@@ -64,6 +64,17 @@
 
                     </ul>
                 </li>
+                <li class="sub-menu">
+                    <a href="javascript:;">
+                        <i class="fa fa-book"></i>
+                        <span>Vận chuyển</span>
+                    </a>
+                    <ul class="sub">
+                        <li><a href="{{ route('delivery.index') }}">Quản lý vận chuyển</a></li>
+                        {{-- <li><a href="{{ route('delivery.create') }}">Thêm mã giảm giá</a></li> --}}
+
+                    </ul>
+                </li>
 
             </ul>
         </div>

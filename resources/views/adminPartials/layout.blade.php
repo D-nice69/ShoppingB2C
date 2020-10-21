@@ -90,6 +90,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     </script>
     @yield('js')
     <!-- morris JavaScript -->
+  
     <script>
         $(document).ready(function() {
             //BOX BUTTON SHOW AND CLOSE

@@ -98,14 +98,15 @@ Route::prefix('admin')->group(function () {
             ->name('coupon.delete');    
        
     });
-    // Route::prefix('menus')->middleware('auth')->group(function () {
-    //     Route::get('/', 'menuController@index')->name('menu.index');
-    //     Route::get('/create', 'menuController@create')->name('menu.create');
-    //     Route::post('/store', 'menuController@store')->name('menu.store');
-    //     Route::get('/edit/{id}', 'menuController@edit')->name('menu.edit');
-    //     Route::post('/update/{id}', 'menuController@update')->name('menu.update');
-    //     Route::get('/delete/{id}', 'menuController@delete')->name('menu.delete');
-    // });
+    Route::prefix('deliveries')->group(function () {
+        Route::get('/', 'deliveryController@index')->name('delivery.index');
+        Route::post('/select-delivery', 'deliveryController@select')->name('delivery.select');
+        Route::post('/store', 'deliveryController@store')->name('delivery.store');
+        // Route::get('/create', 'deliveryController@create')->name('delivery.create');
+        // Route::get('/edit/{id}', 'deliveryController@edit')->name('delivery.edit');
+        // Route::post('/update/{id}', 'deliveryController@update')->name('delivery.update');
+        // Route::get('/delete/{id}', 'deliveryController@delete')->name('delivery.delete');
+    });
 
     
 

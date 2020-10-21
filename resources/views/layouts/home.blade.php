@@ -95,7 +95,7 @@
                 var _token = $('input[name="_token"]').val();
 
                 $.ajax({
-                    url: '{{url('/add-cart-ajax')}}',
+                    url: '{{route('cart.addCartAjax')}}',
                     method: 'POST',
                     data:{cart_product_id:cart_product_id,cart_product_name:cart_product_name,cart_product_image:cart_product_image,cart_product_price:cart_product_price,cart_product_qty:cart_product_qty,_token:_token},
                     success:function(data){
