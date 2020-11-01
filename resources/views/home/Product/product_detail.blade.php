@@ -64,7 +64,7 @@ Eshop | {{ $getProduct->product_name }}
       <span>
         <span>{{ number_format($getProduct->product_price) }} VNĐ</span>
         <label>Số lượng:</label>
-        <form action="{{ route('cart.add') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('cart.store') }}" method="POST" enctype="multipart/form-data">
           @csrf
           <input type="number" name="qty" value="1" min="1" />
           <input type="hidden" name="productid_hidden" value="{{ $getProduct->id }}">

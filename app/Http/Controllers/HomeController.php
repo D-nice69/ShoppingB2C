@@ -6,6 +6,7 @@ use App\Brand;
 use App\Category;
 use App\Comment;
 use App\Product;
+use App\Slider;
 use Illuminate\Http\Request;
 use Cart;
 
@@ -17,10 +18,11 @@ class HomeController extends Controller
         $meta_keywords = "";
         $meta_title = "";
         $url_canonical = $request->url();
-        $categories = Category::latest()->get();
-        $brands = Brand::latest()->get();
-        $products = Product::latest()->get();
-        return view('eshopHome',compact('categories','brands','products','meta_desc','meta_keywords','meta_title','url_canonical'));
+        $categories = Category::where('category_status',0)->latest()->get();
+        $brands = Brand::where('brand_status',0)->latest()->get();
+        $products = Product::where('product_status',0)->latest()->get();
+        $sliders = Slider::where('status',0)->latest()->limit(5)->get();
+        return view('eshopHome',compact('categories','brands','products','meta_desc','meta_keywords','meta_title','url_canonical','sliders'));
     }
     public function categoryProduct($slug, Request $request)
     {

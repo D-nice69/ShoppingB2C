@@ -51,42 +51,31 @@ Eshop | Thanh toán
 
                 </thead>
                 <tbody>
-                    @foreach($content as $conValue)
+                    @foreach($cart as $val)
                     <tr>
                         <td class="cart_product">
-                            <a href="">
-                                <img src="/uploads/products/{{ $conValue->options->image }}" height="100px"
-                                    width="100px" alt="">
+                            <a href="{{ route('home.productDetails',['slug'=>$val['product_slug']]) }}">
+                                <img src="/uploads/products/{{ $val['product_image']}}" height="100px" width="100px"
+                                    alt="">
                             </a>
                         </td>
                         <td class="cart_description">
-                            <h4><a href="">{{ $conValue->name }}</a></h4>
-                            <p>ID sản phẩm: {{ $conValue->id }}</p>
+                            <h4><a href="">{{ $val['product_name'] }}</a></h4>
+                            <p>ID sản phẩm: {{ $val['product_id'] }}</p>
                         </td>
                         <td class="cart_price">
-                            <p>{{ number_format($conValue->price) }} VNĐ</p>
+                            <p>{{ number_format($val['product_price']) }} VNĐ</p>
                         </td>
                         <td class="cart_quantity">
                             <div class="cart_quantity_button">
-                                <form action="{{ route('cart.update') }}" method="POST" enctype="multipart/form-data">
-                                    @csrf
-                                    <input class="cart_quantity_input" type="text" name="quantity"
-                                        value="{{ $conValue->qty }}" size="2">
-                                    <input type="hidden" name="rowId_cart" value="{{ $conValue->rowId }}">
-                                    <button type="submit" name="update_qty" class="btn btn-default btn-sm"><i
-                                            class="fa fa-refresh"></i></button>
-                                </form>
-
+                                <input class="cart_quantity_input" disabled type="text" name="quantity"
+                                    value="{{ $val['product_qty'] }}" size="2">
                             </div>
                         </td>
                         <td class="cart_total">
-                            <p class="cart_total_price">{{ number_format($conValue->price * $conValue->qty) }} VNĐ</p>
-                        </td>
-                        <td class="cart_delete">
-                            <a class="cart_quantity_delete"
-                                href="{{ route('cart.delete',['id'=>$conValue->rowId]) }}"><i
-                                    class="fa fa-times"></i></a>
-                        </td>
+                            <p class="cart_total_price">{{ number_format($val['product_price'] * $val['product_qty']) }}
+                                VNĐ</p>
+                        </td>                        
                     </tr>
                     @endforeach
 
@@ -174,9 +163,9 @@ Eshop | Thanh toán
                 {{-- <span>
                 <label><input type="checkbox"> Paypal</label>
             </span> --}}
-            <br/>
-            <input type="submit" name="send_order_place" value="Đặt hàng" class="btn btn-primary btn-small">
-        </div>
+                <br />
+                <input type="submit" name="send_order_place" value="Đặt hàng" class="btn btn-primary btn-small">
+            </div>
         </form>
     </div>
 </section>

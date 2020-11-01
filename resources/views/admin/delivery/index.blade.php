@@ -5,21 +5,20 @@ Shipping management
 @section('js')
 <script type="text/javascript">
     $(document).ready(function(){
-        // $('.add_delivery').click(function(){
-        //     var city = $('.city').val();
-        //     var distric = $('.distric').val();
-        //     var town = $('.town').val();
-        //     var fee_ship = $('.fee_ship').val();
-        //     var _token = $('input[name="_token"]').val();
-        //     $.ajax({
-        //         url: '{{ route('delivery.store') }}',
-        //         method: 'POST',
-        //         data:{city:city, distric:distric, town:town, fee_ship:fee_ship, _token:_token},
-        //         success:function(data){
-        //             alert('pro');
-        //         }
-        //     });
-        // });
+
+        $(document).on('blur','.feeship_edit',function(){
+            var feeship_id = $(this).data('feeship_id');
+            var feeship_value = $(this).text();
+            var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url: '{{ route('delivery.update') }}',
+                method: 'POST',
+                data:{feeship_id:feeship_id, feeship_value:feeship_value, _token:_token},
+                success:function(data){
+                    location.reload();
+                }
+            });
+        });
         $('.choose').on('change',function(){
             var action = $(this).attr('id');
             var ma_id = $(this).val();
@@ -88,10 +87,53 @@ Shipping management
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                    <button type="submit" class="btn btn-info add_delivery">Tính phí vận chuyển</button>
+                    <button type="submit" class="btn btn-info add_delivery">Thêm phí vận chuyển</button>
                 </form>
             </div>
-
+            <div class="table-responsive">
+                <table class="table table-striped b-t b-light">
+                    <thead>
+                        <tr>
+                            
+                            <th>Tên thành phố</th>
+                            <th>Tên quận huyện</th>
+                            <th>Tên xã phường</th>
+                            <th>Phí vận chuyển</th>
+                            <th style="width:30px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($fee_ships as $fee_ship)
+                        <tr>
+                            <td>
+                               {{ $fee_ship->city->name }}
+                            </td>
+                            <td>
+                               {{ $fee_ship->district->name }}
+                            </td>
+                            <td>
+                                {{ $fee_ship->town->name }}
+                             </td>
+                             <td data-feeship_id="{{ $fee_ship->id }}" class="feeship_edit" contenteditable>
+                                {{ number_format($fee_ship->fee_feeship) }}
+                             </td>                            
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div id="load_delivery">
+            </div>
+            <footer class="panel-footer">
+                <div class="row">
+                    {{-- <div class="col-sm-5 text-center">
+                            <small class="text-muted inline m-t-sm m-b-sm">showing 20-30 of 50 items</small>
+                        </div> --}}
+                    <div class="col-sm-7 text-right text-center-xs">
+                        {{$fee_ships->links()}}
+                    </div>
+                </div>
+            </footer>
         </div>
     </section>
 </div>

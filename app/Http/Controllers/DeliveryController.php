@@ -12,10 +12,11 @@ class DeliveryController extends Controller
 {
     public function index()
     {
+        $fee_ships = feeShip::paginate(5);
         $cities = City::all();
         $districts = District::all();
         $towns = Town::all();
-        return view('admin.delivery.index',compact('cities','districts','towns'));
+        return view('admin.delivery.index',compact('cities','districts','towns','fee_ships'));
     }
     public function select(Request $request)
     {
@@ -47,5 +48,14 @@ class DeliveryController extends Controller
             'fee_feeship' => $request->fee_feeship,
         ]);
         return redirect()->back();
-    }    
+    }
+  
+    public function update(Request $request)
+    {
+		$data = $request->all();
+        $fee_ship = Feeship::find($data['feeship_id']);
+		$fee_value = str_replace(",","",$data['feeship_value']);
+		$fee_ship->fee_feeship = $fee_value;
+		$fee_ship->save();
+    }
 }

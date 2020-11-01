@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Payment extends Model
+class Slider extends Model
 {
     protected $guarded = [];
 }

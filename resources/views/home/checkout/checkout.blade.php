@@ -2,8 +2,24 @@
 @section('title')
 Eshop | Thanh toán
 @endsection
-@section('css')
-  
+@section('js')
+<script>
+    $("input:checkbox").on('click', function() {
+  // in the handler, 'this' refers to the box clicked on
+  var $box = $(this);
+  if ($box.is(":checked")) {
+    // the name of the box is retrieved using the .attr() method
+    // as it is assumed and expected to be immutable
+    var group = "input:checkbox[name='" + $box.attr("name") + "']";
+    // the checked state of the group/box on the other hand will change
+    // and the current value is retrieved using .prop() method
+    $(group).prop("checked", false);
+    $box.prop("checked", true);
+  } else {
+    $box.prop("checked", false);
+  }
+});
+</script>
 @endsection
 @section('content_2')
 
@@ -36,144 +52,204 @@ Eshop | Thanh toán
                         <a class="btn btn-primary" href="">Continue</a>
                     </div>
                 </div> --}}
-                <div class="col-sm-5 clearfix">
+                <div class="col-sm-6">
                     <div class="bill-to">
-                        <p>Thông tin người mua hàng</p>
-                        <div class="form-one">
-                            <form method="POST" action="{{ route('customer.saveCheckout') }}" enctype="multipart/form-data">
+                        <p>Điền thông tin gửi hàng</p>
+                        <div class="form-one" style="width: 90%">
+                            <form method="POST">
                                 @csrf
-                                <input type="text" name="name" placeholder="Tên">
-                                <input type="text" name="email" placeholder="Email">
-                                <input type="text" name="address" placeholder="Địa chỉ">
-                                <input type="text" name="phone" placeholder="Số điện thoại">
-                                <input type="submit" name="send_order" value="Gửi"
-                                    class="btn btn-primary btn-small">
+                                <input type="text" class="shipping_name" name="name" placeholder="Họ tên người gửi">
+                                <input type="text" class="shipping_email" name="email" placeholder="Email">
+                                <input type="text" class="shipping_address" name="address"
+                                    placeholder="Địa chỉ gửi hàng">
+                                <input type="text" class="shipping_phone" name="phone" placeholder="Số điện thoại">
+                                @if(Session::get('fee'))
+                                <input type="hidden" class="order_fee" name="order_fee"
+                                    value="{{ Session::get('fee') }}">
+                                @else
+                                <input type="hidden" class="order_fee" name="order_fee" value="25000">
+                                @endif
+
+                                @if(Session::get('coupon'))
+                                @foreach(Session::get('coupon') as $key => $cou)
+                                <input type="hidden" class="order_coupon" name="order_coupon"
+                                    value="{{ $cou['code'] }}">
+                                @endforeach
+                                @else
+                                <input type="hidden" class="order_coupon" name="order_coupon" value="">
+                                @endif
+                                
+                            </form>
 
                         </div>
-                        {{-- <div class="form-two">
-                            <form>
-                                <input type="text" placeholder="Zip / Postal Code *">
-                                <select>
-                                    <option>-- Country --</option>
-                                    <option>United States</option>
-                                    <option>Bangladesh</option>
-                                    <option>UK</option>
-                                    <option>India</option>
-                                    <option>Pakistan</option>
-                                    <option>Ucrane</option>
-                                    <option>Canada</option>
-                                    <option>Dubai</option>
-                                </select>
-                                <select>
-                                    <option>-- State / Province / Region --</option>
-                                    <option>United States</option>
-                                    <option>Bangladesh</option>
-                                    <option>UK</option>
-                                    <option>India</option>
-                                    <option>Pakistan</option>
-                                    <option>Ucrane</option>
-                                    <option>Canada</option>
-                                    <option>Dubai</option>
-                                </select>
-                                <input type="password" placeholder="Confirm password">
-                                <input type="text" placeholder="Phone *">
-                                <input type="text" placeholder="Mobile Phone">
-                                <input type="text" placeholder="Fax">
-                            </form>
-                        </div> --}}
                     </div>
                 </div>
-                <div class="col-sm-5">
+                <div class="col-sm-6">
                     <div class="order-message">
                         <p>Ghi chú</p>
-                        <textarea name="note" placeholder="Ghi chú đơn hàng của bạn"
-                            rows="16"></textarea>
+                        <textarea style="height: 200px; font-size:15px" class="shipping_note" name="note"
+                            placeholder="Ghi chú đơn hàng của bạn"></textarea>
                     </div>
-                    </form>
                 </div>
+                {{-- <div class="col-sm-10 clearfix">
+                    <div class="order-message">
+                        <p>Nơi vận chuyển </p>
+                        @csrf
+                        <div class="form-group">
+                            <label for="">Chọn tỉnh, thành phố</label>
+                            <select class="form-control m-bot15 choose city" id="city" name="matp">
+                                <option value="" hidden>---Chọn tỉnh, thành phố---</option>
+                                @foreach($cities as $city)
+                                <option value="{{ $city->matp }}">{{ $city->name }}</option>
+                @endforeach
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="">Chọn quận huyện </label>
+                <select class="form-control m-bot15 choose district" id="district" name="maqh">
+                    <option value="" hidden>---Chọn quận huyện---</option>
+                    @foreach($districts as $district)
+                    <option value="{{ $district->maqh }}">{{ $district->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="">Chọn xã phường</label>
+                <select class="form-control m-bot15 town" id="town" name="xaid">
+                    <option value="" hidden>---Chọn xã phường---</option>
+                    @foreach($towns as $town)
+                    <option value="{{ $town->xaid }}">{{ $town->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <button type="submit" class="btn btn-info add_delivery">Tính phí vận chuyển</button>
+        </div>
+    </div> --}}
+    {{-- <div class="col-sm-12">
+        <input type="submit" name="send_order" value="Xác nhận đơn hàng" class="btn btn-default check_out">
+    </div> --}}
+    <div class="review-payment">
+        <h2>Xem lại giỏ hàng & phương thức thanh toán</h2>
+    </div>
+
+    <div class="table-responsive cart_info">
+        <table class="table table-condensed">
+            <thead>
+                <tr class="cart_menu">
+                    <td class="image">Sản phẩm</td>
+                    <td class="description">Tên sản phẩm</td>
+                    <td class="price">Giá</td>
+                    <td class="quantity">Số lượng</td>
+                    <td class="total">Thành tiền</td>
+                    <td></td>
+                </tr>
+
+            </thead>
+
+            <tbody>
+                @if($cart)
+
+                @foreach($cart as $val)
+                <tr>
+                    <td class="cart_product">
+                        <a href="{{ route('home.productDetails',['slug'=>$val['product_slug']]) }}">
+                            <img src="/uploads/products/{{ $val['product_image']}}" height="100px" width="100px" alt="">
+                        </a>
+                    </td>
+                    <td class="cart_description">
+                        <h4><a href="">{{ $val['product_name'] }}</a></h4>
+                        <p>ID sản phẩm: {{ $val['product_id'] }}</p>
+                    </td>
+                    <td class="cart_price">
+                        <p>{{ number_format($val['product_price']) }} VNĐ</p>
+                    </td>
+                    <td class="cart_quantity">
+                        <div class="cart_quantity_button">
+                            <input class="cart_quantity_input" disabled type="text" name="quantity"
+                                value="{{ $val['product_qty'] }}" size="2">
+                        </div>
+                    </td>
+                    <td class="cart_total">
+                        <p class="cart_total_price">{{ number_format($val['product_price'] * $val['product_qty']) }}
+                            VNĐ</p>
+                    </td>
+                </tr>
+
+                @endforeach
+                @endif
+
+            </tbody>
+        </table>
+        <div class="col-sm-6" style="float: right">
+            <div class="total_area">
+                <ul>
+                    <li>Tổng tiền:<span> {{ number_format($total) }} VNĐ</span></li>
+                    @if(Session::get('fee'))
+                    <li>
+                        Phí vận chuyển: <span>{{ number_format(Session::get('fee')) }} VNĐ</span></li>
+                    @endif
+                    @if(Session::get('coupon'))
+                    @foreach(Session::get('coupon') as $key => $cou)
+                    @if($cou['feature']==0)
+                    <li> Mã giảm: <span>{{ $cou['discount_number'] }} %</span> </li>
+                    @php
+                    $total_coupon = ($total*$cou['discount_number'])/100;
+                    @endphp
+                    <li>Thành tiền:
+                        <span>
+                            @if(Session::get('fee'))
+                            {{ number_format($total - $total_coupon + Session::get('fee')) }} VNĐ
+                            @else
+                            {{ number_format($total - $total_coupon) }} VNĐ
+                            @endif
+                        </span>
+                    </li>
+                    @else
+                    <li> Mã giảm giá sản phẩm: <span>{{ number_format($cou['discount_number']) }} VNĐ</span> </li>
+                    <li>Thành tiền:
+                        <span>
+                            @if(Session::get('fee'))
+                            {{ number_format($total - $cou['discount_number'] + Session::get('fee')) }} VNĐ
+                            @else
+                            {{ number_format($total - $cou['discount_number']) }} VNĐ
+                            @endif
+                        </span>
+                    </li>
+                    @endif
+                    @endforeach
+                    @endif
+
+                    {{-- <li>Thuế <span> VNĐ</span></li>
+                    <li>Tổng số tiền (bao gồm coupon) <span> VNĐ</span></li> --}}
+                </ul>
+                {{-- <a class="btn btn-default update" href="">Update</a> --}}
             </div>
         </div>
-        <div class="review-payment">
-            <h2>Review & Payment</h2>
-        </div>
-
-        {{-- <div class="table-responsive cart_info">
-            <table class="table table-condensed">
-                <thead>
-                    <tr class="cart_menu">
-                        <td class="image">Item</td>
-                        <td class="description"></td>
-                        <td class="price">Price</td>
-                        <td class="quantity">Quantity</td>
-                        <td class="total">Total</td>
-                        <td></td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="cart_product">
-                            <a href=""><img src="images/cart/one.png" alt=""></a>
-                        </td>
-                        <td class="cart_description">
-                            <h4><a href="">Colorblock Scuba</a></h4>
-                            <p>Web ID: 1089772</p>
-                        </td>
-                        <td class="cart_price">
-                            <p>$59</p>
-                        </td>
-                        <td class="cart_quantity">
-                            <div class="cart_quantity_button">
-                                <a class="cart_quantity_up" href=""> + </a>
-                                <input class="cart_quantity_input" type="text" name="quantity" value="1" autocomplete="off" size="2">
-                                <a class="cart_quantity_down" href=""> - </a>
-                            </div>
-                        </td>
-                        <td class="cart_total">
-                            <p class="cart_total_price">$59</p>
-                        </td>
-                        <td class="cart_delete">
-                            <a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="4">&nbsp;</td>
-                        <td colspan="2">
-                            <table class="table table-condensed total-result">
-                                <tr>
-                                    <td>Cart Sub Total</td>
-                                    <td>$59</td>
-                                </tr>
-                                <tr>
-                                    <td>Exo Tax</td>
-                                    <td>$2</td>
-                                </tr>
-                                <tr class="shipping-cost">
-                                    <td>Shipping Cost</td>
-                                    <td>Free</td>										
-                                </tr>
-                                <tr>
-                                    <td>Total</td>
-                                    <td><span>$61</span></td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div> --}}
-        <div class="payment-options">
-            <span>
-                <label><input type="checkbox"> Direct Bank Transfer</label>
-            </span>
-            <span>
-                <label><input type="checkbox"> Check Payment</label>
-            </span>
-            <span>
-                <label><input type="checkbox"> Paypal</label>
-            </span>
-        </div>
     </div>
+
+    <h4>Chọn hình thức thanh toán:</h4>
+    <br />
+    <form method="POST">
+        @csrf
+        <div class="payment-options">
+            {{-- <select class="payment_select" id="city" name="matp">
+                <option selected value="3" >---Chọn tỉnh, thành phố---</option>               
+            </select> --}}
+            <span >
+                <label><input name="payment_method" class="radio payment_select" value="0" type="checkbox"> Trả bằng thẻ
+                    ATM</label>
+            </span>
+            <span >
+                <label ><input name="payment_method" class="radio payment_select" value="1" type="checkbox"> Nhận tiền
+                    mặt</label>
+            </span>
+            {{-- <span>
+                <label><input type="checkbox"> Paypal</label>
+            </span> --}}
+            <br />
+            <a type="button" class="btn btn-default check_out send_order" name="send_order_place">Đặt hàng</a>
+        </div>
+    </form>
 </section>
 <!--/#cart_items-->
 

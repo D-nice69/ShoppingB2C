@@ -83,8 +83,33 @@
         nonce="kYGdzKZT"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script src="js/sweetalert.min.js"></script>
+    <script>
+
+    </script>
     <script type="text/javascript">
         $(document).ready(function(){
+            //select delivery
+            $('.choose').on('change',function(){
+                var action = $(this).attr('id');
+                var ma_id = $(this).val();
+                var _token = $('input[name="_token"]').val();
+                var result = '';
+                if (action == 'city'){
+                    result = 'district';
+                }else{
+                    result = 'town';
+                }
+                $.ajax({
+                    url: '{{ route('delivery.select') }}',
+                    method: 'POST',
+                    data:{action:action, ma_id:ma_id, _token:_token},
+                    success:function(data){
+                        $('#'+result).html(data);
+                    }
+                });
+            });
+
+            //add cart
             $('.add-to-cart').click(function(){
                 var id = $(this).data('id_product');
                 var cart_product_id = $('.cart_product_id_' + id).val();
@@ -109,10 +134,80 @@
                                 closeOnConfirm: false
                             },
                             function() {
-                                window.location.href = "{{url('/show-cart')}}";
+                                window.location.href = "{{route('cart.show')}}";
                             });
                     }
                 });
+            });
+
+            //calculate delivery fee
+            $('.delivery_cal').click(function(){
+                var matp = $('.city').val();
+                var maqh = $('.district').val();
+                var xaid = $('.town').val();
+                var _token = $('input[name="_token"]').val();
+                if(matp == '' && maqh == '' && xaid == '')
+                {
+                    alert('Vui lòng chọn để tính phí vận chuyển');
+                }else{
+                    $.ajax({
+                    url: '{{ route('customer.deliveryCal') }}',
+                    method: 'POST',
+                    data:{matp:matp, maqh:maqh, xaid:xaid, _token:_token},
+                    success:function(data){
+                        location.reload();
+                        }
+                    });
+                }
+               
+            });
+
+             //add cart
+            $('.send_order').click(function(){  
+                swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover this imaginary file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "No, cancel plx!",
+                    closeOnConfirm: false,
+                    // closeOnCancel: false                    
+                },               
+                    function(isConfirm){
+                        if(isConfirm){
+                            var shipping_email = $('.shipping_email').val();
+                            var shipping_name = $('.shipping_name').val();
+                            var shipping_address = $('.shipping_address').val();
+                            var shipping_phone = $('.shipping_phone').val();
+                            var shipping_note = $('.shipping_note').val();
+                            var order_fee = $('.order_fee').val();
+                            var order_coupon = $('.order_coupon').val();
+                            var payment_select1 = [];
+                            var payment_select = '';
+                            $(':checkbox:checked').each(function(i){
+                                payment_select1[i] = $(this).val();
+                                payment_select = payment_select1[0];
+                            });               
+                            var _token = $('input[name="_token"]').val();
+                            $.ajax({
+                                url: '{{route('order.confirm')}}',
+                                method: 'POST',
+                                data:{shipping_email:shipping_email,shipping_name:shipping_name
+                                ,shipping_address:shipping_address,shipping_phone:shipping_phone,shipping_note:shipping_note
+                                ,order_fee:order_fee,order_coupon:order_coupon,payment_select:payment_select,_token:_token},
+                                success:function(data){
+                                    swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                                    window.setTimeout(function(){
+                                        location.replace("{{ route('customer.thanks') }}");
+                                    },1000);
+                                }
+                            });
+                        }
+                    }
+                );              
+                
             });
         });
     </script>

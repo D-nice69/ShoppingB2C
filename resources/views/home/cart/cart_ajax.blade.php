@@ -14,7 +14,8 @@ Eshop | Cart
 </style>
 @endsection
 @section('js')
-
+<script>
+</script>
 @endsection
 @section('content_2')
 <section id="cart_items">
@@ -25,6 +26,7 @@ Eshop | Cart
                 <li class="active">Giỏ hàng</li>
             </ol>
         </div>
+        
         <div class="table-responsive cart_info">
             <table class="table table-condensed">
                 <thead>
@@ -40,10 +42,12 @@ Eshop | Cart
                 </thead>
 
                 <tbody>
+                    @if($cart)
+
                     @foreach( $cart as $key=> $value)
                     <tr>
                         <td class="cart_product">
-                            <a href="">
+                            <a href="{{ route('home.productDetails',['slug'=>$value['product_slug']]) }}">
                                 <img src="/uploads/products/{{ $value['product_image'] }}" height="100px" width="100px"
                                     alt="">
                             </a>
@@ -81,6 +85,8 @@ Eshop | Cart
                     </tr>
 
                     @endforeach
+                    @endif
+
                 </tbody>
             </table>
         </div>
@@ -90,96 +96,88 @@ Eshop | Cart
 @if($cart)
 <section id="do_action">
     <div class="container" id="coupon_check">
-        <div class="heading">
-            <h3>What would you like to do next?</h3>
-            <p>Choose if you have a discount code or reward points you want to use or would like to estimate your
-                delivery cost.</p>
-        </div>
         <div class="row">
             <div class="col-sm-6">
-                <div class="chose_area">
-                    <ul class="user_option">
-                        <li>
-                            <input type="checkbox">
-                            <label>Use Coupon Code</label>
-                        </li>
-                        <li>
-                            <input type="checkbox">
-                            <label>Use Gift Voucher</label>
-                        </li>
-                        <li>
-                            <input type="checkbox">
-                            <label>Estimate Shipping & Taxes</label>
-                        </li>
-                    </ul>
-                    <ul class="user_info">
-                        <li class="single_field">
-                            <label>Country:</label>
-                            <select>
-                                <option>United States</option>
-                                <option>Bangladesh</option>
-                                <option>UK</option>
-                                <option>India</option>
-                                <option>Pakistan</option>
-                                <option>Ucrane</option>
-                                <option>Canada</option>
-                                <option>Dubai</option>
+                <div class="chose_area" style="padding-left: 30px">
+                    <h4>Nơi vận chuyển </h4>
+                    <form>
+                        @csrf
+                        <div class="form-group">
+                            <label for="">Chọn tỉnh, thành phố</label>
+                            <select class="form-control m-bot15 choose city" id="city" name="matp">
+                                <option selected value="" hidden>---Chọn tỉnh, thành phố---</option>
+                                @foreach($cities as $city)
+                                <option value="{{ $city->matp }}">{{ $city->name }}</option>
+                                @endforeach
                             </select>
-
-                        </li>
-                        <li class="single_field">
-                            <label>Region / State:</label>
-                            <select>
-                                <option>Select</option>
-                                <option>Dhaka</option>
-                                <option>London</option>
-                                <option>Dillih</option>
-                                <option>Lahore</option>
-                                <option>Alaska</option>
-                                <option>Canada</option>
-                                <option>Dubai</option>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Chọn quận huyện </label>
+                            <select class="form-control m-bot15 choose district" id="district" name="maqh">
+                                <option selected value="" hidden>---Chọn quận huyện---</option>
+                                @foreach($districts as $district)
+                                <option value="{{ $district->maqh }}">{{ $district->name }}</option>
+                                @endforeach
                             </select>
-
-                        </li>
-                        <li class="single_field zip-field">
-                            <label>Zip Code:</label>
-                            <input type="text">
-                        </li>
-                    </ul>
-                    <a class="btn btn-default update" href="">Get Quotes</a>
-                    <a class="btn btn-default check_out" href="">Continue</a>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Chọn xã phường</label>
+                            <select class="form-control m-bot15 town" id="town" name="xaid">
+                                <option selected value="" hidden>---Chọn xã phường---</option>
+                                @foreach($towns as $town)
+                                <option value="{{ $town->xaid }}">{{ $town->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <a type="button" class="btn btn-default check_out delivery_cal">Tính phí vận chuyển</a>
+                        {{-- <input type="button" class="btn btn-primary check_out delivery_cal" value="Tính phí vận chuyển"> --}}
+                    </form>
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="total_area">
                     <ul>
-                        <li>Tổng tiền<span> {{ number_format($total) }} VNĐ</span></li>
-                            @if(Session::get('coupon'))
-                            @foreach(Session::get('coupon') as $key => $cou)
-                            @if($cou['feature']==0)
-                            <li> Mã giảm: <span>{{ $cou['discount_number'] }} %</span> </li>
-                            @php
-                            $total_coupon = ($total*$cou['discount_number'])/100;
-                            echo '
-                        <li>Tổng giảm: '.'<span>'.number_format($total_coupon).' VNĐ</span>'.'</li>';
+                        <li>Tổng tiền:<span> {{ number_format($total) }} VNĐ</span></li>
+                        @if(Session::get('fee'))
+                        <li>
+                            <a href="{{ route('customer.deliveryDel') }}">
+                                <i class="fa fa-times">
+                                </i>
+                            </a>
+                            Phí vận chuyển: <span>{{ number_format(Session::get('fee')) }} VNĐ</span></li>
+                        @endif
+                        @if(Session::get('coupon'))
+                        @foreach(Session::get('coupon') as $key => $cou)
+                        @if($cou['feature']==0)
+                        <li> Mã giảm: <span>{{ $cou['discount_number'] }} %</span> </li>
+                        @php
+                        $total_coupon = ($total*$cou['discount_number'])/100;
                         @endphp
-                        <li>Tổng tiền sau khi giảm
+                        <li>Thành tiền:
                             <span>
+                                @if(Session::get('fee'))
+                                {{ number_format($total - $total_coupon + Session::get('fee')) }} VNĐ
+                                @else
                                 {{ number_format($total - $total_coupon) }} VNĐ
+                                @endif
                             </span>
                         </li>
                         @else
-                        <li> Mã giảm: <span>{{ number_format($cou['discount_number']) }} VNĐ</span> </li>
-                        <li>Tổng tiền sau khi giảm
+                        <li> Mã giảm giá sản phẩm: <span>{{ number_format($cou['discount_number']) }} VNĐ</span> </li>
+                        <li>Thành tiền:
                             <span>
+                                @if(Session::get('fee'))
+                                {{ number_format($total - $cou['discount_number'] + Session::get('fee')) }} VNĐ
+                                @else
                                 {{ number_format($total - $cou['discount_number']) }} VNĐ
+                                @endif
                             </span>
                         </li>
                         @endif
                         @endforeach
                         @endif
+
                         {{-- <li>Thuế <span> VNĐ</span></li>
-                        <li>Phí vận chuyển <span>Free</span></li>
                         <li>Tổng số tiền (bao gồm coupon) <span> VNĐ</span></li> --}}
                     </ul>
                     {{-- <a class="btn btn-default update" href="">Update</a> --}}
@@ -206,7 +204,18 @@ Eshop | Cart
                     Session::put('message', null);
                     }
                     ?>
-                    <a class="btn btn-default check_out" href="">Thanh toán</a>
+                    <?php
+                    $customerId = Session::get('customerId');
+                    if($customerId!=Null){                                
+                    ?>
+                    <a class="btn btn-default check_out" href="{{ route('customer.checkout') }}">Check Out</a>
+                    <?php 
+                    }else {                                    
+                    ?>
+                    <a class="btn btn-default check_out" href="{{ route('customer.login') }}">Check Out</a>
+                    <?php 
+                    }
+                    ?>
                 </div>
             </div>
         </div>

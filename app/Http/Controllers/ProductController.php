@@ -28,6 +28,7 @@ class ProductController extends Controller
         $storeProduct = [
             'product_name' => $request->product_name,
             'product_price' => $request->product_price,
+            'product_qty' => $request->product_qty,
             'product_status' => $request->product_status,
             'product_desc' => $request->product_desc,
             'product_content' => $request->product_content,
@@ -65,6 +66,7 @@ class ProductController extends Controller
         $updateProduct = [
             'product_name' => $request->product_name,
             'product_price' => $request->product_price,
+            'product_qty' => $request->product_qty,
             'product_status' => $request->product_status,
             'product_desc' => $request->product_desc,
             'product_content' => $request->product_content,
@@ -95,7 +97,7 @@ class ProductController extends Controller
         Product::find($id)->delete();
         return response()->json([
             'code' => 200,
-            'message' => 'success'
+            'message' => 'success',
         ],200);
         return response()->json([
             'code' => 500,

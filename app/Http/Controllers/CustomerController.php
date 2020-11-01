@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\City;
 use App\Customer;
+use App\District;
+use App\feeShip;
 use App\Http\Requests\CaptchaRequest;
 use App\Http\Requests\CustomerResigterRequest;
 use App\Shipping;
+use App\Town;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Cart;
@@ -48,24 +52,30 @@ class CustomerController extends Controller
     }
     public function Checkout(Request $request)
     {
+        //SEO
         $meta_desc = "";
         $meta_keywords = "";
         $meta_title = "";
         $url_canonical = $request->url();
-        return view('home.checkout.checkout',compact('meta_desc','meta_keywords','meta_title','url_canonical'));
+        //SEO
+
+        $cart = Session::get('cart');
+        $total = 0;
+        
+        // $cities = City::all();
+        // $districts = District::all();
+        // $towns = Town::all();
+        if($cart){
+            foreach($cart as $key=>$value){
+                $subtotal = $value['product_price'] * $value['product_qty'];
+                $total += $subtotal;
+            }
+        }
+        return view('home.checkout.checkout',compact('meta_desc','meta_keywords','meta_title','url_canonical','total','cart'));
     }
     public function saveCheckout(Request $request)
     {
-        $data = Shipping::create([
-            'name' =>$request->name,
-            'email' =>$request->email,
-            'phone' =>$request->phone,
-            'address' =>$request->address,
-            'note' =>$request->note,
-        ]);
-        $shippingId = $data->id;
-        Session::put('shippingId',$shippingId);
-        return redirect('/payment');
+        dd($request->payment_method);
     }
     public function payment(Request $request)
     {
@@ -73,11 +83,48 @@ class CustomerController extends Controller
         $meta_keywords = "";
         $meta_title = "";
         $url_canonical = $request->url();
-        $content = Cart::content();
-        return view('home.checkout.payment',compact('content','meta_desc','meta_keywords','meta_title','url_canonical'));
+        $cart = Session::get('cart');
+        $total = 0;
+        foreach($cart as $value){
+            $subtotal = $value['product_price'] * $value['product_qty'];
+            $total += $subtotal;
+        }
+        return view('home.checkout.payment',compact('cart','meta_desc','meta_keywords','meta_title','url_canonical'));
     }
     public function logout(){
     	Session::flush();
     	return redirect()->back();
+    }
+    public function deliveryCal(Request $request)
+    {
+        $data = $request->all();
+        if($data['matp']){
+            $feeship = feeShip::where('matp',$data['matp'])->where('maqh',$data['maqh'])->where('xaid',$data['xaid'])->get();
+            if($feeship){
+                $count_feeship = $feeship->count();
+                if($count_feeship>0){
+                    foreach($feeship as $fee){
+                        Session::put('fee',$fee->fee_feeship);
+                        Session::save();
+                    }
+                }else{
+                    Session::put('fee',25000);
+                    Session::save();
+                }
+            }
+        }
+    }
+    public function deliveryDel()
+    {
+        Session::forget('fee');
+        return redirect()->back();
+    }
+    public function thanks(Request $request)
+    {
+        $meta_desc = "";
+        $meta_keywords = "";
+        $meta_title = "";
+        $url_canonical = $request->url();
+        return view('home.checkout.tks',compact('meta_desc','meta_keywords','meta_title','url_canonical'));
     }
 }

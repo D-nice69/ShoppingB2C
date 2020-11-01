@@ -48,10 +48,9 @@
                                     <input type="checkbox"><i></i>
                                 </label>
                             </th>
-                            <th>Tên người đặt</th>
-                            <th>Tổng giá tiền</th>
+                            <th>Mã đơn hàng</th>
                             <th>Tình trạng</th>
-                            <th>Hiển thị</th>
+                            <th></th>
                             <th style="width:30px;"></th>
                         </tr>
                     </thead>
@@ -60,16 +59,21 @@
                             <tr>
                                 <td><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label>
                                 </td>
-                                <td>{{ $order->customer->name }}</td>
-                                <td>{{ $order->total }}</td>
-                                <td>{{ $order->status }}</td>                             
+                                <td>{{ $order->code }}</td>
+                                <td>
+                                    @if( $order->status == 1)
+                                    Đơn hàng mới
+                                    @else
+                                    Đơn hàng đã được thanh toán
+                                    @endif
+                                </td>                             
                                 <td>
                                     <a href="{{ route('order.view',['id'=>$order->id]) }}">
-                                        <i class="fa fa-pencil-square-o text-success text-active"></i>
+                                        <i class="fa fa-eye"></i>
                                     </a>
-                                    {{-- <a  href="" class="action_delete" data-url="{{ route('order.delete',['id'=>$order->id]) }}">
+                                    <a href="" class="action_delete" data-url="{{ route('order.delete',['id'=>$order->id]) }}">
                                         <i  class="fa fa-times text-danger text"></i>
-                                    </a>                                     --}}
+                                    </a>                                                                     
                                 </td>
                             </tr>
                         @endforeach

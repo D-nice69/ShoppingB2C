@@ -2,26 +2,39 @@
 
 namespace App\Http\Controllers;
 
+use App\City;
+use App\District;
 use App\Product;
+use App\Town;
 use Illuminate\Http\Request;
 use Cart;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
 
 class CartController extends Controller
 {
     public function show(Request $request)
     { 
-        $cart = Session::get('cart');
-        $total = 0;
-        foreach($cart as $value){
-            $subtotal = $value['product_price'] * $value['product_qty'];
-            $total += $subtotal;
-        }
+        //SEO
         $meta_desc = "Giỏ hàng của bạn";
         $meta_keywords = "Giỏ hàng của bạn";
         $meta_title = "Giỏ hàng của bạn";
         $url_canonical = $request->url();
-        return view('home.cart.cart_ajax',compact('meta_desc','meta_keywords','meta_title','url_canonical','total','cart'));
+        //SEO
+        $cities = City::all();
+        $districts = District::all();
+        $towns = Town::all();
+        $cart = Session::get('cart');
+        $total = 0;
+        if($cart){
+            foreach($cart as $key=>$value){
+                $subtotal = $value['product_price'] * $value['product_qty'];
+                $total += $subtotal;
+            }
+            return view('home.cart.cart_ajax',compact('meta_desc','meta_keywords','meta_title','url_canonical','total','cart','cities','districts','towns'));
+        }else{
+            return view('home.cart.cart_ajax',compact('meta_desc','meta_keywords','meta_title','url_canonical','total','cart','cities','districts','towns'));
+        }
     }
     public function index(Request $request)
     {
@@ -34,19 +47,19 @@ class CartController extends Controller
     }
     public function store(Request $request)
     {
-        $productId = $request->productid_hidden;
-        $productInfo = Product::where('id',$productId)->first();
-        $data =[
-            'id' => $productInfo->id,
-            'qty' => $request->qty,
-            'name' => $productInfo->product_name,
-            'price' => $productInfo->product_price,
-            'weight' => '0',
-            'options' => ['image'=>$productInfo->product_image],
-        ];
-        Cart::add($data);
-        return redirect()->route('cart.index');
-        // Cart::destroy();
+        // $productId = $request->productid_hidden;
+        // $productInfo = Product::where('id',$productId)->first();
+        // $data =[
+        //     'id' => $productInfo->id,
+        //     'qty' => $request->qty,
+        //     'name' => $productInfo->product_name,
+        //     'price' => $productInfo->product_price,
+        //     'weight' => '0',
+        //     'options' => ['image'=>$productInfo->product_image],
+        // ];
+        // Cart::add($data);
+        // return redirect()->route('cart.index');
+        Cart::destroy();
     }
     public function delete($id)
     {
@@ -76,6 +89,7 @@ class CartController extends Controller
                 $cart[] = array(
                     'session_id' => $session_id,
                     'product_name' => $data['cart_product_name'],
+                    'product_slug' => Str::slug($data['cart_product_name']),
                     'product_id' => $data['cart_product_id'],
                     'product_image' => $data['cart_product_image'],
                     'product_qty' => $data['cart_product_qty'],
@@ -87,6 +101,7 @@ class CartController extends Controller
             $cart[] = array(
                 'session_id' => $session_id,
                 'product_name' => $data['cart_product_name'],
+                'product_slug' => Str::slug($data['cart_product_name']),
                 'product_id' => $data['cart_product_id'],
                 'product_image' => $data['cart_product_image'],
                 'product_qty' => $data['cart_product_qty'],
@@ -108,6 +123,8 @@ class CartController extends Controller
                        $cart[$sess]['product_qty'] = $qty;
                        if($cart[$sess]['product_qty'] == 0){
                            unset($cart[$sess]);
+                           Session::forget('coupon');
+                           Session::forget('fee');
                        }
                     }
                 }

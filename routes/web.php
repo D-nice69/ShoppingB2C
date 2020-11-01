@@ -81,11 +81,12 @@ Route::prefix('admin')->group(function () {
             ->name('product.active');
     });
     Route::prefix('orders')->group(function () {
-        Route::get('/', 'orderController@index')
-            ->name('order.index');
-        Route::get('/view/{id}', 'orderController@view')
-        ->name('order.view');
-       
+        Route::get('/', 'orderController@index')->name('order.index');
+        Route::get('/view/{id}', 'orderController@view')->name('order.view');
+        Route::get('/print/{checkout_code}', 'orderController@print')->name('order.print');
+        Route::get('/delete/{id}', 'orderController@delete')->name('order.delete');
+        Route::get('/update/{id}', 'orderController@update')->name('order.update');
+
     });
     Route::prefix('coupons')->group(function () {
         Route::get('/', 'couponController@index')
@@ -102,22 +103,24 @@ Route::prefix('admin')->group(function () {
         Route::get('/', 'deliveryController@index')->name('delivery.index');
         Route::post('/select-delivery', 'deliveryController@select')->name('delivery.select');
         Route::post('/store', 'deliveryController@store')->name('delivery.store');
+        Route::post('/update', 'deliveryController@update')->name('delivery.update');
         // Route::get('/create', 'deliveryController@create')->name('delivery.create');
         // Route::get('/edit/{id}', 'deliveryController@edit')->name('delivery.edit');
-        // Route::post('/update/{id}', 'deliveryController@update')->name('delivery.update');
         // Route::get('/delete/{id}', 'deliveryController@delete')->name('delivery.delete');
     });
 
+    Route::prefix('sliders')->group(function () {
+        Route::get('/', 'sliderController@index')->name('slider.index');
+        Route::get('/create', 'sliderController@create')->name('slider.create');
+        Route::post('/store', 'sliderController@store')->name('slider.store');
+        Route::get('/unactive/{id}', 'sliderController@unactive')->name('slider.unactive');
+        Route::get('/active/{id}', 'sliderController@active')->name('slider.active');
+        Route::get('/edit/{id}', 'sliderController@edit')->name('slider.edit');
+        Route::post('/update/{id}', 'sliderController@update')->name('slider.update');
+        Route::get('/delete/{id}', 'sliderController@delete')->name('slider.delete');
+    });
     
 
-    // Route::prefix('sliders')->middleware('auth')->group(function () {
-    //     Route::get('/', 'sliderController@index')->name('slider.index');
-    //     Route::get('/create', 'sliderController@create')->name('slider.create');
-    //     Route::post('/store', 'sliderController@store')->name('slider.store');
-    //     Route::get('/edit/{id}', 'sliderController@edit')->name('slider.edit');
-    //     Route::post('/update/{id}', 'sliderController@update')->name('slider.update');
-    //     Route::get('/delete/{id}', 'sliderController@delete')->name('slider.delete');
-    // });
 
     // Route::prefix('settings')->middleware('auth')->group(function () {
     //     Route::get('/', 'settingController@index')->name('setting.index');
@@ -201,12 +204,15 @@ Route::post('/add-customer', 'CustomerController@add')->name('customer.add');
 Route::post('/save-checkout', 'CustomerController@saveCheckout')->name('customer.saveCheckout');
 Route::get('/payment', 'CustomerController@payment')->name('customer.payment');
 Route::get('/logout','CustomerController@logout')->name('customer.logout');
+Route::post('/calculate-delivery','CustomerController@deliveryCal')->name('customer.deliveryCal');
+Route::get('/delete-delivery','CustomerController@deliveryDel')->name('customer.deliveryDel');
 
 //Search Product
 Route::post('/search', 'HomeController@search')->name('home.search');
 
 //Order
 Route::post('/order-place', 'OrderController@orderPlace')->name('order.orderPlace');
+Route::post('/order-confirm', 'OrderController@confirm')->name('order.confirm');
 
 //Send mail
 Route::get('/send-mail', 'MailController@send_mail')->name('mail.send_mail');
@@ -222,3 +228,6 @@ Route::get('/google/callback','AdminController@callback_google');
 //Coupon
 Route::post('/check-coupon', 'CouponController@checkCoupon')->name('coupon.checkCoupon');
 Route::get('/unset-coupon', 'CouponController@unset')->name('coupon.unset');
+
+//thanks for shopping
+Route::get('/thanks', 'CustomerController@thanks')->name('customer.thanks');

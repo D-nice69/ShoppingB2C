@@ -76,7 +76,7 @@
                             <?php 
                                 }elseif ($customerId!=Null && $shippingId==Null) {                                   
                             ?>
-                            <li><a href="{{ route('customer.checkout') }}"><i class="fa fa-crosshairs"></i>Thanh
+                            <li><a href="{{ route('cart.show') }}"><i class="fa fa-crosshairs"></i>Thanh
                                 toán</a>
                             </li>
                             <?php 
@@ -89,7 +89,7 @@
                             }
                             ?>
 
-                            <li><a href="{{ route('cart.index') }}"><i class="fa fa-shopping-cart"></i>Giỏ hàng</a></li>
+                            <li><a href="{{ route('cart.show') }}"><i class="fa fa-shopping-cart"></i>Giỏ hàng</a></li>
                             <?php
                                 $customerId = Session::get('customerId');
                                 if($customerId!=Null){                                

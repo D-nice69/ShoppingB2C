@@ -17,7 +17,7 @@ Products List
             echo '<span style="color: red; padding: 10px">' . $message . '</span>';
             Session::put('message', null);
             }
-        ?>
+            ?>
         <div class="row w3-res-tb">
             <div class="col-sm-5 m-b-xs">
                 <select class="inpu\t-sm form-control w-sm inline v-middle">
@@ -49,46 +49,41 @@ Products List
                             </label>
                         </th>
                         <th>Tên</th>
-                        <th>Giá</th>
                         <th>Hình ảnh</th>
-                        <th>Số lượng</th>
-                        <th>Danh mục</th>
-                        <th>Thương hiệu</th>
+                        <th>Mô tả</th>
                         <th>Ẩn/Hiện</th>
+                        <th></th>
                         <th style="width:30px;"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($products as $product)
+                    @foreach ($sliders as $slider)
                     <tr>
                         <td><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label>
                         </td>
-                        <td>{{ $product->product_name }}</td>
-                        <td>{{ number_format ($product->product_price) }} VNĐ</td>
+                        <td>{{ $slider->name }}</td>
                         <td>
-                            <img src="/uploads/products/{{ $product->product_image }}"
-                                alt="{{ $product->product_image }}" width="100" height="100">
+                            <img src="/uploads/sliders/{{ $slider->image }}"
+                                alt="{{ $slider->image }}" width="100" height="100">
                         </td>
-                        <td>{{ $product->product_qty }}</td>
-                        <td>{{ $product->category->category_name }}</td>
-                        <td>{{ $product->brand->brand_name }}</td>
+                        <td>{{ $slider->desc }}</td>
                         <td>
                             <span class="text-ellipsis">
-                                @if($product->product_status==0)
-                                <a href="{{ route('product.unactive',['id'=>$product->id]) }}"><span
+                                @if($slider->status==0)
+                                <a href="{{ route('slider.unactive',['id'=>$slider->id]) }}"><span
                                         class="fa fa-eye"></span></a>
                                 @else
-                                <a href="{{ route('product.active',['id'=>$product->id]) }}"><span
+                                <a href="{{ route('slider.active',['id'=>$slider->id]) }}"><span
                                         class="fa fa-eye-slash"></span></a>
                                 @endif
                             </span>
                         </td>
                         <td>
-                            <a href="{{ route('product.edit',['id'=>$product->id]) }}">
+                            <a href="{{ route('slider.edit',['id'=>$slider->id]) }}">
                                 <i class="fa fa-pencil-square-o text-success text-active"></i>
                             </a>
                             <a href="" class="action_delete"
-                                data-url="{{ route('product.delete',['id'=>$product->id]) }}">
+                                data-url="{{ route('slider.delete',['id'=>$slider->id]) }}">
                                 <i class="fa fa-times text-danger text"></i>
                             </a>
                         </td>
@@ -103,7 +98,7 @@ Products List
                         <small class="text-muted inline m-t-sm m-b-sm">showing 20-30 of 50 items</small>
                     </div> --}}
                 <div class="col-sm-7 text-right text-center-xs">
-                    {{$products->links()}}
+                    {{-- {{$sliders->links()}} --}}
                 </div>
             </div>
         </footer>

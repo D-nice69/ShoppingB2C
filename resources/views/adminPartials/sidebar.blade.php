@@ -46,6 +46,17 @@
                 <li class="sub-menu">
                     <a href="javascript:;">
                         <i class="fa fa-book"></i>
+                        <span>Slider</span>
+                    </a>
+                    <ul class="sub">
+                        <li><a href="{{ route('slider.create') }}">Thêm Slider</a></li>
+                        <li><a href="{{ route('slider.index') }}">Liệt kê Slider</a></li>
+
+                    </ul>
+                </li>
+                <li class="sub-menu">
+                    <a href="javascript:;">
+                        <i class="fa fa-book"></i>
                         <span>Đơn hàng</span>
                     </a>
                     <ul class="sub">

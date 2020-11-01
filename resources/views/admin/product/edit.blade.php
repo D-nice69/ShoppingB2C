@@ -40,6 +40,14 @@ Edit product
                         @enderror
                     </div>
                     <div class="form-group">
+                        <label for="">Số lượng</label>
+                        <input class="form-control @error('product_qty') is-invalid @enderror" name="product_qty"
+                            value="{{ $product->product_qty }}">
+                        @error('product_qty')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
                         <label for="">Mô tả</label>
                         <textarea rows="5" class="form-control @error('product_desc') is-invalid @enderror"
                             name="product_desc">{{ $product->product_desc }}</textarea>

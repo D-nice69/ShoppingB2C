@@ -37,6 +37,14 @@ Add product
                         @enderror
                     </div>
                     <div class="form-group">
+                        <label for="">Số lượng</label>
+                        <input class="form-control @error('product_qty') is-invalid @enderror" name="product_qty"
+                            placeholder="Enter price">
+                        @error('product_qty')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
                         <label for="">Mô tả</label>
                         <textarea rows="5" class="form-control @error('product_desc') is-invalid @enderror"
                             name="product_desc"></textarea>
@@ -77,7 +85,7 @@ Add product
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="">Hiện/Ẩn</label>
+                        <label for="">Ẩn/Hiện</label>
                         <select class="form-control m-bot15" name="product_status">
                             <option value="0">Hiện</option>
                             <option value="1">Ẩn</option>
