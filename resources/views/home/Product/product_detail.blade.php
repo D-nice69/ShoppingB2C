@@ -10,8 +10,9 @@ Eshop | {{ $getProduct->product_name }}
 @endsection
 @section('css')
 <style>
-  .cart {
-    margin-left: 0px;
+  .add-to-cart {
+    color: black;
+    margin: 0px 5px 10px;
   }
 
   .product-information {
@@ -64,22 +65,26 @@ Eshop | {{ $getProduct->product_name }}
       <span>
         <span>{{ number_format($getProduct->product_price) }} VNĐ</span>
         <label>Số lượng:</label>
-        <form action="{{ route('cart.store') }}" method="POST" enctype="multipart/form-data">
+        <form>
           @csrf
-          <input type="number" name="qty" value="1" min="1" />
-          <input type="hidden" name="productid_hidden" value="{{ $getProduct->id }}">
-          <button type="submit" class="btn btn-fefault cart">
-            <i class="fa fa-shopping-cart"></i>
-            Thêm giỏ hàng
-          </button>
+          <input type="number" name="qty" min="1" value="1" class="cart_product_qty_{{$getProduct->id}}" />
+          <input type="hidden" value="{{$getProduct->id}}" class="cart_product_id_{{$getProduct->id}}">
+          <input type="hidden" value="{{$getProduct->product_name}}" class="cart_product_name_{{$getProduct->id}}">
+          <input type="hidden" value="{{$getProduct->product_image}}" class="cart_product_image_{{$getProduct->id}}">
+          <input type="hidden" value="{{$getProduct->product_price}}" class="cart_product_price_{{$getProduct->id}}">
+          <input type="hidden" value="{{ $getProduct->product_qty  }}"
+            class="cart_product_quantity_{{$getProduct->id}}">
+          <button style="background-color: #f9b02c" type="button" class="btn btn-default add-to-cart" name="add-to-cart"
+            data-id_product="{{ $getProduct->id }}">
+            <i class="fa fa-shopping-cart"></i>Thêm giỏ hàng</button>          
       </span>
       </form>
-      <p><b>Còn hàng:</b> Còn</p>
+      <p><b>Số lượng:</b> {{ $getProduct->product_qty }}</p>
       <p><b>Điều kiện:</b> Mới</p>
       <p><b>Danh mục:</b> {{ $getProduct->category->category_name }}</p>
       <p><b>Thương hiệu:</b> {{ $getProduct->brand->brand_name }}</p>
-      <div class="fb-like" data-href="{{ $url_canonical }}" data-width="" data-layout="button_count"
-        data-action="like"  data-size="small" data-share="true"></div>
+      <div class="fb-like" data-href="{{ $url_canonical }}" data-width="" data-layout="button_count" data-action="like"
+        data-size="small" data-share="true"></div>
     </div>
     <!--/product-information-->
   </div>

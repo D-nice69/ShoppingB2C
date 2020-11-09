@@ -189,14 +189,18 @@ Order details
                     @endif
                 </div>
                 @if($order->status == 1)
+                @can('update_order')
                 <a style="margin: 5px" class="btn btn-default" id="update_order" data-url="{{ route('order.update',['id'=>$order->id]) }}"
                     href="">Thanh toán hóa đơn và cập
                     nhật số lượng sản phẩm
                 </a>                
-                @endif                
+                @endcan
+                @endif
+                @can('print_order')
                 <a style="margin: 5px" class="btn btn-default"
                     href="{{ route('order.print',['checkout_code'=>$order->code]) }}">In đơn hàng
-                </a>               
+                </a>    
+                @endcan                
             </div>
         </section>
     </form>

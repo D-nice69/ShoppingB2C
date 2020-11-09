@@ -13,18 +13,22 @@
     <div class="top-nav clearfix">
         <!--search & user info start-->
         <ul class="nav pull-right top-menu">
-            <li>
+            {{-- <li>
                 <input type="text" class="form-control search" placeholder=" Search">
-            </li>
+            </li> --}}
             <!-- user login dropdown start-->
             <li class="dropdown">
                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                     <img alt="" src="">
                     <span class="username">
                         <?php
-                            $message = Session::get('admin_name');
-                            if($message){
-                                echo $message;
+                            $message1 = Session::get('admin_name');
+                            if($message1){
+                                echo $message1;
+                            }
+                            $message2 = Session::get('customerName');
+                            if($message2){
+                                echo $message2;
                             }
                         ?>
                       

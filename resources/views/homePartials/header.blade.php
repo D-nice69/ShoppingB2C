@@ -67,18 +67,20 @@
                             <li><a href="#"><i class="fa fa-star"></i>Đánh dấu</a></li>
                             <?php
                                 $customerId = Session::get('customerId');
-                                $shippingId = Session::get('shippingId');
-                                if($customerId!=Null && $shippingId!=Null){                                
+                                $cart = Session::get('cart');
+                                if($customerId!=Null && $cart!=Null){                                
                             ?>
-                            <li><a href="{{ route('customer.payment') }}"><i class="fa fa-crosshairs"></i>Thanh
+                            <li><a href="{{ route('customer.checkout') }}"><i class="fa fa-crosshairs"></i>Thanh
                                     toán</a>
                             </li>
+                            <li><a href="{{ route('Admin.showDashboard') }}"><i class="fa fa-money"></i>Kênh người bán</a></li>
                             <?php 
-                                }elseif ($customerId!=Null && $shippingId==Null) {                                   
+                                }elseif ($customerId!=Null && $cart==Null) {                                   
                             ?>
                             <li><a href="{{ route('cart.show') }}"><i class="fa fa-crosshairs"></i>Thanh
                                 toán</a>
                             </li>
+                            <li><a href="{{ route('Admin.showDashboard') }}"><i class="fa fa-money"></i>Kênh người bán</a></li>
                             <?php 
                             }else {                                    
                             ?>
@@ -129,15 +131,18 @@
                     <div class="mainmenu pull-left">
                         <ul class="nav navbar-nav collapse navbar-collapse">
                             <li><a href="{{ route('home.index') }}" class="active">Trang chủ</a></li>
-                            <li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
+                            @php
+                                use App\Category;
+                                $categoriesLimit = Category::where('category_status',0)->latest()->limit(6)->get();
+                            @endphp
+                            @foreach($categoriesLimit as $key=>$category)
+                            <li class="dropdown"><a href="#">{{ $category->category_name }}<i class="fa fa-angle-down"></i></a>
                                 <ul role="menu" class="sub-menu">
-                                    <li><a href="shop.html">Products</a></li>
-                                    <li><a href="product-details.html">Product Details</a></li>
-                                    <li><a href="checkout.html">Checkout</a></li>
-                                    <li><a href="cart.html">Cart</a></li>
-                                    <li><a href="login.html">Login</a></li>
+                                    <li><a href="shop.html">Products</a></li>                                    
                                 </ul>
                             </li>
+                            @endforeach
+
                             <li class="dropdown"><a href="#">Blog<i class="fa fa-angle-down"></i></a>
                                 <ul role="menu" class="sub-menu">
                                     <li><a href="blog.html">Blog List</a></li>

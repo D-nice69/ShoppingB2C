@@ -13,6 +13,7 @@ use App\Town;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Cart;
+use Illuminate\Support\Facades\Auth;
 
 class CustomerController extends Controller
 {
@@ -27,11 +28,16 @@ class CustomerController extends Controller
         $result = Customer::where('email',$email)->where('password',$password)->first();
     	if($result){
             Session::put('customerName',$result->name);
-    		Session::put('customerId',$result->id);
-    		return redirect('/checkout');
-    	}else{
+            Session::put('customerId',$result->id); 
+        }
+        if(Auth::attempt([
+            'email' => $email,
+            'password' => $request->password
+        ])){
+            return redirect()->intended();
+        }else{
     		return redirect('/login');
-    	}
+        };
     }
     public function register()
     {
@@ -44,6 +50,7 @@ class CustomerController extends Controller
             'email' =>$request->email,
             'phone' =>$request->phone,
             'password' =>md5($request->password),
+            'role_id' => 2,
         ]);
         $customerId = $data->id;
         Session::put('customerId',$customerId);
@@ -92,8 +99,9 @@ class CustomerController extends Controller
         return view('home.checkout.payment',compact('cart','meta_desc','meta_keywords','meta_title','url_canonical'));
     }
     public function logout(){
-    	Session::flush();
-    	return redirect()->back();
+        Session::flush();
+        Auth::logout();
+    	return redirect()->route('home.index');
     }
     public function deliveryCal(Request $request)
     {

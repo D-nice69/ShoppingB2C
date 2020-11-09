@@ -107,13 +107,13 @@ class ProductController extends Controller
     public function unactive($id)
     {
         Product::find($id)->update(['product_status'=>1]);
-        Session::put('message','Product is hidden');
+        Session::put('message','Đã ẩn');
         return redirect()->route('product.index');
     }
     public function active($id)
     {
         Product::find($id)->update(['product_status'=>0]);
-        Session::put('message','Product is shown');
+        Session::put('message','đã hiện');
         return redirect()->route('product.index');
     }
 }

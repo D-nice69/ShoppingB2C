@@ -9,6 +9,7 @@ use Session;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Redirect;
 use App\Social; //sử dụng model Social
+use Illuminate\Support\Facades\Auth;
 use Socialite; //sử dụng Socialite
 
 session_start();
@@ -20,7 +21,7 @@ class AdminController extends Controller
         if($admin_id){
             return redirect()->route('Admin.showDashboard');
         }else{
-            return Redirect::to('/admin')->send();
+            return Redirect::to('home')->send();
         }
     }
     public function index(){
@@ -32,8 +33,13 @@ class AdminController extends Controller
         }
     }
     public function showDashboard(){
-        $this->AuthLogin();
-    	return view('admin.adminDashboard');
+        $c = Session::get('customerId');       
+        if($c){
+            return view('admin.adminDashboard');
+        }else{
+            $this->AuthLogin();
+            return view('admin.adminDashboard');
+        }
     }
     public function adminLogin(Request $request){
     	$admin_email = $request->admin_email;
@@ -57,7 +63,8 @@ class AdminController extends Controller
         $this->AuthLogin();
         Session::put('admin_name',null);
         Session::put('id',null);
-        return Redirect::to('/admin');
+        Session::put('customerName',null);
+        Session::put('customerId',null);
     }
     
     //login facebook

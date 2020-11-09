@@ -77,16 +77,18 @@ Coupons List
                             @else
                             {{ number_format($coupon->discount_number) }} VNĐ
                             @endif
-                            
+
                         </td>
                         <td>
                             {{-- <a href="{{ route('coupon.edit',['id'=>$coupon->id]) }}">
                             <i class="fa fa-pencil-square-o text-success text-active"></i>
                             </a> --}}
+                            @can('delete_coupon')
                             <a href="" class="action_delete"
                                 data-url="{{ route('coupon.delete',['id'=>$coupon->id]) }}">
                                 <i class="fa fa-times text-danger text"></i>
                             </a>
+                            @endcan
                         </td>
                     </tr>
                     @endforeach

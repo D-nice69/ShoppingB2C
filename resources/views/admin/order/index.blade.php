@@ -71,9 +71,11 @@
                                     <a href="{{ route('order.view',['id'=>$order->id]) }}">
                                         <i class="fa fa-eye"></i>
                                     </a>
+                                    @can('delete_order')
                                     <a href="" class="action_delete" data-url="{{ route('order.delete',['id'=>$order->id]) }}">
                                         <i  class="fa fa-times text-danger text"></i>
                                     </a>                                                                     
+                                    @endcan
                                 </td>
                             </tr>
                         @endforeach

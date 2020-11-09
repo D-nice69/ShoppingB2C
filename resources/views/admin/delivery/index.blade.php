@@ -81,20 +81,22 @@ Shipping management
                     </div>
                     <div class="form-group">
                         <label for="">Phí vận chuyển</label>
-                        <input class="form-control fee_ship @error('fee_feeship') is-invalid @enderror" name="fee_feeship"
-                            placeholder="Enter name">
+                        <input class="form-control fee_ship @error('fee_feeship') is-invalid @enderror"
+                            name="fee_feeship" placeholder="Enter name">
                         @error('fee_feeship')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                     </div>
+                    @can('add_shipping')
                     <button type="submit" class="btn btn-info add_delivery">Thêm phí vận chuyển</button>
+                    @endcan
                 </form>
             </div>
             <div class="table-responsive">
                 <table class="table table-striped b-t b-light">
                     <thead>
                         <tr>
-                            
+
                             <th>Tên thành phố</th>
                             <th>Tên quận huyện</th>
                             <th>Tên xã phường</th>
@@ -106,17 +108,18 @@ Shipping management
                         @foreach ($fee_ships as $fee_ship)
                         <tr>
                             <td>
-                               {{ $fee_ship->city->name }}
+                                {{ $fee_ship->city->name }}
                             </td>
                             <td>
-                               {{ $fee_ship->district->name }}
+                                {{ $fee_ship->district->name }}
                             </td>
                             <td>
                                 {{ $fee_ship->town->name }}
-                             </td>
-                             <td data-feeship_id="{{ $fee_ship->id }}" class="feeship_edit" contenteditable>
+                            </td>
+                            <td data-feeship_id="{{ $fee_ship->id }}" class="feeship_edit" @can('edit_shipping')
+                                contenteditable @endcan>
                                 {{ number_format($fee_ship->fee_feeship) }}
-                             </td>                            
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>

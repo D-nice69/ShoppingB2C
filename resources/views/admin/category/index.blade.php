@@ -69,12 +69,17 @@
                                     </span>
                                 </td>
                                 <td>
+                                    @can('edit_category')
                                     <a href="{{ route('category.edit',['id'=>$category->id]) }}">
                                         <i class="fa fa-pencil-square-o text-success text-active"></i>
                                     </a>
+                                    @endcan
+                                    @can('delete_category')
                                     <a  href="" class="action_delete" data-url="{{ route('category.delete',['id'=>$category->id]) }}">
                                         <i  class="fa fa-times text-danger text"></i>
                                     </a>                                    
+                                    @endcan
+                                        
                                 </td>
                             </tr>
                         @endforeach

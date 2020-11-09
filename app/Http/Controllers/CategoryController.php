@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
+use App\Components\Recusive;
 session_start();
 class CategoryController extends Controller
 {
@@ -18,7 +19,8 @@ class CategoryController extends Controller
     }
     public function create()
     {
-        return view('admin.category.create');
+        $htmlOption = $this->getCategory($parentId = '');
+        return view('admin.category.create',compact('htmlOption'));
     }
     public function store(StoreCategory $request)
     {
@@ -26,16 +28,17 @@ class CategoryController extends Controller
             'category_name' => $request->category_name,
             'category_description' => $request->category_description,
             'category_status' => $request->category_status,
+            'parent_id' => $request->parent_id,
             'keyword' => $request->keyword,
             'slug' => Str::slug( $request->category_name,'-'),
         ]);
-        Session::put('message','Add category successfully');
-        return redirect()->route('category.index');
-    }
+        return redirect()->route('category.index')->with('message','Thêm danh mục thành công');
+    }   
     public function edit($id)
     {
         $category = Category::where('id',$id)->first();
-        return view('admin.category.edit',compact('category'));
+        $htmlOption = $this->getCategory($category->parent_id);
+        return view('admin.category.edit',compact('category','htmlOption'));
     }
     public function update($id, StoreCategory $request)
     {
@@ -43,6 +46,7 @@ class CategoryController extends Controller
             'category_name' => $request->category_name,
             'category_description' => $request->category_description,
             'category_status' => $request->category_status,
+            'parent_id' => $request->parent_id,
             'keyword' => $request->keyword,
             'slug' => Str::slug( $request->category_name,'-'),
         ]);
@@ -77,4 +81,12 @@ class CategoryController extends Controller
             ], 500);
         }
     }
+    public function getCategory($parentId)
+    {
+        $data = Category::all();
+        $recusive = new Recusive($data);
+        $htmlOption = $recusive->categoryRecusive($parentId);
+        return $htmlOption;
+    }
+
 }

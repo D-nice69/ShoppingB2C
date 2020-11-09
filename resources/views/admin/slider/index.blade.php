@@ -63,8 +63,8 @@ Products List
                         </td>
                         <td>{{ $slider->name }}</td>
                         <td>
-                            <img src="/uploads/sliders/{{ $slider->image }}"
-                                alt="{{ $slider->image }}" width="100" height="100">
+                            <img src="/uploads/sliders/{{ $slider->image }}" alt="{{ $slider->image }}" width="100"
+                                height="100">
                         </td>
                         <td>{{ $slider->desc }}</td>
                         <td>
@@ -79,13 +79,17 @@ Products List
                             </span>
                         </td>
                         <td>
+                            @can('edit_slider')
                             <a href="{{ route('slider.edit',['id'=>$slider->id]) }}">
                                 <i class="fa fa-pencil-square-o text-success text-active"></i>
                             </a>
+                            @endcan
+                            @can('delete_slider')
                             <a href="" class="action_delete"
                                 data-url="{{ route('slider.delete',['id'=>$slider->id]) }}">
                                 <i class="fa fa-times text-danger text"></i>
                             </a>
+                            @endcan
                         </td>
                     </tr>
                     @endforeach

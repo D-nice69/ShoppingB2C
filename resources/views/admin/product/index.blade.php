@@ -84,13 +84,17 @@ Products List
                             </span>
                         </td>
                         <td>
+                            @can('edit_product')
                             <a href="{{ route('product.edit',['id'=>$product->id]) }}">
                                 <i class="fa fa-pencil-square-o text-success text-active"></i>
                             </a>
+                            @endcan
+                            @can('delete_product')
                             <a href="" class="action_delete"
                                 data-url="{{ route('product.delete',['id'=>$product->id]) }}">
                                 <i class="fa fa-times text-danger text"></i>
                             </a>
+                            @endcan
                         </td>
                     </tr>
                     @endforeach

@@ -38,6 +38,13 @@ Add category
                         @enderror
                     </div>
                     <div class="form-group">
+                        <label for="">Chọn danh mục cha</label>
+                        <select class="form-control m-bot15" name="parent_id">
+                            <option value="0">---Chọn danh mục cha---</option>
+                            {!! $htmlOption !!}
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="">Ẩn/Hiện</label>
                         <select class="form-control m-bot15" name="category_status">
                             <option value="0">Hiện</option>

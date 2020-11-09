@@ -69,12 +69,16 @@
                                     </span>
                                 </td>
                                 <td>
+                                    @can('edit_brand')
                                     <a href="{{ route('brand.edit',['id'=>$brand->id]) }}">
                                         <i class="fa fa-pencil-square-o text-success text-active"></i>
                                     </a>
+                                    @endcan
+                                    @can('delete_brand')
                                     <a  href="" class="action_delete" data-url="{{ route('brand.delete',['id'=>$brand->id]) }}">
                                         <i  class="fa fa-times text-danger text"></i>
                                     </a>                                    
+                                    @endcan
                                 </td>
                             </tr>
                         @endforeach
