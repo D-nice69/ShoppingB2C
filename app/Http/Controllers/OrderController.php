@@ -12,6 +12,7 @@ use App\Shipping;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Cart;
+use Illuminate\Support\Facades\Auth;
 use PDF;
 class OrderController extends Controller
 {
@@ -63,8 +64,17 @@ class OrderController extends Controller
     // }
     public function index(Request $request)
     {
+        $orderDetails = Order_detail::where('seller_id',Auth::user()->id)->get();
         $orders = Order::oldest()->paginate(10);
-        return view('admin.order.index',compact('orders'));
+        // $product = Session::get('cart');
+
+        // foreach($product as $pro){
+        //     $unique[] = $pro['seller_id'];
+        // }
+        // $unique_id = array_unique($unique);
+        // dd($unique_id);
+        
+        return view('admin.order.index',compact('orders','orderDetails'));
     }
     public function view($id, Request $request)
     {
@@ -72,17 +82,19 @@ class OrderController extends Controller
         $all_product = 0;
         $fee_ship = 0;
         foreach($order->orderDetails as $orderItem){
-            $coupon = Coupon::where('code',$orderItem->coupon)->first();
-            $one_product = $orderItem->product_sales_quantity * $orderItem->product_price;
-            $all_product += $one_product;
-            $fee_ship = $orderItem->fee_ship;
+            if($orderItem->seller_id == Auth::user()->id){
+                $coupon = Coupon::where('code',$orderItem->coupon)->first();
+                $one_product = $orderItem->product_sales_quantity * $orderItem->product_price;
+                $all_product += $one_product;
+                $fee_ship = $orderItem->fee_ship;
+            }
         }
         return view('admin.order.view',compact('order','coupon','all_product','fee_ship'));
     }
     public function confirm(Request $request)
     {
         $data = $request->all();
-        
+        $product = Session::get('cart');
         $shipping = Shipping::create([
             'name' => $data['shipping_name'],
             'email' => $data['shipping_email'],
@@ -93,28 +105,51 @@ class OrderController extends Controller
         ]);
         $shipping_id = $shipping->id;
         
-        $order = Order::create([
-            'customer_id' => Session::get('customerId'),
-            'shipping_id' => $shipping_id,
-            'status' => 1,
-            'code' => substr(md5(microtime()),rand(0,26),5),
-        ]);
-        $order_id = $order->id;
-
-        $product = Session::get('cart');
-        if($product){
-            foreach($product as $val){
-                Order_detail::create([
-                    'order_id' => $order_id,
-                    'product_id' => $val['product_id'],
-                    'product_name' => $val['product_name'],
-                    'product_sales_quantity' => $val['product_qty'],
-                    'product_price' => $val['product_price'],
-                    'coupon' => $data['order_coupon'],
-                    'fee_ship' => $data['order_fee'],
-                ]);
-            }
+        foreach($product as $pro){
+            $unique[] = $pro['seller_id'];
         }
+        $unique_id = array_unique($unique);
+        if($product){
+            foreach($unique_id as $ui){
+                $order = Order::create([
+                    'customer_id' => Session::get('customerId'),
+                    'shipping_id' => $shipping_id,
+                    'seller_id' => $ui,
+                    'status' => 1,
+                    'code' => substr(md5(microtime()),rand(0,26),5),
+                ]);
+            foreach($product as $val){
+                if($val['seller_id']==$ui){
+                    Order_detail::create([
+                        'order_id' => $order->id,
+                        'product_id' => $val['product_id'],
+                        'seller_id' => $val['seller_id'],
+                        'product_name' => $val['product_name'],
+                        'product_sales_quantity' => $val['product_qty'],
+                        'product_price' => $val['product_price'],
+                        'coupon' => $data['order_coupon'],
+                        'fee_ship' => $data['order_fee'],
+                        ]);
+                    }
+                }
+            }
+
+        }
+
+        // if($product){
+        //     foreach($product as $val){
+        //         Order_detail::create([
+        //             'order_id' => $order->id,
+        //             'product_id' => $val['product_id'],
+        //             'seller_id' => $val['seller_id'],
+        //             'product_name' => $val['product_name'],
+        //             'product_sales_quantity' => $val['product_qty'],
+        //             'product_price' => $val['product_price'],
+        //             'coupon' => $data['order_coupon'],
+        //             'fee_ship' => $data['order_fee'],
+        //         ]);
+        //     }
+        // }
         Session::forget('fee');
         Session::forget('coupon');
         Session::forget('cart');

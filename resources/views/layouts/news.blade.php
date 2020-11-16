@@ -29,10 +29,6 @@
     <link href="css/responsive.css" rel="stylesheet">
     <link href="css/sweetalert.css" rel="stylesheet">
     <link href="css/category.css" rel="stylesheet">
-    <link href="css/gallery.css" rel="stylesheet">
-    <link href="css/lightSlider.css" rel="stylesheet">
-    <link href="css/lightGallery.css" rel="stylesheet">
-    <link type="text/css" rel="stylesheet" href="css/lightGallery.css" />      
     <!--[if lt IE 9]>
     <script src="js/html5shiv.js"></script>
     <script src="js/respond.min.js"></script>
@@ -42,9 +38,7 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
-    <style>
 
-    </style>
 
     @yield('css')
 </head>
@@ -62,10 +56,7 @@
     <section>
         <div class="container">
             <div class="row">
-                <div class="col-sm-3">
-                    @yield('left_side_bar')
-                </div>
-                <div class="col-sm-9 padding-right">
+                <div class="col-sm-12">
                     @yield('content')
                 </div>
             </div>
@@ -84,11 +75,9 @@
     <div id="fb-root"></div>
     <div id="fb-root"></div>
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v8.0"
-    nonce="kYGdzKZT"></script>
+        nonce="kYGdzKZT"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script src="js/sweetalert.min.js"></script>
-    <script src="js/lightGallery.js"></script>
-    <script src="js/lightSlider.js"></script>
     <script>
 
     </script>
@@ -119,7 +108,6 @@
             $('.add-to-cart').click(function(){
                 var id = $(this).data('id_product');
                 var cart_product_id = $('.cart_product_id_' + id).val();
-                var cart_product_seller_id = $('.cart_product_seller_id_' + id).val();
                 var cart_product_name = $('.cart_product_name_' + id).val();
                 var cart_product_image = $('.cart_product_image_' + id).val();
                 var cart_product_price = $('.cart_product_price_' + id).val();
@@ -142,8 +130,7 @@
                         method: 'POST',
                         data:{cart_product_quantity:cart_product_quantity,cart_product_id:cart_product_id,
                         cart_product_name:cart_product_name,cart_product_image:cart_product_image,
-                        cart_product_price:cart_product_price,cart_product_qty:cart_product_qty,
-                        cart_product_seller_id:cart_product_seller_id,_token:_token},
+                        cart_product_price:cart_product_price,cart_product_qty:cart_product_qty,_token:_token},
                         success:function(data){
                             swal({
                                     title: "Đã thêm sản phẩm vào giỏ hàng",
@@ -206,7 +193,6 @@
                             var shipping_address = $('.shipping_address').val();
                             var shipping_phone = $('.shipping_phone').val();
                             var shipping_note = $('.shipping_note').val();
-                            var seller_id = $('.seller_id').val();
                             var order_fee = $('.order_fee').val();
                             var order_coupon = $('.order_coupon').val();
                             var payment_select1 = [];
@@ -221,8 +207,7 @@
                                 method: 'POST',
                                 data:{shipping_email:shipping_email,shipping_name:shipping_name
                                 ,shipping_address:shipping_address,shipping_phone:shipping_phone,shipping_note:shipping_note
-                                ,order_fee:order_fee,order_coupon:order_coupon,payment_select:payment_select,
-                                seller_id:seller_id,_token:_token},
+                                ,order_fee:order_fee,order_coupon:order_coupon,payment_select:payment_select,_token:_token},
                                 success:function(data){
                                     swal("Deleted!", "Your imaginary file has been deleted.", "success");
                                     window.setTimeout(function(){
@@ -237,23 +222,6 @@
             });
         });
     </script>
-    <script>
-     
-    //     $('#lightSlider').lightSlider({
-    //         gallery: true,
-    //         item: 1,
-    //         loop:true,
-    //         slideMargin: 0,
-    //         thumbItem: 3,
-    //         thumbMargin: 0,
-    //         controls: true,
-    //         adaptiveHeight:true,
-    //         slideMargin: 100,
-    //         prevHtml: '<i class="fa fa-angle-left" style="font-size:50px"></i>',
-    //         nextHtml: '<i class="fa fa-angle-right" style="font-size:50px"></i>',
-            
-    // });
-    </script>   
     @yield('js')
 </body>
 

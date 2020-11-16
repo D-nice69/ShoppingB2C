@@ -63,31 +63,33 @@ Products List
                         </td>
                         <td>{{ $post->title }}</td>
                         <td>{{ $post->description }}</td>
-                        <td>{{ $post->image }}</td>
-                        <td>{{ $post->category_post_id }}</td>                       
                         <td>
-                            {{-- <span class="text-ellipsis">
-                                @if($product->product_status==0)
-                                <a href="{{ route('product.unactive',['id'=>$product->id]) }}"><span
+                            <img src="/uploads/posts/{{ $post->image }}" alt="{{ $post->image }}" width="100" height="100">
+                        </td>
+                        <td>{{ $post->category_post->name }}</td>                       
+                        <td>
+                            <span class="text-ellipsis">
+                                @if($post->status==0)
+                                <a href="{{ route('post.unactive',['id'=>$post->id]) }}"><span
                                         class="fa fa-eye"></span></a>
                                 @else
-                                <a href="{{ route('product.active',['id'=>$product->id]) }}"><span
+                                <a href="{{ route('post.active',['id'=>$post->id]) }}"><span
                                         class="fa fa-eye-slash"></span></a>
                                 @endif
-                            </span> --}}
+                            </span>
                         </td>
                         <td>
-                            {{-- @can('edit_product')
-                            <a href="{{ route('product.edit',['id'=>$product->id]) }}">
+                            {{-- @can('edit_post') --}}
+                            <a href="{{ route('post.edit',['id'=>$post->id]) }}">
                                 <i class="fa fa-pencil-square-o text-success text-active"></i>
                             </a>
-                            @endcan
-                            @can('delete_product')
+                            {{-- @endcan --}}
+                            {{-- @can('delete_post') --}}
                             <a href="" class="action_delete"
-                                data-url="{{ route('product.delete',['id'=>$product->id]) }}">
+                                data-url="{{ route('post.delete',['id'=>$post->id]) }}">
                                 <i class="fa fa-times text-danger text"></i>
                             </a>
-                            @endcan --}}
+                            {{-- @endcan --}}
                         </td>
                     </tr>
                     @endforeach

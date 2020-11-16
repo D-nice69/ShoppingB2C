@@ -44,12 +44,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				<input type="text" class="ggg" name="phone" placeholder="PHONE" required="">
 				<input type="password" class="ggg" name="password" placeholder="PASSWORD" required="">
 				<div class="clearfix"></div>
-				<div class="g-recaptcha" data-sitekey="{{env('CAPTCHA_KEY')}}"></div>
+				{{-- <div class="g-recaptcha" data-sitekey="{{env('CAPTCHA_KEY')}}"></div>
 				@if($errors->has('g-recaptcha-response'))
 				<span class="invalid-feedback" style="display:block">
 					<strong>{{$errors->first('g-recaptcha-response')}}</strong>
 				</span>
-				@endif
+				@endif --}}
 				<h4><input type="checkbox" />I agree to the Terms of Service and Privacy Policy</h4>
 				<input type="submit" value="Đăng ký">
 			</form>

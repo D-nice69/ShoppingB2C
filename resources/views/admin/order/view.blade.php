@@ -148,6 +148,7 @@ Order details
                         </thead>
                         <tbody>
                             @foreach ($order->orderDetails as $orderItem)
+                            @if($orderItem->seller_id == Auth::user()->id)
                             <tr>
                                 <td>{{ $orderItem->product_name }}</td>
                                 <td>
@@ -165,6 +166,7 @@ Order details
                                     VNĐ
                                 </td>
                             </tr>
+                            @endif
                             @endforeach
                         </tbody>
                     </table>

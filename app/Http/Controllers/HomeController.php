@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Brand;
 use App\Category;
+use App\CategoryPost;
 use App\Comment;
+use App\Post;
 use App\Product;
 use App\Slider;
 use Illuminate\Http\Request;
@@ -19,11 +21,8 @@ class HomeController extends Controller
         $meta_keywords = "";
         $meta_title = "";
         $url_canonical = $request->url();
-        $categories = Category::where('category_status',0)->latest()->get();
-        $brands = Brand::where('brand_status',0)->latest()->get();
         $products = Product::where('product_status',0)->latest()->get();
-        $sliders = Slider::where('status',0)->latest()->limit(5)->get();
-        return view('eshopHome',compact('categories','brands','products','meta_desc','meta_keywords','meta_title','url_canonical','sliders'));
+        return view('eshopHome',compact('products','meta_desc','meta_keywords','meta_title','url_canonical'));
     }
     public function categoryProduct($slug, Request $request)
     {
@@ -34,11 +33,8 @@ class HomeController extends Controller
         $meta_title = $getCategory->category_name;
         $url_canonical = $request->url();
         //--SEO
-        $sliders = Slider::where('status',0)->latest()->limit(5)->get();
         $categoryProducts = Category::find($getCategory->id)->products;
-        $categories = Category::latest()->get();
-        $brands = Brand::latest()->get();
-        return view('home.categoryProduct.index',compact('sliders','categories','brands','meta_desc','meta_keywords','meta_title','url_canonical','categoryProducts','getCategory'));
+        return view('home.categoryProduct.index',compact('meta_desc','meta_keywords','meta_title','url_canonical','categoryProducts','getCategory'));
     }
     public function brandProduct($slug, Request $request)
     {
@@ -49,11 +45,8 @@ class HomeController extends Controller
         $meta_title = $getBrand->brand_name;
         $url_canonical = $request->url();
         //--SEO
-        $sliders = Slider::where('status',0)->latest()->limit(5)->get();
         $brandProducts = Brand::find($getBrand->id)->products;
-        $categories = Category::latest()->get();
-        $brands = Brand::latest()->get();
-        return view('home.brandProduct.index',compact('sliders','categories','brands','meta_desc','meta_keywords','meta_title','url_canonical','brandProducts','getBrand'));
+        return view('home.brandProduct.index',compact('meta_desc','meta_keywords','meta_title','url_canonical','brandProducts','getBrand'));
     }
     public function productDetails($slug, Request $request)
     {
@@ -64,11 +57,8 @@ class HomeController extends Controller
         $meta_title = $getProduct->product_name;
         $url_canonical = $request->url();
         //--SEO
-        $sliders = Slider::where('status',0)->latest()->limit(5)->get();
         $productCategories = Product::where('category_id',$getProduct->category_id)->whereNotIn('products.id',[$getProduct->id])->get();
-        $categories = Category::latest()->get();
-        $brands = Brand::latest()->get();
-        return view('home.Product.product_detail',compact('categories','brands','meta_desc','meta_keywords','meta_title','url_canonical','getProduct','productCategories','sliders'));
+        return view('home.Product.product_detail',compact('meta_desc','meta_keywords','meta_title','url_canonical','getProduct','productCategories'));
     }
     public function search(Request $request)
     {
@@ -78,12 +68,44 @@ class HomeController extends Controller
         $meta_title = "Tìm kiếm sản phẩm";
         $url_canonical = $request->url();
         //--SEO
-        $sliders = Slider::where('status',0)->latest()->limit(5)->get();
-        $categories = Category::latest()->get();
-        $brands = Brand::latest()->get();
         $products = Product::latest()->get();
         $keyword = $request->keywords_submit;
         $searchProducts = Product::where('product_name','like','%'.$keyword.'%')->get();
-        return view('home.Product.search',compact('sliders','categories','brands','products','meta_desc','meta_keywords','meta_title','url_canonical','searchProducts'));
+        return view('home.Product.search',compact('products','meta_desc','meta_keywords','meta_title','url_canonical','searchProducts'));
+    }
+    public function new(Request $request)
+    {
+        //SEO
+        $meta_desc = "Tin tức";
+        $meta_keywords = "Tin tức";
+        $meta_title = "Tin tức";
+        $url_canonical = $request->url();
+        //--SEO
+        $news = Post::latest()->paginate(4);
+        return view('home.news.index',compact('meta_desc','meta_keywords','meta_title','url_canonical','news'));
+    }
+    public function newDetails($slug, Request $request)
+    {
+        //SEO
+        $meta_desc = "Tin tức";
+        $meta_keywords = "Tin tức";
+        $meta_title = "Tin tức";
+        $url_canonical = $request->url();
+        //--SEO
+        $new = Post::where('slug',$slug)->where('status',0)->first();
+        $news = Post::where('category_post_id',$new->category_post_id)->where('status',0)->take(6)->where('id','!=',$new->id)->get();
+        return view('home.news.newDetails',compact('new','news','meta_desc','meta_keywords','meta_title','url_canonical'));
+    }
+    public function newCategory($slug, Request $request)
+    {
+        //SEO
+        $meta_desc = "Tin tức";
+        $meta_keywords = "Tin tức";
+        $meta_title = "Tin tức";
+        $url_canonical = $request->url();
+        //--SEO
+        $category = CategoryPost::where('slug',$slug)->where('status',0)->first();
+        $categoryPosts = Post::where('category_post_id',$category->id)->where('status',0)->paginate(4);
+        return view('home.news.categoryNew',compact('category','categoryPosts','meta_desc','meta_keywords','meta_title','url_canonical'));
     }
 }

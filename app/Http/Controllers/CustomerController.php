@@ -55,6 +55,7 @@ class CustomerController extends Controller
         $customerId = $data->id;
         Session::put('customerId',$customerId);
         Session::put('customerName',$request->name);
+        Auth::login($data);
         return redirect('/checkout');
     }
     public function Checkout(Request $request)
@@ -99,8 +100,8 @@ class CustomerController extends Controller
         return view('home.checkout.payment',compact('cart','meta_desc','meta_keywords','meta_title','url_canonical'));
     }
     public function logout(){
-        Session::flush();
         Auth::logout();
+        Session::flush();
     	return redirect()->route('home.index');
     }
     public function deliveryCal(Request $request)

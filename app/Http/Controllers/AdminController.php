@@ -61,6 +61,7 @@ class AdminController extends Controller
     }
     public function logout(){
         $this->AuthLogin();
+        Auth::logout();
         Session::put('admin_name',null);
         Session::put('id',null);
         Session::put('customerName',null);

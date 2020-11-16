@@ -8,6 +8,7 @@
                 <div class="productinfo text-center">
                     <form>
                         @csrf
+                        <input type="hidden" value="{{$product->user_id}}" class="cart_product_seller_id_{{$product->id}}">
                         <input type="hidden" value="{{$product->id}}" class="cart_product_id_{{$product->id}}">
                         <input type="hidden" value="{{$product->product_name}}"
                             class="cart_product_name_{{$product->id}}">

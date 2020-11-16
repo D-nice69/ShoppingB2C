@@ -22,7 +22,7 @@ class PostController extends Controller
     }
     public function store(Request $request)
     {
-        Post::create([
+        $storePost = [
             'title' => $request->title,
             'image' => '',
             'slug' => Str::slug($request->title),
@@ -30,8 +30,74 @@ class PostController extends Controller
             'status' => $request->status,
             'content' => $request->content,
             'category_post_id' => $request->parent_id,
-        ]);
+        ];
+        $getImage = $request->file('image');
+        if(!empty($getImage)){
+            $getNameImage = $getImage->getClientOriginalName();
+            $nameImage = current(explode('.',$getNameImage));
+            $newImage =  $nameImage.rand(0,999) .'.'.$getImage->getClientOriginalExtension();
+            $getImage->move('uploads/posts',$newImage);
+            $storePost['image'] = $newImage;
+            Post::create($storePost);
+            return redirect()->route('post.index');
+        }
+        Post::create($storePost);
         return redirect()->route('post.index');
+    }
+    
+    public function unactive($id)
+    {
+        Post::find($id)->update(['status'=>1]);
+        return redirect()->route('post.index')->with('message','Đã ẩn');
+    }
+    public function active($id)
+    {
+        Post::find($id)->update(['status'=>0]);
+        return redirect()->route('post.index')->with('message','Đã hiện');
+    }
+    public function edit($id)
+    {
+        $post = Post::find($id);
+        $cPost = CategoryPost::where('id',$post->category_post_id)->first();
+        $htmlOption = $this->getCategory($cPost->id);
+        return view('admin.post.edit',compact('post','htmlOption'));
+    }
+    public function update($id,Request $request)
+    {
+        $post = Post::find($id);
+        $updatePost = [
+            'title' => $request->title,
+            'image' => $post->image,
+            'slug' => Str::slug($request->title),
+            'description' => $request->description,
+            'status' => $request->status,
+            'content' => $request->content,
+            'category_post_id' => $request->parent_id,
+        ];
+        $getImage = $request->file('image');
+        if(!empty($getImage)){
+            $getNameImage = $getImage->getClientOriginalName();
+            $nameImage = current(explode('.',$getNameImage));
+            $newImage =  $nameImage.rand(0,999) .'.'.$getImage->getClientOriginalExtension();
+            $getImage->move('uploads/posts',$newImage);
+            $updatePost['image'] = $newImage;
+            Post::find($id)->update($updatePost);
+            return redirect()->route('post.index');
+        }
+        Post::find($id)->update($updatePost);
+        return redirect()->route('post.index');
+    }
+    public function delete($id)
+    {
+        Post::find($id)->delete();
+        return response()->json([
+            'code' => 200,
+            'message' => 'success'
+        ],200);
+        return response()->json([
+            'code' => 500,
+            'message' => 'fail'
+        ],500);
     }
     public function getCategory($parentId)
     {

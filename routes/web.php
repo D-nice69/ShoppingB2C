@@ -193,14 +193,18 @@ Route::prefix('admin')->group(function () {
                 ->name('post.create');
             Route::post('/store', 'PostController@store')
                 ->name('post.store');
-            // Route::get('/edit/{id}', 'PostController@edit')
-            //     // ->middleware('can:edit_user')
-            //     ->name('post.edit');
-            // Route::post('/update/{id}', 'PostController@update')
-            //     ->name('post.update');
-            // Route::get('/delete/{id}', 'PostController@delete')
-            //     // ->middleware('can:delete_user')
-            //     ->name('post.delete');
+            Route::get('/unactive/{id}', 'PostController@unactive')
+                ->name('post.unactive');
+            Route::get('/active/{id}', 'PostController@active')
+                ->name('post.active');
+            Route::get('/edit/{id}', 'PostController@edit')
+                // ->middleware('can:edit_user')
+                ->name('post.edit');
+            Route::post('/update/{id}', 'PostController@update')
+                ->name('post.update');
+            Route::get('/delete/{id}', 'PostController@delete')
+                // ->middleware('can:delete_user')
+                ->name('post.delete');
         }
     );
     
@@ -259,6 +263,11 @@ Route::get('/', 'HomeController@index')->name('home.index');
 Route::get('/home', 'HomeController@index')->name('home.index');
 Route::get('/home', 'HomeController@index')->name('home');
 
+//news
+Route::get('/news', 'HomeController@new')->name('home.new');
+Route::get('/news/{slug}', 'HomeController@newDetails')->name('home.newDetails');
+Route::get('/news/category/{slug}', 'HomeController@newCategory')->name('home.newCategory');
+
 //get products by category
 Route::get('/category/{slug}','HomeController@categoryProduct')->name('home.categoryProduct');
 
@@ -315,3 +324,5 @@ Route::get('/unset-coupon', 'CouponController@unset')->name('coupon.unset');
 
 //thanks for shopping
 Route::get('/thanks', 'CustomerController@thanks')->name('customer.thanks');
+
+

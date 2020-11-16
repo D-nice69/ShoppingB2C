@@ -1,0 +1,26 @@
+/* .demo {
+    width:100%;
+}
+ul#lightSlider {
+    list-style: none outside none;
+    padding-left: 0;
+    margin-bottom:0;
+}
+ul#lightSlider>li {
+    display: block;
+    float: left;
+    margin-right: 6px;
+    cursor:pointer;
+}
+ul.lSPager.lSGallery>li {
+    width: auto !important;
+    margin-right: 10px !important;
+}
+ul#lightSlider>li>img {
+    display: block;
+    height: auto;
+    max-width: 100%;
+}
+.lSSlideOuter .lSPager.lSGallery img {
+    height: 75px;
+} */

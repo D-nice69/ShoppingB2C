@@ -7,6 +7,7 @@ use App\Category;
 use App\Http\Requests\StoreProduct;
 use App\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
@@ -14,7 +15,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::latest()->paginate(10);
+        $products = Product::where('user_id',Auth::user()->id)->latest()->paginate(10);
         return view('admin.product.index',compact('products'));
     }
     public function create()
@@ -34,7 +35,7 @@ class ProductController extends Controller
             'product_content' => $request->product_content,
             'category_id' => $request->category_id,
             'brand_id' => $request->brand_id,
-            'user_id' => '1',
+            'user_id' => Auth::user()->id,
             'product_image' => '',
             'slug' => Str::slug($request->product_name,'-'),
             'keyword' => $request->keyword,
@@ -63,6 +64,7 @@ class ProductController extends Controller
     }
     public function update($id,Request $request)
     {
+        $product = Product::find($id);
         $updateProduct = [
             'product_name' => $request->product_name,
             'product_price' => $request->product_price,
@@ -72,8 +74,8 @@ class ProductController extends Controller
             'product_content' => $request->product_content,
             'category_id' => $request->category_id,
             'brand_id' => $request->brand_id,
-            'user_id' => '1',
-            'product_image' => '',
+            'user_id' => Auth::user()->id,
+            'product_image' => $product->product_image,
             'slug' => Str::slug($request->product_name,'-'),
             'keyword' => $request->keyword,
         ];

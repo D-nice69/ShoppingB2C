@@ -19,11 +19,12 @@ class SliderController extends Controller
     }
     public function store(Request $request)
     {
+        $slider = Slider::find($id);
         $data = [
             'name' => $request->name,
             'desc' => $request->desc,
             'status' => $request->status,
-            'image' => '',
+            'image' => $slider->image,
         ];
         $getImage = $request->file('image');
         if(!empty($getImage)){

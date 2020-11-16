@@ -148,8 +148,8 @@ Eshop | Thanh toán
 
             <tbody>
                 @if($cart)
-
                 @foreach($cart as $val)
+                <input type="hidden" value="{{ $val['seller_id'] }}" class="seller_id" name="seller_id">
                 <tr>
                     <td class="cart_product">
                         <a href="{{ route('home.productDetails',['slug'=>$val['product_slug']]) }}">

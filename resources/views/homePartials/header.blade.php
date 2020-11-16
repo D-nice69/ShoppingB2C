@@ -63,7 +63,9 @@
                 <div class="col-sm-8">
                     <div class="shop-menu pull-right">
                         <ul class="nav navbar-nav">
+                            @if(Session::get('customerId'))
                             <li><a href="#"><i class="fa fa-user"></i>Tài khoản</a></li>
+                            @endif
                             <li><a href="#"><i class="fa fa-star"></i>Đánh dấu</a></li>
                             <?php
                                 $customerId = Session::get('customerId');
@@ -73,14 +75,16 @@
                             <li><a href="{{ route('customer.checkout') }}"><i class="fa fa-crosshairs"></i>Thanh
                                     toán</a>
                             </li>
-                            <li><a href="{{ route('Admin.showDashboard') }}"><i class="fa fa-money"></i>Kênh người bán</a></li>
+                            <li><a href="{{ route('Admin.showDashboard') }}"><i class="fa fa-money"></i>Kênh người
+                                    bán</a></li>
                             <?php 
                                 }elseif ($customerId!=Null && $cart==Null) {                                   
                             ?>
                             <li><a href="{{ route('cart.show') }}"><i class="fa fa-crosshairs"></i>Thanh
-                                toán</a>
+                                    toán</a>
                             </li>
-                            <li><a href="{{ route('Admin.showDashboard') }}"><i class="fa fa-money"></i>Kênh người bán</a></li>
+                            <li><a href="{{ route('Admin.showDashboard') }}"><i class="fa fa-money"></i>Kênh người
+                                    bán</a></li>
                             <?php 
                             }else {                                    
                             ?>
@@ -128,29 +132,52 @@
                             <span class="icon-bar"></span>
                         </button>
                     </div>
+                    @php
+                    use App\Category;
+                    use App\CategoryPost;
+                    $categoriesLimit = Category::where('category_status',0)->where('parent_id', 0)->get();
+                    $categoriesPostLimit = CategoryPost::where('status',0)->where('parent_id', 0)->get();
+                    @endphp
                     <div class="mainmenu pull-left">
                         <ul class="nav navbar-nav collapse navbar-collapse">
                             <li><a href="{{ route('home.index') }}" class="active">Trang chủ</a></li>
-                            @php
-                                use App\Category;
-                                $categoriesLimit = Category::where('category_status',0)->latest()->limit(6)->get();
-                            @endphp
-                            @foreach($categoriesLimit as $key=>$category)
-                            <li class="dropdown"><a href="#">{{ $category->category_name }}<i class="fa fa-angle-down"></i></a>
-                                <ul role="menu" class="sub-menu">
-                                    <li><a href="shop.html">Products</a></li>                                    
+                            <li class="dropdown liNav">
+                                <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="">Danh mục sản
+                                    phẩm <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu multi-level uNav" role="menu">
+                                    @foreach ($categoriesLimit as $key => $child)
+                                    <li class="dropdown-submenu">
+                                        <a id="aChild"
+                                            href="{{ route('home.categoryProduct',['slug'=>$child->slug]) }}">{{ $child->category_name }}<i
+                                                class=" {{ ($child->categoryChildrent->count()) ? 'fa fa-chevron-right' : '' }} iChild"></i>
+                                        </a>
+                                        @include('home.components.childMenu')
+                                    </li>
+                                    @endforeach
                                 </ul>
                             </li>
-                            @endforeach
-
-                            <li class="dropdown"><a href="#">Blog<i class="fa fa-angle-down"></i></a>
-                                <ul role="menu" class="sub-menu">
-                                    <li><a href="blog.html">Blog List</a></li>
-                                    <li><a href="blog-single.html">Blog Single</a></li>
+                            <li class="dropdown liNav">
+                                <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="">Tin tức
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu multi-level" role="menu">
+                                    <li class="dropdown-submenu">
+                                        <a id="aChild" href="{{ route('home.new') }}">Tổng hợp tin tức<i class="iChild"></i>
+                                        </a>
+                                    </li>
+                                    @foreach ($categoriesPostLimit as $key => $p)
+                                    <li class="dropdown-submenu">
+                                        <a id="aChild" href="{{ route('home.newCategory',['slug'=>$p->slug]) }}">{{ $p->name }}<i
+                                                class=" {{ ($p->categoryPostChildrent->count()) ? 'fa fa-chevron-right' : '' }} iChild"></i>
+                                        </a>
+                                        @include('home.components.childNew')
+                                    </li>
+                                    @endforeach
                                 </ul>
                             </li>
-                            <li><a href="404.html">404</a></li>
-                            <li><a href="contact-us.html">Contact</a></li>
+                            <li class="liNav"><a class="aNav" href="404.html">404</a></li>
+                            <li class="liNav"><a class="aNav" href="contact-us.html">Contact</a></li>
                         </ul>
                     </div>
                 </div>

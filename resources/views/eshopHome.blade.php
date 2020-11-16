@@ -9,7 +9,6 @@ Eshop | Trang chủ
 @include('homePartials.left_sidebar')
 @endsection
 @section('content')
-
 @include('homePartials.features_items')
 <!--features_items-->
 <!--category-tab-->
