@@ -40,8 +40,8 @@ Shipping management
         });
     })
 </script>
+<script src="js/dataTables/shipping.js"></script>
 @endsection
-
 @section('content')
 <div class="form-w3layouts">
     <section class="panel">
@@ -91,17 +91,16 @@ Shipping management
                     <button type="submit" class="btn btn-info add_delivery">Thêm phí vận chuyển</button>
                     @endcan
                 </form>
-            </div>
+            </div>   
+            <br/>         
             <div class="table-responsive">
-                <table class="table table-striped b-t b-light">
+                <table id="myTable" class="table table-striped b-t b-light">
                     <thead>
                         <tr>
-
                             <th>Tên thành phố</th>
                             <th>Tên quận huyện</th>
                             <th>Tên xã phường</th>
                             <th>Phí vận chuyển</th>
-                            <th style="width:30px;"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -127,16 +126,16 @@ Shipping management
             </div>
             <div id="load_delivery">
             </div>
-            <footer class="panel-footer">
+            {{-- <footer class="panel-footer">
                 <div class="row">
-                    {{-- <div class="col-sm-5 text-center">
+                    <div class="col-sm-5 text-center">
                             <small class="text-muted inline m-t-sm m-b-sm">showing 20-30 of 50 items</small>
-                        </div> --}}
+                        </div>
                     <div class="col-sm-7 text-right text-center-xs">
                         {{$fee_ships->links()}}
                     </div>
                 </div>
-            </footer>
+            </footer> --}}
         </div>
     </section>
 </div>

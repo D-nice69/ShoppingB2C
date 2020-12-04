@@ -4,6 +4,7 @@ Coupons List
 @endsection
 @section('js')
 <script src="{{ asset('admins/delete/delete.js') }}"></script>
+<script src="js/dataTables/coupon.js"></script>
 @endsection
 @section('content')
 <div class="table-agile-info">
@@ -11,6 +12,7 @@ Coupons List
         <div class="panel-heading">
             Danh sách mã giảm giá
         </div>
+        <br/>
         <?php
             $message = Session::get('message');
             if ($message) {
@@ -18,7 +20,7 @@ Coupons List
             Session::put('message', null);
             }
             ?>
-        <div class="row w3-res-tb">
+        {{-- <div class="row w3-res-tb">
             <div class="col-sm-5 m-b-xs">
                 <select class="inpu\t-sm form-control w-sm inline v-middle">
                     <option value="0">Bulk action</option>
@@ -38,9 +40,9 @@ Coupons List
                     </span>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="table-responsive">
-            <table class="table table-striped b-t b-light">
+            <table id="myTable" class="table table-striped b-t b-light">
                 <thead>
                     <tr>
                         <th style="width:20px;">
@@ -95,16 +97,16 @@ Coupons List
                 </tbody>
             </table>
         </div>
-        <footer class="panel-footer">
+        {{-- <footer class="panel-footer">
             <div class="row">
-                {{-- <div class="col-sm-5 text-center">
+                <div class="col-sm-5 text-center">
                         <small class="text-muted inline m-t-sm m-b-sm">showing 20-30 of 50 items</small>
-                    </div> --}}
+                    </div>
                 <div class="col-sm-7 text-right text-center-xs">
                     {{$coupons->links()}}
                 </div>
             </div>
-        </footer>
+        </footer> --}}
     </div>
 </div>
 @endsection

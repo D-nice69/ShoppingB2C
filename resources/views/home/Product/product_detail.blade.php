@@ -7,20 +7,38 @@ Eshop | {{ $getProduct->product_name }}
 @endsection
 @section('left_side_bar')
 @include('homePartials.left_sidebar')
+@include('homePartials.left_sidebar_ads')
+
 @endsection
 @section('css')
+<link href="css/productTags.css" rel="stylesheet">
 <style>
-  .add-to-cart {
+  /* .add-to-cart {
     color: black;
     margin: 0px 5px 10px;
-  }
+  } */
 
   .product-information {
     padding-top: 0px;
   }
+
+  ul.lSGallery>li,
+  li.lslide {
+    border: 2px solid rgb(248, 167, 18);
+  }
+
+  li.breadcrumb-item>a {
+    font-size: 16px;
+    color: #e95713;
+  }
+
+  li.breadcrumb-item>a:hover {
+    color: #e0a80c;
+  }
 </style>
 @endsection
 @section('js')
+<script src="js/jquery.zoom.js"></script>
 <script type="text/javascript">
   $(document).ready(function() {
     $('#imageGallery').lightSlider({
@@ -38,34 +56,41 @@ Eshop | {{ $getProduct->product_name }}
             el.lightGallery({
                 selector: '#imageGallery .lslide'
             });
+            el.find('li').zoom();
         }   
     });  
   });
 </script>
 @endsection
 @section('content')
+@php
+use App\Category;
+$categoriesLimit = Category::where('id',$getProduct->category_id)->first();
+$parent_id = $categoriesLimit->parent_id;
+@endphp
 
-</div>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+    {!! $html !!}
+    <li style="font-size: 16px" class="breadcrumb-item active" aria-current="page">{{ $getProduct->product_name }}</li>
+  </ol>
+</nav>
 <div class="product-details">
   <!--product-details-->
   <div class="col-sm-5">
     <ul id="imageGallery">
-      <li data-thumb="/uploads/products/{{ $getProduct->product_image }}"
-        data-src="/uploads/products/{{ $getProduct->product_image }}">
-        <img width="100%" src="/uploads/products/{{ $getProduct->product_image }}" />
+      <li data-thumb="/uploads/products/{{ $getProduct->user_id }}/{{ $getProduct->product_image }}"
+        data-src="/uploads/products/{{ $getProduct->user_id }}/{{ $getProduct->product_image }}">
+        <img width="100%" src="/uploads/products/{{ $getProduct->user_id }}/{{ $getProduct->product_image }}" />
       </li>
-      <li data-thumb="/Eshopper/images/404/404.png"
-        data-src="/uploads/products/{{ $getProduct->product_image }}">
-        <img width="100%" src="/Eshopper/images/404/404.png" />
+      @foreach($getProduct->images as $image)
+      <li data-thumb="/uploads/products/{{ $getProduct->user_id }}/{{ $image->image }}"
+        data-src="/uploads/products/{{ $getProduct->user_id }}/{{ $image->image }}">
+        <img width="100%" src="/uploads/products/{{ $getProduct->user_id }}/{{ $image->image }}" />
       </li>
-      <li data-thumb="/uploads/products/{{ $getProduct->product_image }}"
-        data-src="/uploads/products/{{ $getProduct->product_image }}">
-        <img width="100%" src="/uploads/products/{{ $getProduct->product_image }}" />
-      </li>
-      <li data-thumb="/uploads/products/{{ $getProduct->product_image }}"
-        data-src="/uploads/products/{{ $getProduct->product_image }}">
-        <img width="100%" src="/uploads/products/{{ $getProduct->product_image }}" />
-      </li>
+      @endforeach
+
     </ul>
     {{-- <div class="view-product">
       <img src="/uploads/products/{{ $getProduct->product_image }}" alt="" />
@@ -98,6 +123,7 @@ Eshop | {{ $getProduct->product_name }}
   </div> --}}
 
 </div>
+
 <div class="col-sm-7">
   <div class="product-information">
     <!--/product-information-->
@@ -110,21 +136,62 @@ Eshop | {{ $getProduct->product_name }}
         @csrf
         <input type="number" name="qty" min="1" value="1" class="cart_product_qty_{{$getProduct->id}}" />
         <input type="hidden" value="{{$getProduct->id}}" class="cart_product_id_{{$getProduct->id}}">
+        <input type="hidden" value="{{$getProduct->user_id}}" class="cart_product_seller_id_{{$getProduct->id}}">
         <input type="hidden" value="{{$getProduct->product_name}}" class="cart_product_name_{{$getProduct->id}}">
         <input type="hidden" value="{{$getProduct->product_image}}" class="cart_product_image_{{$getProduct->id}}">
         <input type="hidden" value="{{$getProduct->product_price}}" class="cart_product_price_{{$getProduct->id}}">
         <input type="hidden" value="{{ $getProduct->product_qty  }}" class="cart_product_quantity_{{$getProduct->id}}">
-        <button style="background-color: #f9b02c" type="button" class="btn btn-default add-to-cart" name="add-to-cart"
-          data-id_product="{{ $getProduct->id }}">
+        <button style="background-color: #f9b02c" type="button" class="btn btn-default add-to-cart-detail"
+          name="add-to-cart" data-id_product="{{ $getProduct->id }}">
           <i class="fa fa-shopping-cart"></i>Thêm giỏ hàng</button>
+      </form>
     </span>
-    </form>
-    <p><b>Số lượng:</b> {{ $getProduct->product_qty }}</p>
-    <p><b>Điều kiện:</b> Mới</p>
+    <p><b>Số lượng hàng trong kho:</b> {{ $getProduct->product_qty }}</p>
+    {{-- <p><b>Điều kiện:</b> Mới</p> --}}
     <p><b>Danh mục:</b> {{ $getProduct->category->category_name }}</p>
     <p><b>Thương hiệu:</b> {{ $getProduct->brand->brand_name }}</p>
+    <p>
+      <b>Shop bán:</b>
+      <a href="{{ route('home.shop',['id'=>$getProduct->customer->id]) }}">
+        {{ $getProduct->customer->name }}
+      </a> 
+    </p>
+    <ul class="list-inline" title="Average Rating">
+    @for($count = 1; $count <= 5; $count++)
+    @php
+      if($count<=$rating){
+        $color = 'color:#ffcc00';
+      }else {
+        $color = 'color:#ccc';
+      }
+    @endphp
+      <li title="start_rating" 
+      id="{{ $getProduct->id }}-{{ $count }}" data-index="{{ $count }}" 
+      data-product-id="{{ $getProduct->id }}" 
+      data-rating="{{ $rating }}"
+      @if(Auth::user()) 
+      data-user_id="{{ Auth::user()->id }}" 
+      @endif
+      class="rating" 
+      style="cursor: pointer;font-size:30px;{{ $color }}">
+      &#9733;
+      </li>
+    @endfor
+  </ul>
+  <p>Lượt đánh giá: {{ count($ratings) }}</p>
     <div class="fb-like col-sm-12" data-href="{{ $url_canonical }}" data-width="" data-layout="button_count"
       data-action="like" data-size="small" data-share="true"></div>
+    <p><b>Tags:</b>
+      <ul class="tags">
+        @foreach($getProduct->tags as $tag)
+        <li>
+          <a href="{{ route('home.tagProduct',['slug'=>$tag->slug]) }}">
+            {{ $tag->name }}
+          </a>
+        </li>
+        @endforeach
+      </ul>
+    </p>
   </div>
   <!--/product-information-->
 </div>
@@ -149,7 +216,7 @@ Eshop | {{ $getProduct->product_name }}
             <div class="single-products">
 
               <div class="productinfo text-center">
-                <img src="/uploads/products/{{ $pro->product_image }}" alt="" />
+                <img src="/uploads/products/{{ $pro->user_id }}/{{ $pro->product_image }}" alt="" />
                 <h2>${{ number_format($pro->product_price) }}</h2>
                 <p>{{ $pro->product_name }}</p>
                 <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm giỏ hàng</a>

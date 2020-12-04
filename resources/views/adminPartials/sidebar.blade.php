@@ -10,6 +10,21 @@
                     </a>
                 </li>
 
+                {{-- @can('list_category') --}}
+                <li class="sub-menu">
+                    <a href="javascript:;">
+                        <i class="fa fa-book"></i>
+                        <span>Hồ sơ Shop</span>
+                    </a>
+                    <ul class="sub">
+                        {{-- @can('add_category') --}}
+                        <li><a href="{{ route('shop.index') }}">Cài đặt Shop</a></li>
+                        {{-- @endcan --}}
+                        {{-- <li><a href="{{ route('category.index') }}">Danh sách danh mục</a></li> --}}
+                    </ul>
+                </li>
+                {{-- @endcan --}}
+
                 @can('list_category')
                 <li class="sub-menu">
                     <a href="javascript:;">

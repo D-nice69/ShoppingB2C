@@ -1,15 +1,16 @@
 @extends('adminPartials.layout')
 @section('title')
-Products List
+Posts List
 @endsection
 @section('js')
 <script src="{{ asset('admins/delete/delete.js') }}"></script>
+<script src="js/dataTables/post.js"></script>
 @endsection
 @section('content')
 <div class="table-agile-info">
     <div class="panel panel-default">
         <div class="panel-heading">
-            Danh sách sản phẩm
+            Danh sách bài viết
         </div>
         <?php
             $message = Session::get('message');
@@ -18,7 +19,7 @@ Products List
             Session::put('message', null);
             }
         ?>
-        <div class="row w3-res-tb">
+        {{-- <div class="row w3-res-tb">
             <div class="col-sm-5 m-b-xs">
                 <select class="inpu\t-sm form-control w-sm inline v-middle">
                     <option value="0">Bulk action</option>
@@ -38,9 +39,10 @@ Products List
                     </span>
                 </div>
             </div>
-        </div>
+        </div> --}}
+        <br/>
         <div class="table-responsive">
-            <table class="table table-striped b-t b-light">
+            <table id="myTable" class="table table-striped b-t b-light">
                 <thead>
                     <tr>
                         <th style="width:20px;">

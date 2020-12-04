@@ -14,4 +14,18 @@ class Product extends Model
     {
         return $this ->belongsTo(Brand::class,'brand_id');
     }
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class,'product_id');
+    }
+    public function tags()
+    {
+        return $this
+            ->belongsToMany(Tag::class, 'product_tags', 'product_id', 'tag_id')
+            ->withTimestamps();
+    }
+    public function customer()
+    {
+        return $this ->belongsTo(Customer::class,'user_id');
+    }
 }

@@ -47,13 +47,13 @@ Eshop | Cart
                     @foreach( $cart as $key=> $value)
                     <tr>
                         <td class="cart_product">
-                            <a href="{{ route('home.productDetails',['slug'=>$value['product_slug']]) }}">
-                                <img src="/uploads/products/{{ $value['product_image'] }}" height="100px" width="100px"
+                            <a href="{{ route('home.productDetails',['slug'=>$value['product_slug'],'id'=>$value['product_id']]) }}">
+                                <img src="/uploads/products/{{ $value['seller_id'] }}/{{ $value['product_image'] }}" height="auto" width="100px"
                                     alt="">
                             </a>
                         </td>
                         <td class="cart_description">
-                            <h4><a href="">{{ $value['product_name'] }}</a></h4>
+                            <h4><a href="{{ route('home.productDetails',['slug'=>$value['product_slug'],'id'=>$value['product_id']]) }}">{{ $value['product_name'] }}</a></h4>
                             <p>ID sản phẩm: {{ $value['product_id'] }} </p>
                         </td>
                         <td class="cart_price">

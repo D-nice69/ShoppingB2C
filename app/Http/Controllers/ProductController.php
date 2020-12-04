@@ -6,6 +6,8 @@ use App\Brand;
 use App\Category;
 use App\Http\Requests\StoreProduct;
 use App\Product;
+use App\ProductImage;
+use App\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -15,7 +17,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::where('user_id',Auth::user()->id)->latest()->paginate(10);
+        $products = Product::where('user_id',Auth::user()->id)->latest()->get();
         return view('admin.product.index',compact('products'));
     }
     public function create()
@@ -24,8 +26,13 @@ class ProductController extends Controller
         $brands = Brand::get();
         return view('admin.product.create',compact('categories','brands'));
     }
-    public function store(StoreProduct $request)
+    public function store(Request $request)
     {
+        // $getImage = $request->file('pro');
+        // $getImage2 = $request->file('images');
+
+        // dd($getImage);
+
         $storeProduct = [
             'product_name' => $request->product_name,
             'product_price' => $request->product_price,
@@ -38,20 +45,39 @@ class ProductController extends Controller
             'user_id' => Auth::user()->id,
             'product_image' => '',
             'slug' => Str::slug($request->product_name,'-'),
-            'keyword' => $request->keyword,
+            // 'keyword' => $request->keyword,
         ];
         $getImage = $request->file('product_image');
         if(!empty($getImage)){
             $getNameImage = $getImage->getClientOriginalName();
             $nameImage = current(explode('.',$getNameImage));
             $newImage =  $nameImage.rand(0,999) .'.'.$getImage->getClientOriginalExtension();
-            $getImage->move('uploads/products',$newImage);
-            $storeProduct['product_image'] = $newImage;
-            Product::create($storeProduct);
-            Session::put('message','Thêm sản phẩm thành công');
-            return redirect()->route('product.index');
+            $getImage->move('uploads/products/'.Auth::user()->id,$newImage);
+            $storeProduct['product_image'] = $newImage;            
         }
-        Product::create($storeProduct);
+        $sP = Product::create($storeProduct);
+        //add tags
+        foreach ($request->tags as $tagItem) {
+            $tagInstance = Tag::firstOrCreate([
+                'name' => $tagItem,
+                'slug' => Str::slug($tagItem,'-'),
+            ]);
+            $tagIds[] = $tagInstance->id;
+        }
+        $sP->tags()->attach($tagIds);
+
+        if($request->hasFile('images')){
+            foreach($request->images as $fileItem){
+                $getNameImage = $fileItem->getClientOriginalName();
+                $nameImage = current(explode('.',$getNameImage));
+                $newImage =  $nameImage.rand(0,999) .'.'.$fileItem->getClientOriginalExtension();
+                $fileItem->move('uploads/products/'.Auth::user()->id,$newImage);
+                ProductImage::create([
+                    'image' => $newImage,
+                    'product_id' => $sP->id,
+                ]);
+            }
+        }
         Session::put('message','Thêm sản phẩm thành công');
         return redirect()->route('product.index');
     }
@@ -77,26 +103,49 @@ class ProductController extends Controller
             'user_id' => Auth::user()->id,
             'product_image' => $product->product_image,
             'slug' => Str::slug($request->product_name,'-'),
-            'keyword' => $request->keyword,
         ];
         $getImage = $request->file('product_image');
         if(!empty($getImage)){
             $getNameImage = $getImage->getClientOriginalName();
             $nameImage = current(explode('.',$getNameImage));
             $newImage =  $nameImage.rand(0,999) .'.'.$getImage->getClientOriginalExtension();
-            $getImage->move('uploads/products',$newImage);
+            $getImage->move('uploads/products/'.Auth::user()->id,$newImage);
             $updateProduct['product_image'] = $newImage;
-            Product::find($id)->update($updateProduct);
-            Session::put('message','Product updated');
-            return redirect()->route('product.index');
         }
         Product::find($id)->update($updateProduct);
+        $sP =  Product::find($id);
+        $tagIds = [];
+            if (!empty($request->tags)) {
+                foreach ($request->tags as $tagItem) {
+                    $tagInstance = Tag::firstOrCreate([
+                        'name' => $tagItem,
+                        'slug' => Str::slug($tagItem,'-'),
+                    ]);
+                    $tagIds[] = $tagInstance->id;
+                }
+            }
+        $sP->tags()->sync($tagIds);
+        if($request->hasFile('images')){
+            ProductImage::where('product_id',$id)->delete();
+            foreach($request->images as $fileItem){
+                $getNameImage = $fileItem->getClientOriginalName();
+                $nameImage = current(explode('.',$getNameImage));
+                $newImage =  $nameImage.rand(0,999) .'.'.$fileItem->getClientOriginalExtension();
+                $fileItem->move('uploads/products/'.Auth::user()->id,$newImage);
+                ProductImage::create([
+                    'image' => $newImage,
+                    'product_id' => $sP->id,
+                ]);
+            }
+        }
+
         Session::put('message','Product updated');
         return redirect()->route('product.index');
     }
     public function delete($id)
     {
         Product::find($id)->delete();
+        ProductImage::where('product_id',$id)->delete();
         return response()->json([
             'code' => 200,
             'message' => 'success',

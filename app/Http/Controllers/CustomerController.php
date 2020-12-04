@@ -8,6 +8,7 @@ use App\District;
 use App\feeShip;
 use App\Http\Requests\CaptchaRequest;
 use App\Http\Requests\CustomerResigterRequest;
+use App\Seller;
 use App\Shipping;
 use App\Town;
 use Illuminate\Http\Request;
@@ -51,6 +52,11 @@ class CustomerController extends Controller
             'phone' =>$request->phone,
             'password' =>md5($request->password),
             'role_id' => 2,
+        ]);
+        Seller::create([
+            'customer_id' => $data->id,
+            'shop_info' => '',
+            'shop_name' => $request->name,
         ]);
         $customerId = $data->id;
         Session::put('customerId',$customerId);

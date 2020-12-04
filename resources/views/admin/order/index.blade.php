@@ -4,6 +4,7 @@ Orders List
 @endsection
 @section('js')
 <script src="{{ asset('admins/delete/delete.js') }}"></script>
+<script src="js/dataTables/order.js"></script>
 @endsection
 @section('content')
 <div class="table-agile-info">
@@ -18,7 +19,7 @@ Orders List
             Session::put('message', null);
             }
             ?>
-        <div class="row w3-res-tb">
+        {{-- <div class="row w3-res-tb">
             <div class="col-sm-5 m-b-xs">
                 <select class="inpu\t-sm form-control w-sm inline v-middle">
                     <option value="0">Bulk action</option>
@@ -38,9 +39,10 @@ Orders List
                     </span>
                 </div>
             </div>
-        </div>
+        </div> --}}
+        <br />
         <div class="table-responsive">
-            <table class="table table-striped b-t b-light">
+            <table id="myTable" class="table table-striped b-t b-light">
                 <thead>
                     <tr>
                         <th style="width:20px;">
@@ -50,26 +52,13 @@ Orders List
                         </th>
                         <th>Mã đơn hàng</th>
                         <th>Tình trạng</th>
-                        <th></th>
-                        <th style="width:30px;"></th>
+                        <th style="width:50px;"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($orderDetails as $od)
-                    @php
-                    $od_id[] = $od->order_id;
-                    @endphp
-                    @endforeach
-                    @php
-                    $unique_data = array_unique($od_id);                    
-                    @endphp
-                    @foreach($unique_data as $unique)
-                        
-                    @foreach ($orders as $order)
-                    @if($order->id == $unique)
+                    @foreach($orders as $order)
                     <tr>
                         <td><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label>
-                        </td>
                         <td>{{ $order->code }}</td>
                         <td>
                             @if( $order->status == 1)
@@ -89,10 +78,48 @@ Orders List
                             @endcan
                         </td>
                     </tr>
-                    @endif
                     @endforeach
 
+                    {{-- @if(count($orderDetails)>0)
+                    @foreach($orderDetails as $od)
+                    @php
+                    $od_id[] = $od->order_id;
+                    @endphp
                     @endforeach
+                    @php
+                    $unique_data = array_unique($od_id);
+                    @endphp
+                    @foreach($unique_data as $unique)
+
+                    @foreach ($orders as $order)
+                    @if($order->id == $unique)
+                    <tr>
+                        <td><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label>
+                        </td>
+                        <td>{{ $order->code }}</td>
+                    <td>
+                        @if( $order->status == 1)
+                        Đơn hàng mới
+                        @else
+                        Đơn hàng đã được thanh toán
+                        @endif
+                    </td>
+                    <td>
+                        <a href="{{ route('order.view',['id'=>$order->id]) }}">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                        @can('delete_order')
+                        <a href="" class="action_delete" data-url="{{ route('order.delete',['id'=>$order->id]) }}">
+                            <i class="fa fa-times text-danger text"></i>
+                        </a>
+                        @endcan
+                    </td>
+                    </tr>
+                    @endif
+                    @endforeach
+                    @endforeach
+                    @endif --}}
+
                 </tbody>
             </table>
         </div>
@@ -101,11 +128,11 @@ Orders List
                 {{-- <div class="col-sm-5 text-center">
                         <small class="text-muted inline m-t-sm m-b-sm">showing 20-30 of 50 items</small>
                     </div> --}}
-                <div class="col-sm-7 text-right text-center-xs">
+                {{-- <div class="col-sm-7 text-right text-center-xs">
                     {{$orders->links()}}
-                </div>
-            </div>
-        </footer>
+            </div> --}}
     </div>
+    </footer>
+</div>
 </div>
 @endsection

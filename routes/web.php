@@ -17,7 +17,12 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-//Backend Route
+//--------------------------------------------------------Backend Route
+
+Route::get('admin/shops/index', 'ShopController@index')->name('shop.index');
+Route::get('admin/shops/store', 'ShopController@store');
+Route::post('admin/shops/store', 'ShopController@store')->name('shop.store');
+Route::post('crop-image-upload ', 'ShopController@uploadCropImage')->name('crop');
 Route::prefix('admin')->group(function () {
 
     Route::get('/', 'AdminController@index')->name('Admin.index');
@@ -90,7 +95,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/unactive/{id}', 'productController@unactive')
             ->name('product.unactive');
         Route::get('/active/{id}', 'productController@active')
-            ->name('product.active');
+            ->name('product.active');       
     });
     Route::prefix('orders')->group(function () {
         Route::get('/', 'orderController@index')
@@ -254,9 +259,34 @@ Route::prefix('admin')->group(function () {
                 ->name('role.delete');
         }
     );
+
+    // Route::prefix('shops')
+    //     ->group(function () {
+    //         Route::get('/', 'ShopController@index')
+    //             // ->middleware('can:list_shop')
+    //             ->name('shop.index');
+    //         // Route::get('/create', 'ShopController@create')
+    //         //     // ->middleware('can:add_shop')
+    //         //     ->name('shop.create');
+    //         Route::post('/store', 'ShopController@store')
+    //            ->name('shop.store');
+    //         Route::post('/cropImage', 'ShopController@cropImage')
+    //             ->name('shop.cropImage');
+    //         Route::get('/cropImage', 'ShopController@index2')
+    //             ->name('shop.index2');
+    //         // Route::get('/edit/{id}', 'ShopController@edit')
+    //         //     // ->middleware('can:edit_shop')
+    //         //     ->name('shop.edit');
+    //         // Route::post('/update/{id}', 'ShopController@update')
+    //         //     ->name('shop.update');
+    //         // Route::get('/delete/{id}', 'ShopController@delete')
+    //         //     // ->middleware('can:delete_shop')
+    //         //     ->name('shop.delete');
+    //     }
+    // );
 });
 
-//Fontend Route
+//---------------------------Fontend Route
 
 //Home
 Route::get('/', 'HomeController@index')->name('home.index');
@@ -274,8 +304,14 @@ Route::get('/category/{slug}','HomeController@categoryProduct')->name('home.cate
 //get products by brand
 Route::get('/brand/{slug}','HomeController@brandProduct')->name('home.brandProduct');
 
+//get products by tags
+Route::get('/tag/{slug}','HomeController@tagProduct')->name('home.tagProduct');
+
 //product details
-Route::get('/product-details/{slug}','HomeController@productDetails')->name('home.productDetails');
+Route::get('/product-details/{slug}/{id}','HomeController@productDetails')->name('home.productDetails');
+
+//rating
+Route::post('/rating','HomeController@rating')->name('home.rating');
 
 //Shopping cart
 Route::get('/cart','CartController@index')->name('cart.index');
@@ -283,8 +319,10 @@ Route::post('/store-cart','CartController@store')->name('cart.store');
 Route::get('/delete-cart/{id}','CartController@delete')->name('cart.delete');
 Route::post('/update-cart','CartController@update')->name('cart.update');
 //Shopping cart Ajax
+
 Route::get('/show-cart','CartController@show')->name('cart.show');
 Route::post('/add-cart-ajax','CartController@addCartAjax')->name('cart.addCartAjax');
+Route::post('/add-cart-ajax-detail','CartController@addCartAjaxDetail')->name('cart.addCartAjaxDetail');
 Route::get('/delete-cart-ajax/{id}','CartController@deleteAjax')->name('cart.deleteAjax');
 Route::post('/update-cart-ajax/{id}','CartController@updateAjax')->name('cart.updateAjax');
 
@@ -302,6 +340,8 @@ Route::get('/delete-delivery','CustomerController@deliveryDel')->name('customer.
 
 //Search Product
 Route::post('/search', 'HomeController@search')->name('home.search');
+//Autocomplete search
+Route::post('/AutocompleteSearch', 'HomeController@AutocompleteSearch')->name('home.AutocompleteSearch');
 
 //Order
 Route::post('/order-place', 'OrderController@orderPlace')->name('order.orderPlace');
@@ -325,4 +365,6 @@ Route::get('/unset-coupon', 'CouponController@unset')->name('coupon.unset');
 //thanks for shopping
 Route::get('/thanks', 'CustomerController@thanks')->name('customer.thanks');
 
+//shop
+Route::get('/shop/{id}', 'HomeController@shop')->name('home.shop');
 

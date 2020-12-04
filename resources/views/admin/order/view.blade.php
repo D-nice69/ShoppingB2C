@@ -13,6 +13,7 @@ Order details
 @section('js')
 <script src="{{ asset('admins/delete/delete.js') }}"></script>
 <script src="{{ asset('admins/update/update_order.js') }}"></script>
+<script src="js/dataTables/orderDetails.js"></script>
 {{-- <script type="text/javascript">
     $(document).ready(function(){
     $('#update_order').click(function(){
@@ -135,8 +136,9 @@ Order details
                 <div class="panel-heading">
                     Liệt kê chi tiết đơn hàng
                 </div>
+                <br/>
                 <div class="table-responsive">
-                    <table class="table table-striped b-t b-light">
+                    <table id="myTable" class="table table-striped b-t b-light">
                         <thead>
                             <tr>
                                 <th>Tên sản phẩm</th>

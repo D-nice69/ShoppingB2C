@@ -4,13 +4,21 @@ Products List
 @endsection
 @section('js')
 <script src="{{ asset('admins/delete/delete.js') }}"></script>
+<script src="js/dataTables/product.js"></script>
 @endsection
 @section('content')
+@section('css')
+    <style>
+        th#check{
+        }
+    </style>
+@endsection
 <div class="table-agile-info">
     <div class="panel panel-default">
         <div class="panel-heading">
             Danh sách sản phẩm
         </div>
+        <br/>
         <?php
             $message = Session::get('message');
             if ($message) {
@@ -18,7 +26,7 @@ Products List
             Session::put('message', null);
             }
         ?>
-        <div class="row w3-res-tb">
+        {{-- <div class="row w3-res-tb">
             <div class="col-sm-5 m-b-xs">
                 <select class="inpu\t-sm form-control w-sm inline v-middle">
                     <option value="0">Bulk action</option>
@@ -38,9 +46,9 @@ Products List
                     </span>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="table-responsive">
-            <table class="table table-striped b-t b-light">
+            <table id="myTable" class="table table-striped b-t b-light">
                 <thead>
                     <tr>
                         <th style="width:20px;">
@@ -51,6 +59,7 @@ Products List
                         <th>Tên</th>
                         <th>Giá</th>
                         <th>Hình ảnh</th>
+                        <th>Hình ảnh chi tiết</th>
                         <th>Số lượng</th>
                         <th>Danh mục</th>
                         <th>Thương hiệu</th>
@@ -66,8 +75,14 @@ Products List
                         <td>{{ $product->product_name }}</td>
                         <td>{{ number_format ($product->product_price) }} VNĐ</td>
                         <td>
-                            <img src="/uploads/products/{{ $product->product_image }}"
-                                alt="{{ $product->product_image }}" width="100" height="100">
+                            <img src="/uploads/products/{{ Auth::user()->id }}/{{ $product->product_image }}"
+                                alt="{{ $product->product_image }}" width="100" height="auto">
+                        </td>
+                        <td>
+                            @foreach($product->images as $image)
+                            <img src="/uploads/products/{{ Auth::user()->id }}/{{ $image->image }}"
+                            alt="{{ $image->image }}" width="40" height="auto">
+                            @endforeach
                         </td>
                         <td>{{ $product->product_qty }}</td>
                         <td>{{ $product->category->category_name }}</td>
@@ -101,16 +116,15 @@ Products List
                 </tbody>
             </table>
         </div>
-        <footer class="panel-footer">
+        {{-- <footer class="panel-footer">
             <div class="row">
-                {{-- <div class="col-sm-5 text-center">
+                <div class="col-sm-5 text-center">
                         <small class="text-muted inline m-t-sm m-b-sm">showing 20-30 of 50 items</small>
-                    </div> --}}
+                    </div>
                 <div class="col-sm-7 text-right text-center-xs">
-                    {{$products->links()}}
                 </div>
             </div>
-        </footer>
+        </footer> --}}
     </div>
 </div>
 @endsection

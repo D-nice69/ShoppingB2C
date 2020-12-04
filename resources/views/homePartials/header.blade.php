@@ -63,52 +63,22 @@
                 <div class="col-sm-8">
                     <div class="shop-menu pull-right">
                         <ul class="nav navbar-nav">
-                            @if(Session::get('customerId'))
-                            <li><a href="#"><i class="fa fa-user"></i>Tài khoản</a></li>
+                            @if(Auth::user())
+                            <li><a href="{{ route('home.shop',['id'=>Auth::user()->id]) }}"><i class="fa fa-user"></i>Cửa hàng của bạn</a></li>
+                            @if(Auth::user()->role_id == 1)
+                            <li><a href="{{ route('Admin.showDashboard') }}"><i class="fa fa-money"></i>Quản trị</a></li>
+                            @else
+                            <li><a href="{{ route('Admin.showDashboard') }}"><i class="fa fa-money"></i>Kênh người
+                                bán</a></li>   
                             @endif
-                            <li><a href="#"><i class="fa fa-star"></i>Đánh dấu</a></li>
-                            <?php
-                                $customerId = Session::get('customerId');
-                                $cart = Session::get('cart');
-                                if($customerId!=Null && $cart!=Null){                                
-                            ?>
-                            <li><a href="{{ route('customer.checkout') }}"><i class="fa fa-crosshairs"></i>Thanh
-                                    toán</a>
-                            </li>
-                            <li><a href="{{ route('Admin.showDashboard') }}"><i class="fa fa-money"></i>Kênh người
-                                    bán</a></li>
-                            <?php 
-                                }elseif ($customerId!=Null && $cart==Null) {                                   
-                            ?>
-                            <li><a href="{{ route('cart.show') }}"><i class="fa fa-crosshairs"></i>Thanh
-                                    toán</a>
-                            </li>
-                            <li><a href="{{ route('Admin.showDashboard') }}"><i class="fa fa-money"></i>Kênh người
-                                    bán</a></li>
-                            <?php 
-                            }else {                                    
-                            ?>
-                            <li><a href="{{ route('customer.login') }}"><i class="fa fa-crosshairs"></i>Thanh toán</a>
-                            </li>
-
-                            <?php 
-                            }
-                            ?>
-
                             <li><a href="{{ route('cart.show') }}"><i class="fa fa-shopping-cart"></i>Giỏ hàng</a></li>
-                            <?php
-                                $customerId = Session::get('customerId');
-                                if($customerId!=Null){                                
-                            ?>
                             <li><a href="{{ route('customer.logout') }}"><i></i>Đăng xuất</a></li>
-
-                            <?php 
-                            }else {                                    
-                            ?>
+                            @endif
+                            @if(Auth::user()== null)
+                            <li><a href="{{ route('cart.show') }}"><i class="fa fa-shopping-cart"></i>Giỏ hàng</a></li>
                             <li><a href="{{ route('customer.login') }}"><i></i>Đăng nhập</a></li>
-                            <?php 
-                            }
-                            ?>
+                            @endif
+                            {{-- <li><a href="#"><i class="fa fa-star"></i>Đánh dấu</a></li> --}}                           
 
                         </ul>
                     </div>
@@ -163,12 +133,14 @@
                                 </a>
                                 <ul class="dropdown-menu multi-level" role="menu">
                                     <li class="dropdown-submenu">
-                                        <a id="aChild" href="{{ route('home.new') }}">Tổng hợp tin tức<i class="iChild"></i>
+                                        <a id="aChild" href="{{ route('home.new') }}">Tổng hợp tin tức<i
+                                                class="iChild"></i>
                                         </a>
                                     </li>
                                     @foreach ($categoriesPostLimit as $key => $p)
                                     <li class="dropdown-submenu">
-                                        <a id="aChild" href="{{ route('home.newCategory',['slug'=>$p->slug]) }}">{{ $p->name }}<i
+                                        <a id="aChild"
+                                            href="{{ route('home.newCategory',['slug'=>$p->slug]) }}">{{ $p->name }}<i
                                                 class=" {{ ($p->categoryPostChildrent->count()) ? 'fa fa-chevron-right' : '' }} iChild"></i>
                                         </a>
                                         @include('home.components.childNew')
@@ -182,13 +154,15 @@
                     </div>
                 </div>
                 <div class="col-sm-3">
-                    <div class="pull-right">
-                        <form action="{{ route('home.search') }}" method="POST" enctype="multipart/form-data">
+                    <div class="pull-right" style="    padding-right: 79px;">
+                        <form action="{{ route('home.search') }}" autocomplete="off" method="POST"
+                            enctype="multipart/form-data">
                             @csrf
-                            <input type="text" placeholder="Tìm kiếm sản phẩm" name="keywords_submit" />
+                            <input type="text" placeholder="Tìm kiếm sản phẩm" id="keywords" name="keywords_submit" />
                             <button type="submit" name="search_items" class="fabutton">
                                 <i class="search-box fa fa-search"></i>
                             </button>
+                            <div id="search_ajax"></div>
                         </form>
                     </div>
                 </div>
@@ -210,5 +184,9 @@
 
     :hover.search-box {
         color: orange;
+    }
+
+    a#aAuto:hover {
+        cursor: default;
     }
 </style>

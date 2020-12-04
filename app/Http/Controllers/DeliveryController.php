@@ -12,7 +12,7 @@ class DeliveryController extends Controller
 {
     public function index()
     {
-        $fee_ships = feeShip::paginate(5);
+        $fee_ships = feeShip::all();
         $cities = City::all();
         $districts = District::all();
         $towns = Town::all();
@@ -41,12 +41,16 @@ class DeliveryController extends Controller
     }
     public function store(Request $request)
     {
-        feeShip::create([
+        feeShip::updateOrCreate(
+        [
             'matp' => $request ->matp,
             'maqh' => $request->maqh,
             'xaid' => $request->xaid,
+        ],
+        [
             'fee_feeship' => $request->fee_feeship,
-        ]);
+        ]
+    );
         return redirect()->back();
     }
   

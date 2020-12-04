@@ -65,7 +65,9 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $orderDetails = Order_detail::where('seller_id',Auth::user()->id)->get();
-        $orders = Order::oldest()->paginate(10);
+        // dd($orderDetails);
+        // dd(count($orderDetails));
+        $orders = Order::where('seller_id',Auth::user()->id)->get();
         // $product = Session::get('cart');
 
         // foreach($product as $pro){
@@ -191,7 +193,7 @@ class OrderController extends Controller
     {
         $order = Order::find($id);
         foreach($order->orderDetails as $orderItem){
-            $product = Product::where('id',$orderItem->product_id)->first();
+            $product = Product::where('id',$orderItem->product_id)->where('user_id',Auth::user()->id)->first();
             $product_sale_qty = $orderItem->product_sales_quantity;
             $product_qty = $product->product_qty;
             if($product_qty <= $product_sale_qty){

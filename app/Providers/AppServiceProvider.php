@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Admin;
 use App\Brand;
 use App\Category;
+use App\Customer;
 use App\Slider;
 use Illuminate\Support\ServiceProvider;
 
@@ -44,5 +45,6 @@ class AppServiceProvider extends ServiceProvider
         view()->composer('homePartials.slider',function ($view){
             $view->with('sliders',Slider::where('status',0)->latest()->limit(5)->get());
         });
+       
     }
 }

@@ -152,12 +152,12 @@ Eshop | Thanh toán
                 <input type="hidden" value="{{ $val['seller_id'] }}" class="seller_id" name="seller_id">
                 <tr>
                     <td class="cart_product">
-                        <a href="{{ route('home.productDetails',['slug'=>$val['product_slug']]) }}">
-                            <img src="/uploads/products/{{ $val['product_image']}}" height="100px" width="100px" alt="">
+                        <a href="{{ route('home.productDetails',['slug'=>$val['product_slug'],'id'=>$val['product_id']]) }}">
+                            <img src="/uploads/products/{{ $val['seller_id'] }}/{{ $val['product_image']}}" height="auto" width="100px" alt="">
                         </a>
                     </td>
                     <td class="cart_description">
-                        <h4><a href="">{{ $val['product_name'] }}</a></h4>
+                        <h4><a href="{{ route('home.productDetails',['slug'=>$val['product_slug'],'id'=>$val['product_id']]) }}">{{ $val['product_name'] }}</a></h4>
                         <p>ID sản phẩm: {{ $val['product_id'] }}</p>
                     </td>
                     <td class="cart_price">

@@ -32,7 +32,8 @@
     <link href="css/gallery.css" rel="stylesheet">
     <link href="css/lightSlider.css" rel="stylesheet">
     <link href="css/lightGallery.css" rel="stylesheet">
-    <link type="text/css" rel="stylesheet" href="css/lightGallery.css" />      
+    <link href="css/jquery_ui.min.css" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="css/lightGallery.css" />
     <!--[if lt IE 9]>
     <script src="js/html5shiv.js"></script>
     <script src="js/respond.min.js"></script>
@@ -84,11 +85,14 @@
     <div id="fb-root"></div>
     <div id="fb-root"></div>
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v8.0"
-    nonce="kYGdzKZT"></script>
+        nonce="kYGdzKZT"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script src="js/sweetalert.min.js"></script>
     <script src="js/lightGallery.js"></script>
     <script src="js/lightSlider.js"></script>
+    <script src="js/jquery_ui.min.js"></script>
+    <script src="js/jquery_format_number.min.js"></script>
+
     <script>
 
     </script>
@@ -183,19 +187,18 @@
                         }
                     });
                 }
-               
             });
 
-             //add cart
+             //send order
             $('.send_order').click(function(){  
                 swal({
-                    title: "Are you sure?",
-                    text: "You will not be able to recover this imaginary file!",
+                    title: "Xác nhận đơn hàng ?",
+                    text: "Nếu nhấn đồng ý, bạn sẽ không được hoàn tác",
                     type: "warning",
                     showCancelButton: true,
                     confirmButtonClass: "btn-danger",
-                    confirmButtonText: "Yes, delete it!",
-                    cancelButtonText: "No, cancel plx!",
+                    confirmButtonText: "Đồng ý",
+                    cancelButtonText: "Hủy bỏ",
                     closeOnConfirm: false,
                     // closeOnCancel: false                    
                 },               
@@ -224,7 +227,7 @@
                                 ,order_fee:order_fee,order_coupon:order_coupon,payment_select:payment_select,
                                 seller_id:seller_id,_token:_token},
                                 success:function(data){
-                                    swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                                    swal("Bạn đã đặt đơn hàng thành công!", "Cảm ơn bạn đã mua hàng");
                                     window.setTimeout(function(){
                                         location.replace("{{ route('customer.thanks') }}");
                                     },1000);
@@ -235,25 +238,149 @@
                 );              
                 
             });
+
+            //add cart detail
+            $('.add-to-cart-detail').click(function(){
+                var id = $(this).data('id_product');
+                var cart_product_id = $('.cart_product_id_' + id).val();
+                var cart_product_seller_id = $('.cart_product_seller_id_' + id).val();
+                var cart_product_name = $('.cart_product_name_' + id).val();
+                var cart_product_image = $('.cart_product_image_' + id).val();
+                var cart_product_price = $('.cart_product_price_' + id).val();
+                var cart_product_qty = $('.cart_product_qty_' + id).val();
+                var cart_product_quantity = $('.cart_product_quantity_' + id).val();
+                var _token = $('input[name="_token"]').val();
+                if(parseInt(cart_product_qty) > parseInt(cart_product_quantity)){
+                    swal({
+                        title: "Không đủ hàng",
+                        text: "Hiện tại shop chỉ còn "+cart_product_quantity+" sản phẩm",
+                        showCancelButton: true,
+                        showConfirmButton: false,
+                        cancelButtonText: "Ok",
+                        type: "warning",                        
+                        closeOnConfirm: false
+                    });
+                }else{
+                    $.ajax({
+                        url: '{{route('cart.addCartAjaxDetail')}}',
+                        method: 'POST',
+                        data:{cart_product_quantity:cart_product_quantity,cart_product_id:cart_product_id,
+                        cart_product_name:cart_product_name,cart_product_image:cart_product_image,
+                        cart_product_price:cart_product_price,cart_product_qty:cart_product_qty,
+                        cart_product_seller_id:cart_product_seller_id,_token:_token},
+                        success:function(data){
+                            // swal({
+                            //         title: "Đã thêm sản phẩm vào giỏ hàng",
+                            //         text: "Bạn có thể mua hàng tiếp hoặc tới giỏ hàng để tiến hành thanh toán",
+                            //         showCancelButton: true,
+                            //         cancelButtonText: "Xem tiếp",
+                            //         confirmButtonClass: "btn-success",
+                            //         confirmButtonText: "Đi đến giỏ hàng",
+                            //         closeOnConfirm: false
+                            //     },
+                            //     function() {
+                                    window.location.href = "{{route('cart.show')}}";
+                            //     }
+                            // );
+                        }
+                    });
+                }
+                
+            });
+
+            //search filter
+            $('#sort').on('change',function(){
+                var url = $(this).val();
+                if (url){
+                    window.location = url;
+                }
+                return false
+            });
         });
     </script>
     <script>
-     
-    //     $('#lightSlider').lightSlider({
-    //         gallery: true,
-    //         item: 1,
-    //         loop:true,
-    //         slideMargin: 0,
-    //         thumbItem: 3,
-    //         thumbMargin: 0,
-    //         controls: true,
-    //         adaptiveHeight:true,
-    //         slideMargin: 100,
-    //         prevHtml: '<i class="fa fa-angle-left" style="font-size:50px"></i>',
-    //         nextHtml: '<i class="fa fa-angle-right" style="font-size:50px"></i>',
-            
-    // });
-    </script>   
+        //Tìm kiếm tự động
+        $('#keywords').keyup(function(){
+            var query = $(this).val();
+            if(query != ''){
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url: '{{ route('home.AutocompleteSearch') }}' ,
+                    method:"POST",
+                    data:{query:query, _token:_token},
+                    success:function(data){
+                        $('#search_ajax').fadeIn();
+                        $('#search_ajax').html(data);
+                    }
+                });
+            }else{
+                $('#search_ajax').fadeOut();
+            }
+        });
+        $(document).on('click','li.li_search_ajax',function(){
+            $('#keywords').val($(this).text());
+            $('#search_ajax').fadeOut();
+        });
+    </script>
+    <script>
+        function remove_background(product_id){
+            for (var count = 1; count <= 5; count++){
+                $('#'+product_id+'-'+count).css('color','#ccc');
+            }
+        }
+        //hover chuột để đánh giá sao
+        $(document).on('mouseenter','.rating',function(){
+            var index = $(this).data("index");
+            var product_id = $(this).data('product-id');
+            remove_background(product_id);
+            for (var count = 1; count<=index;count++){
+                $('#'+product_id+'-'+count).css('color','#ffcc00');
+            }
+        });
+
+        //nhả chuột không đánh giá
+        $(document).on('mouseleave','.rating',function(){
+            var index = $(this).data("index");
+            var product_id = $(this).data('product-id');
+            var rating = $(this).data("rating");
+            remove_background(product_id);
+            for (var count = 1; count<=rating;count++){
+                $('#'+product_id+'-'+count).css('color','#ffcc00');
+            }
+        });
+
+        //click để đánh giá
+        $(document).on('click','.rating',function(){
+            var index = $(this).data("index");
+            var product_id = $(this).data('product-id');
+            var user_id = $(this).data('user_id');
+            var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url:'{{ route('home.rating') }}',
+                method: "POST",
+                data:{index:index, product_id:product_id,_token:_token,user_id:user_id},
+                success:function(data){
+                    if(data == 'done'){
+                        location.reload();
+                    }else if(data == 'login'){
+                        swal({
+                            title: "Bạn cần phải đăng nhập để đánh giá sản phẩm",
+                            type: "warning",                        
+                            showCancelButton: true,
+                            cancelButtonText: "Xem tiếp",
+                            confirmButtonClass: "btn-success",
+                            confirmButtonText: "Đăng nhập",
+                            closeOnConfirm: false
+                        },
+                            function() {
+                                window.location.href = "{{route('customer.login')}}";
+                            }
+                        );
+                    }
+                }
+            });
+        });
+    </script>    
     @yield('js')
 </body>
 

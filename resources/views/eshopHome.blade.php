@@ -7,6 +7,8 @@ Eshop | Trang chủ
 @endsection
 @section('left_side_bar')
 @include('homePartials.left_sidebar')
+@include('homePartials.left_sidebar_price')
+@include('homePartials.left_sidebar_ads')
 @endsection
 @section('content')
 @include('homePartials.features_items')
