@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SignupEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -20,5 +21,12 @@ class MailController extends Controller
             $message->to($to_email)->subject('test mail nhé');//send this mail with subject
         });
         //--send mail
+    }
+    public static function send_signup_email($name, $email, $verification_code){
+        $data = [
+            'name' => $name,
+            'verification_code' => $verification_code
+        ];
+        Mail::to($email)->send(new SignupEmail($data));
     }
 }

@@ -60,6 +60,7 @@ Order details
 </script> --}}
 @endsection
 @section('content')
+@include('admin.toast')
 <div class="form-w3layouts">
     <section class="panel">
         <header class="panel-heading">

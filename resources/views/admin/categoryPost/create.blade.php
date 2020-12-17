@@ -23,9 +23,12 @@ Add post categories
                     <div class="form-group">
                         <label for="">Chọn danh mục cha</label>
                         <select class="form-control m-bot15" name="parent_id">
-                            <option value="0">---Chọn danh mục cha---</option>
+                            <option value="0" hidden>---Chọn danh mục cha---</option>
                             {!! $htmlOption !!}
                         </select>
+                        @error('parent_id')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                     </div>                    
                     <div class="form-group">
                         <label for="">Mô tả</label>

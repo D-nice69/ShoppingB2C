@@ -8,7 +8,7 @@ class Social extends Model
 {
     protected $guarded = [];
  	public function login(){
- 		return $this->belongsTo(Admin::class,'user');
+ 		return $this->belongsTo(Customer::class,'user');
  	}
 
 }

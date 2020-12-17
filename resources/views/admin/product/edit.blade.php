@@ -50,6 +50,7 @@ Edit product
                 <form role="form" action="{{ route('product.update',['id'=>$product->id]) }}" method="POST"
                     enctype="multipart/form-data">
                     @csrf
+                    <input type="hidden" name="id" value="{{ $product->id }}">
                     <div class="form-group">
                         <label for="">Tên</label>
                         <input class="form-control @error('product_name') is-invalid @enderror" name="product_name"
@@ -82,9 +83,13 @@ Edit product
                                     class="file form-control @error('product_image') is-invalid @enderror"
                                     data-preview-file-type="any" value="{{ $product->product_image }}">
                             </div>
-                            @error('product_image')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                @error('product_image')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-12">

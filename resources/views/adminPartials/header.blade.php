@@ -26,7 +26,7 @@
                             if($message1){
                                 echo $message1;
                             }
-                            $message2 = Session::get('customerName');
+                            $message2 = Session::get('CustomerName');
                             if($message2){
                                 echo $message2;
                             }

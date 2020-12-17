@@ -13,6 +13,7 @@ Edit brand
                 <form role="form" action="{{ route('brand.update',['id'=>$brand->id]) }}" method="POST"
                     enctype="multipart/form-data">
                     @csrf
+                    <input type="hidden" name="id" value="{{ $brand->id }}">
                     <div class="form-group">
                         <label for="">Tên</label>
                         <input class="form-control @error('brand_name') is-invalid @enderror" name="brand_name"

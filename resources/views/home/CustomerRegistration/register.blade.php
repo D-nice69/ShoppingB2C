@@ -31,11 +31,23 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<link href="css/font-awesome.css" rel="stylesheet">
 	<!-- //font-awesome icons -->
 	<script src="js/jquery2.0.3.min.js"></script>
+	<style>
+		p.alert-success{
+			color: rgb(7, 80, 7)
+		}
+	</style>
 </head>
 
 <body>
 	<div class="reg-w3">
 		<div class="w3layouts-main">
+			<div class="flash-message">
+                @foreach (['danger', 'warning', 'success', 'info'] as $msg)
+                    @if(Session::has('alert-' . $msg))
+                        <p class="alert alert-{{ $msg }}">{{ Session::get('alert-' . $msg) }} <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a></p>
+                    @endif
+                @endforeach
+            </div>
 			<h2>Register Now</h2>
 			<form action="{{ route('customer.add') }}" method="post" enctype="multipart/form-data">
 				@csrf

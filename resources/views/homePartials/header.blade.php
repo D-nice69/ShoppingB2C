@@ -37,7 +37,7 @@
                         <a href="{{ route('home.index') }}"><img src="images/home/logo.png" alt="" /></a>
                     </div>
                     <div class="btn-group pull-right">
-                        <div class="btn-group">
+                        {{-- <div class="btn-group">
                             <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
                                 USA
                                 <span class="caret"></span>
@@ -57,13 +57,37 @@
                                 <li><a href="#">Canadian Dollar</a></li>
                                 <li><a href="#">Pound</a></li>
                             </ul>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="col-sm-8">
                     <div class="shop-menu pull-right">
                         <ul class="nav navbar-nav">
-                            @if(Auth::user())
+                            @php
+                                $proId = Session::get('CustomerId');
+                                $proName = Session::get('CustomerName');
+                                $proRole = Session::get('CustomerRole');
+                            @endphp
+                            @if(Auth::user()==null)
+                            @if($proId)
+                            <li><a href="{{ route('home.shop',['id'=>$proId]) }}"><i class="fa fa-user"></i>Cửa hàng của bạn</a></li>
+                            @if($proRole == 1)
+                            <li><a href="{{ route('Admin.showDashboard') }}"><i class="fa fa-money"></i>Quản trị</a></li>
+                            @else
+                            <li><a href="{{ route('Admin.showDashboard') }}"><i class="fa fa-money"></i>Kênh người
+                                bán</a></li>   
+                            @endif
+                            <li><a href="{{ route('cart.show') }}"><i class="fa fa-shopping-cart"></i>Giỏ hàng</a></li>
+                            <li><a href="{{ route('customer.logout') }}"><i></i>Đăng xuất</a></li>
+                            @endif
+                            @endif
+
+                            {{-- @if(Auth::user()== null || Auth::user()->is_verified=='0')
+                            <li><a href="{{ route('cart.show') }}"><i class="fa fa-shopping-cart"></i>Giỏ hàng</a></li>
+                            <li><a href="{{ route('customer.login') }}"><i></i>Đăng nhập</a></li>
+                            @endif --}}
+
+                            @if(Auth::user() && Auth::user()->is_verified=='1')
                             <li><a href="{{ route('home.shop',['id'=>Auth::user()->id]) }}"><i class="fa fa-user"></i>Cửa hàng của bạn</a></li>
                             @if(Auth::user()->role_id == 1)
                             <li><a href="{{ route('Admin.showDashboard') }}"><i class="fa fa-money"></i>Quản trị</a></li>
@@ -74,9 +98,11 @@
                             <li><a href="{{ route('cart.show') }}"><i class="fa fa-shopping-cart"></i>Giỏ hàng</a></li>
                             <li><a href="{{ route('customer.logout') }}"><i></i>Đăng xuất</a></li>
                             @endif
-                            @if(Auth::user()== null)
+                            @if($proId == null)
+                            @if(Auth::user()== null || Auth::user()->is_verified=='0' )
                             <li><a href="{{ route('cart.show') }}"><i class="fa fa-shopping-cart"></i>Giỏ hàng</a></li>
                             <li><a href="{{ route('customer.login') }}"><i></i>Đăng nhập</a></li>
+                            @endif
                             @endif
                             {{-- <li><a href="#"><i class="fa fa-star"></i>Đánh dấu</a></li> --}}                           
 

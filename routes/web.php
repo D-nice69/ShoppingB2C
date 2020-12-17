@@ -121,8 +121,13 @@ Route::prefix('admin')->group(function () {
         Route::get('/create', 'couponController@create')
             ->middleware('can:add_coupon')
             ->name('coupon.create');
+        Route::get('/edit/{id}', 'couponController@edit')
+            // ->middleware('can:add_coupon')
+            ->name('coupon.edit');
         Route::post('/store', 'couponController@store')
-            ->name('coupon.store');   
+            ->name('coupon.store'); 
+        Route::post('/update/{id}', 'couponController@update')
+            ->name('coupon.update');     
         Route::get('/delete/{id}', 'couponController@delete')
             ->middleware('can:delete_coupon')
             ->name('coupon.delete');    
@@ -367,4 +372,10 @@ Route::get('/thanks', 'CustomerController@thanks')->name('customer.thanks');
 
 //shop
 Route::get('/shop/{id}', 'HomeController@shop')->name('home.shop');
+
+//forget password
+Route::get('/password-forget', 'CustomerController@forgetPassword')->name('Customer.forgetPassword');
+Route::post('/password-reset', 'CustomerController@resetPassword')->name('Customer.resetPassword');
+//verify account
+Route::get('/account-verify', 'CustomerController@accountVerify')->name('Customer.accountVerify');
 

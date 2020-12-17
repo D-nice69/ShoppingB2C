@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Brand;
 use App\Category;
+use App\Components\Recusive;
 use App\Http\Requests\StoreProduct;
 use App\Product;
 use App\ProductImage;
@@ -24,9 +25,10 @@ class ProductController extends Controller
     {
         $categories = Category::get();
         $brands = Brand::get();
-        return view('admin.product.create',compact('categories','brands'));
+        $htmlOption = $this->getCategory($parentId = '');
+        return view('admin.product.create',compact('categories','brands','htmlOption'));
     }
-    public function store(Request $request)
+    public function store(StoreProduct $request)
     {
         // $getImage = $request->file('pro');
         // $getImage2 = $request->file('images');
@@ -78,7 +80,7 @@ class ProductController extends Controller
                 ]);
             }
         }
-        Session::put('message','Thêm sản phẩm thành công');
+        toastr()->success('Thêm sản phẩm thành công');
         return redirect()->route('product.index');
     }
     public function edit($id)
@@ -88,7 +90,7 @@ class ProductController extends Controller
         $product = Product::find($id);
         return view('admin.product.edit',compact('product','categories','brands'));
     }
-    public function update($id,Request $request)
+    public function update($id,StoreProduct $request)
     {
         $product = Product::find($id);
         $updateProduct = [
@@ -139,7 +141,7 @@ class ProductController extends Controller
             }
         }
 
-        Session::put('message','Product updated');
+        toastr()->success('Cập nhật sản phẩm thành công');
         return redirect()->route('product.index');
     }
     public function delete($id)
@@ -158,13 +160,21 @@ class ProductController extends Controller
     public function unactive($id)
     {
         Product::find($id)->update(['product_status'=>1]);
-        Session::put('message','Đã ẩn');
+        toastr()->info('Ẩn sản phẩm');
+
         return redirect()->route('product.index');
     }
     public function active($id)
     {
         Product::find($id)->update(['product_status'=>0]);
-        Session::put('message','đã hiện');
+        toastr()->info('Hiện sản phẩm');
         return redirect()->route('product.index');
+    }
+    public function getCategory($parentId)
+    {
+        $data = Category::all();
+        $recusive = new Recusive($data);
+        $htmlOption = $recusive->categoryRecusive($parentId);
+        return $htmlOption;
     }
 }

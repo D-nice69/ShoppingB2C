@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateSellerRequest;
 use App\Picture;
 use App\Seller;
 use Illuminate\Http\Request;
@@ -15,13 +16,14 @@ class ShopController extends Controller
         $pic = Picture::where('customer_id',Auth::user()->id)->first();
         return view('admin.shop.index',compact('shop','pic'));
     }
-    public function store(Request $request)
+    public function store(UpdateSellerRequest $request)
     {
         Seller::where('customer_id',Auth::user()->id)->update([
             'customer_id' => Auth::user()->id,
             'shop_name' => $request->shop_name,
             'shop_info' => $request->shop_info,
         ]);
+        toastr()->success('Lưu thành công');
         return redirect()->back();
     }
     public function uploadCropImage(Request $request)

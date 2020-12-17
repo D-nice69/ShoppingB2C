@@ -28,14 +28,19 @@ class CustomerController extends Controller
     	$password = md5($request->password);
         $result = Customer::where('email',$email)->where('password',$password)->first();
     	if($result){
-            Session::put('customerName',$result->name);
-            Session::put('customerId',$result->id); 
+            Session::put('CustomerName',$result->name);
+            Session::put('CustomerId',$result->id); 
         }
         if(Auth::attempt([
             'email' => $email,
             'password' => $request->password
         ])){
-            return redirect()->intended();
+            if(Auth::user()->is_verified == 0){
+                toastr()->warning('Vui lòng xác nhận mail để đăng nhập');
+                return redirect()->back();
+            }else{
+                return redirect()->intended();
+            }
         }else{
     		return redirect('/login');
         };
@@ -51,18 +56,26 @@ class CustomerController extends Controller
             'email' =>$request->email,
             'phone' =>$request->phone,
             'password' =>md5($request->password),
+            'verification_code' => sha1(time()),
             'role_id' => 2,
         ]);
-        Seller::create([
-            'customer_id' => $data->id,
-            'shop_info' => '',
-            'shop_name' => $request->name,
-        ]);
-        $customerId = $data->id;
-        Session::put('customerId',$customerId);
-        Session::put('customerName',$request->name);
-        Auth::login($data);
-        return redirect('/checkout');
+        if($data != null){
+            MailController::send_signup_email($data->name,$data->email,$data->verification_code);
+            Seller::create([
+                'customer_id' => $data->id,
+                'shop_info' => '',
+                'shop_name' => $request->name,
+            ]);
+            $customerId = $data->id;
+            Session::put('CustomerId',$customerId);
+            Session::put('CustomerName',$request->name);
+            Auth::login($data);
+            //send mail
+            //show message
+            //redirect
+            return redirect()->back()->with(session()->flash('alert-success','Bạn đã tạo tài khoản thành công, vui lòng kiểm tra email để kích hoạt'));
+        }
+        return redirect()->back()->with(session()->flash('alert-danger','Có gì đó sai sai'));
     }
     public function Checkout(Request $request)
     {
@@ -141,5 +154,20 @@ class CustomerController extends Controller
         $meta_title = "";
         $url_canonical = $request->url();
         return view('home.checkout.tks',compact('meta_desc','meta_keywords','meta_title','url_canonical'));
+    }
+    public function forgetPassword()
+    {
+        return view('home.CustomerRegistration.forgetPassword');
+    }
+    public function resetPassword()
+    {
+        
+    }
+    public function accountVerify()
+    {
+        Customer::where('id',Auth::user()->id)->update([
+            'is_verified' => '1',
+        ]);
+        return redirect()->route('home.index');
     }
 }

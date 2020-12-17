@@ -14,18 +14,18 @@ Add coupon
                     @csrf
                     <div class="form-group">
                         <label for="">Tên</label>
-                        <input class="form-control @error('name') is-invalid @enderror" name="name">
+                        <input class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}">
                         @error('name')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label for="">Mã giảm giá</label>
                         <input class="form-control @error('code') is-invalid @enderror" name="code">
                         @error('code')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
-                    </div>
+                    </div> --}}
                     <div class="form-group">
                         <label for="">Số lượng</label>
                         <input class="form-control @error('qty') is-invalid @enderror" name="qty">
@@ -37,8 +37,8 @@ Add coupon
                         <label for="">Tính năng</label>
                         <select class="form-control  @error('feature') is-invalid @enderror" name="feature">
                             <option hidden value="">----Chọn----</option>
-                            <option value="0">Giảm theo phần trăm</option>
-                            <option value="1">Giảm theo tiền</option>
+                            <option {{ old('feature') == 0 ? 'selected' : '' }} value="0">Giảm theo phần trăm</option>
+                            <option {{ old('feature') == 1 ? 'selected' : '' }} value="1">Giảm theo tiền</option>
                         </select>
                         @error('feature')
                         <div class="alert alert-danger">{{ $message }}</div>
@@ -51,7 +51,7 @@ Add coupon
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                     </div>  
-                    <button type="submit" class="btn btn-info">Thêm</button>
+                    <button type="submit" class="btn btn-info">Tạo mã</button>
                 </form>
             </div>
 

@@ -18,21 +18,21 @@ Add category
                     <div class="form-group">
                         <label for="">Tên</label>
                         <input class="form-control @error('category_name') is-invalid @enderror" name="category_name"
-                            placeholder="Enter name">
+                            placeholder="Enter name" value="{{ old('category_name') }}">
                         @error('category_name')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label for="">Mô tả</label>
-                        <textarea rows="3" class="form-control @error('category_description') is-invalid @enderror" name="category_description"></textarea>
+                        <textarea rows="3" class="form-control @error('category_description') is-invalid @enderror" name="category_description">{{ old('category_description') }}</textarea>
                         @error('category_description')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label for="">Từ khóa danh mục</label>
-                        <textarea class="form-control @error('keyword') is-invalid @enderror" name="keyword"></textarea>
+                        <textarea class="form-control @error('keyword') is-invalid @enderror" name="keyword">{{ old('keyword') }}</textarea>
                         @error('keyword')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
@@ -40,7 +40,7 @@ Add category
                     <div class="form-group">
                         <label for="">Chọn danh mục cha</label>
                         <select class="form-control m-bot15" name="parent_id">
-                            <option value="0">---Chọn danh mục cha---</option>
+                            <option value="0" hidden>---Chọn danh mục cha---</option>
                             {!! $htmlOption !!}
                         </select>
                     </div>

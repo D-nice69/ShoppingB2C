@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RoleRequest;
 use App\Permission;
 use App\Role;
 use Illuminate\Http\Request;
@@ -18,13 +19,14 @@ class RoleController extends Controller
         $permission_parents = Permission::where('parent_id',0)->get();       
         return view('admin.role.create',compact('permission_parents'));
     }
-    public function store(Request $request)
+    public function store(RoleRequest $request)
     {
         $role = Role::create([
             'name' => $request->name,
             'display_name' => $request->display_name,
         ]);
         $role->permissions()->attach($request->permission_id);
+        toastr()->success('Thêm vai trò thành công');
         return redirect()->route('role.index');
     }
     public function edit($id)
@@ -34,7 +36,7 @@ class RoleController extends Controller
         $permission_role = $role->permissions;
         return view('admin.role.edit',compact('role','permission_parents','permission_role'));
     }
-    public function update($id,Request $request)
+    public function update($id,RoleRequest $request)
     {
         $role = Role::find($id);
         $role->update([
@@ -42,6 +44,7 @@ class RoleController extends Controller
             'display_name' => $request->display_name,
         ]);
         $role->permissions()->sync($request->permission_id);
+        toastr()->success('Cập nhật vai trò thành công');
         return redirect()->route('role.index');
     }
     public function delete($id) 

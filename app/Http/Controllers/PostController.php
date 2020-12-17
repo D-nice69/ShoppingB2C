@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\CategoryPost;
 use App\Components\Recusive;
+use App\Http\Requests\PostRequest;
 use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -20,7 +21,7 @@ class PostController extends Controller
         $htmlOption = $this->getCategory($parentId = '');
         return view('admin.post.create',compact('htmlOption'));
     }
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
         $storePost = [
             'title' => $request->title,
@@ -38,9 +39,9 @@ class PostController extends Controller
             $newImage =  $nameImage.rand(0,999) .'.'.$getImage->getClientOriginalExtension();
             $getImage->move('uploads/posts',$newImage);
             $storePost['image'] = $newImage;
-            Post::create($storePost);
-            return redirect()->route('post.index');
         }
+        toastr()->success('Thêm bài viết thành công');
+
         Post::create($storePost);
         return redirect()->route('post.index');
     }
@@ -48,12 +49,14 @@ class PostController extends Controller
     public function unactive($id)
     {
         Post::find($id)->update(['status'=>1]);
-        return redirect()->route('post.index')->with('message','Đã ẩn');
+        toastr()->info('Ẩn bài viết');
+        return redirect()->route('post.index');
     }
     public function active($id)
     {
         Post::find($id)->update(['status'=>0]);
-        return redirect()->route('post.index')->with('message','Đã hiện');
+        toastr()->info('Hiện bài viết');
+        return redirect()->route('post.index');
     }
     public function edit($id)
     {
@@ -62,7 +65,7 @@ class PostController extends Controller
         $htmlOption = $this->getCategory($cPost->id);
         return view('admin.post.edit',compact('post','htmlOption'));
     }
-    public function update($id,Request $request)
+    public function update($id,PostRequest $request)
     {
         $post = Post::find($id);
         $updatePost = [
@@ -81,9 +84,8 @@ class PostController extends Controller
             $newImage =  $nameImage.rand(0,999) .'.'.$getImage->getClientOriginalExtension();
             $getImage->move('uploads/posts',$newImage);
             $updatePost['image'] = $newImage;
-            Post::find($id)->update($updatePost);
-            return redirect()->route('post.index');
         }
+        toastr()->success('Cập nhật bài viết thành công');
         Post::find($id)->update($updatePost);
         return redirect()->route('post.index');
     }

@@ -21,4 +21,8 @@ class Customer extends Authenticatable
         }
         return false;
     }
+    public function seller()
+    {
+        return $this->hasOne(Seller::class,'customer_id');
+    }
 }

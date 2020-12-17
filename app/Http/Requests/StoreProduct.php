@@ -23,28 +23,41 @@ class StoreProduct extends FormRequest
      */
     public function rules()
     {
-        return [
-            'product_name'=>'required|max:30|unique:products,product_name',
-            'product_price'=>'required',
-            'product_desc'=>'required',
-            'product_content'=>'required',
-            'keyword' => 'required',
-            'product_image'=>'required|image',
-
-        ];
+        if($this->request->get('id')){
+            return [
+                'product_name'=>'required|max:50|unique:products,product_name,'.$this->request->get('id'),
+                'product_price'=>'required',
+                'product_desc'=>'required|max:300',
+                'product_content'=>'required|min:100',
+                'product_qty'=>'required',
+                'product_image'=>'mimes:jpeg,jpg,png',
+            ];
+        }else{
+            return [
+                'product_name'=>'required|max:50|unique:products,product_name',
+                'product_price'=>'required',
+                'product_desc'=>'required|max:300',
+                'product_content'=>'required|min:100',
+                'product_qty'=>'required',
+                'product_image'=>'required|mimes:jpeg,jpg,png',
+            ];
+        }
     }
     public function messages()
     {
         return [
             'product_name.required' => 'Vui lòng điền tên sản phẩm',
             'keyword.required' => 'Vui lòng điền từ khóa cho sản phẩm',
-            'product_name.max' => 'Tên sản phẩm không được quá 30 ký tự',
+            'product_name.max' => 'Tên sản phẩm không được quá 50 ký tự',
             'product_name.unique' => 'Sản phẩm này đã tồn tại',
             'product_price.required' => 'Vui lòng điền giá sản phẩm',
             'product_desc.required' => 'Vui lòng mô tả sản phẩm',
+            'product_desc.max' => 'Mô tả sản phẩm không được quá 300 ký tự',
             'product_content.required' => 'Vui lòng mô tả nội dung sản phẩm',
+            'product_content.min' => 'Nội dung sản phẩm phải có hơn 100 ký tự',
+            'product_qty.required' => 'Vui lòng thêm số lượng sản phẩm',
             'product_image.required' => 'Sản phẩm cần có ảnh',
-            'product_image.image' => 'Ảnh phải có dạng là jpeg, png, bmp, gif, svg, hoặc webp',
+            'product_image.mimes' => 'Ảnh phải có dạng là jpeg, png, jpg',
         ];
     }
 }

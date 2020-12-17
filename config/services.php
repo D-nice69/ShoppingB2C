@@ -37,7 +37,7 @@ return [
     'google' => [
         'client_id' => '506830848190-1hv57t687s3fb0op7aha2fo86tb6pl0n.apps.googleusercontent.com',
         'client_secret' => 'u2Z4Ddlvrbi57gul_tFSofIg',
-        'redirect' => 'http://localhost:8000/google/callback' 
+        'redirect' => 'http://eshop.com:8000/google/callback' 
     ],
 
 

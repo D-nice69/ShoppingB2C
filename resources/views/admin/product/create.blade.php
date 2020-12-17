@@ -54,7 +54,7 @@ Add product
                     <div class="form-group">
                         <label for="">Tên</label>
                         <input class="form-control @error('product_name') is-invalid @enderror" name="product_name"
-                            placeholder="Enter name">
+                            placeholder="Enter name" value="{{ old('product_name') }}">
                         @error('product_name')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
@@ -62,7 +62,7 @@ Add product
                     <div class="form-group">
                         <label for="">Giá</label>
                         <input class="form-control @error('product_price') is-invalid @enderror" name="product_price"
-                            placeholder="Enter price">
+                            placeholder="Enter price" value="{{ old('product_price') }}">
                         @error('product_price')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
@@ -71,18 +71,23 @@ Add product
                         <label for="file">Hình ảnh</label>
                         <input id="product_image" type="file" name="product_image" class="file"
                             data-preview-file-type="any">
+                        @error('product_image')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="form-group">
                         <label for="">Hình ảnh chi tiết</label>
                         <input id="images" type="file" name="images[]" class="file" multiple=true
                             data-preview-file-type="any">
-
+                        @error('images')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="form-group">
                         <label for="">Số lượng</label>
                         <input class="form-control @error('product_qty') is-invalid @enderror" name="product_qty"
-                            placeholder="Enter price">
+                            placeholder="Enter price" value="{{ old('product_qty') }}">
                         @error('product_qty')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
@@ -102,7 +107,7 @@ Add product
                         <label for="">Mô tả</label>
                         <textarea id="editor" rows="10" rows="5"
                             class="form-control @error('product_desc') is-invalid @enderror"
-                            name="product_desc"></textarea>
+                            name="product_desc">{{ old('product_desc') }}</textarea>
                         @error('product_desc')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
@@ -111,7 +116,7 @@ Add product
                         <label for="">Nội dung</label>
                         <textarea id="editor1" rows="10"
                             class="form-control @error('product_content') is-invalid @enderror"
-                            name="product_content"></textarea>
+                            name="product_content">{{ old('product_content') }}</textarea>
                         @error('product_content')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
@@ -119,9 +124,7 @@ Add product
                     <div class="form-group">
                         <label for="">Danh mục</label>
                         <select class="form-control m-bot15" name="category_id">
-                            @foreach($categories as $key=>$category)
-                            <option value="{{ $category->id }}">{{ $category->category_name }}</option>
-                            @endforeach
+                            {!! $htmlOption !!}
                         </select>
                     </div>
                     <div class="form-group">

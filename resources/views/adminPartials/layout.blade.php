@@ -55,6 +55,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             margin-top: 6px;
         }
     </style>
+    
     @yield('css')
 </head>
 
@@ -96,7 +97,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             CKEDITOR.replace( 'editor1' );
             CKEDITOR.replace( 'editor' );
     </script>
-  
+   
     @yield('js')
     <!-- morris JavaScript -->
 

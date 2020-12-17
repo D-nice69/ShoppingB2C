@@ -23,17 +23,28 @@ class StoreCategory extends FormRequest
      */
     public function rules()
     {
-        return [
-            'category_name' => 'required|max:30|unique:categories,category_name',
-            'category_description' => 'required',
-            'keyword' => 'required',
-        ];
+        if($this->request->get('id')){
+            return [
+                'category_name' => 'required|max:30|unique:categories,category_name,'.$this->request->get('id'),
+                'category_description' => 'required',
+                'keyword' => 'required',
+                'parent_id' => 'required',
+            ];
+        }else{
+            return [
+                'category_name' => 'required|max:30|unique:categories,category_name',
+                'category_description' => 'required',
+                'keyword' => 'required',
+                'parent_id' => 'required',
+            ];
+        }
     }
     public function messages()
     {
         return [
             'category_name.required' => 'Vui lòng điền tên danh mục',
             'keyword.required' => 'Vui lòng điền từ khóa cho danh mục',
+            'parent_id.required' => 'Vui lòng chọn danh mục cha',
             'category_description.required' => 'Vui lòng mô tả danh mục',
             'category_name.max' => 'Tên danh mục không được quá 30 ký tự',
             'category_name.unique' => 'Danh mục này đã tồn tại',

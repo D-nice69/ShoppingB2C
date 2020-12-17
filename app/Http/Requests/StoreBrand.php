@@ -23,11 +23,20 @@ class StoreBrand extends FormRequest
      */
     public function rules()
     {
-        return [
-            'brand_name' => 'required|max:30|unique:brands,brand_name',
-            'brand_description' => 'required',
-            'keyword' => 'required',
-        ];
+        if($this->request->get('id')){
+            return [
+                'brand_name' => 'required|max:30|unique:brands,brand_name,'.$this->request->get('id'),
+                'brand_description' => 'required',
+                'keyword' => 'required',
+            ];
+        }else{
+            return [
+                'brand_name' => 'required|max:30|unique:brands,brand_name',
+                'brand_description' => 'required',
+                'keyword' => 'required',
+            ];
+        }
+
     }
     public function messages()
     {

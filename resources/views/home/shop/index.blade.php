@@ -157,6 +157,7 @@ Eshop | pro
                         </div>
 
                         <div class="tab-pane fade" id="shop_product">
+                            @if($products->count()>0)
                             @foreach($products as $product)
                             <div class="col-sm-3">
                                 <div class="product-image-wrapper">
@@ -288,11 +289,25 @@ Eshop | pro
                                 </div>
                             </div>
                             @endforeach
+                            @else
+                            <div class="col-sm-3">
+                                <div class="product-image-wrapper">
+                                    <div class="single-products">
+                                        <div class="productinfo text-center">
+                                            Hiện tại shop chưa có sản phẩm
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+       
     </div>
 </section>
 @endsection

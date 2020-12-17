@@ -25,8 +25,10 @@ class BrandController extends Controller
             'brand_name' => $request->brand_name,
             'brand_description' => $request->brand_description,
             'brand_status' => $request->brand_status,
+            'keyword' => $request->keyword,
             'slug' => Str::slug( $request->brand_name,'-')
         ]);
+        toastr()->success('Thêm thương hiệu thành công');
         return redirect()->route('brand.index');
     }
     public function edit($id)
@@ -40,9 +42,10 @@ class BrandController extends Controller
             'brand_name' => $request->brand_name,
             'brand_description' => $request->brand_description,
             'brand_status' => $request->brand_status,
+            'keyword' => $request->keyword,
             'slug' => Str::slug( $request->brand_name,'-')
         ]);
-        Session::put('message','Brand updated');
+        toastr()->success('Cập nhật thương hiệu thành công');
         return redirect()->route('brand.index');
     }
     public function delete($id)
@@ -60,13 +63,13 @@ class BrandController extends Controller
     public function unactive($id)
     {
         Brand::find($id)->update(['Brand_status'=>1]);
-        Session::put('message','Brand is hidden');
+        toastr()->info('Ẩn thương hiệu');
         return redirect()->route('brand.index');
     }
     public function active($id)
     {
         Brand::find($id)->update(['Brand_status'=>0]);
-        Session::put('message','Brand is shown');
+        toastr()->info('Hiện thương hiệu');
         return redirect()->route('brand.index');
     }
 }

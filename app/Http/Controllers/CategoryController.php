@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use App\Components\Recusive;
+use App\Http\Requests\UpdateCategoryRequest;
+
 session_start();
 class CategoryController extends Controller
 {
@@ -32,7 +34,8 @@ class CategoryController extends Controller
             'keyword' => $request->keyword,
             'slug' => Str::slug( $request->category_name,'-'),
         ]);
-        return redirect()->route('category.index')->with('message','Thêm danh mục thành công');
+        toastr()->success('Thêm danh mục thành công');
+        return redirect()->route('category.index');
     }   
     public function edit($id)
     {
@@ -50,19 +53,19 @@ class CategoryController extends Controller
             'keyword' => $request->keyword,
             'slug' => Str::slug( $request->category_name,'-'),
         ]);
-        Session::put('message','Category updated');
+        toastr()->success('Cập nhật danh mục thành công');
         return redirect()->route('category.index');
     }
     public function unactive($id)
     {
         Category::where('id',$id)->update(['category_status'=>1]);
-        Session::put('message','Category is hidden');
+        toastr()->info('Ẩn danh mục');
         return redirect()->route('category.index');
     }
     public function active($id)
     {
         Category::where('id',$id)->update(['category_status'=>0]);
-        Session::put('message','Category is shown');
+        toastr()->info('Hiện danh mục');
         return redirect()->route('category.index');
     }
     public function delete($id)

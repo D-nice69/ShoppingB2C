@@ -7,25 +7,18 @@ Products List
 <script src="js/dataTables/product.js"></script>
 @endsection
 @section('content')
+@include('admin.toast')
 @section('css')
-    <style>
-        th#check{
-        }
-    </style>
+<style>
+    th#check {}
+</style>
 @endsection
 <div class="table-agile-info">
     <div class="panel panel-default">
         <div class="panel-heading">
             Danh sách sản phẩm
         </div>
-        <br/>
-        <?php
-            $message = Session::get('message');
-            if ($message) {
-            echo '<span style="color: red; padding: 10px">' . $message . '</span>';
-            Session::put('message', null);
-            }
-        ?>
+        <br />
         {{-- <div class="row w3-res-tb">
             <div class="col-sm-5 m-b-xs">
                 <select class="inpu\t-sm form-control w-sm inline v-middle">
@@ -81,7 +74,7 @@ Products List
                         <td>
                             @foreach($product->images as $image)
                             <img src="/uploads/products/{{ Auth::user()->id }}/{{ $image->image }}"
-                            alt="{{ $image->image }}" width="40" height="auto">
+                                alt="{{ $image->image }}" width="40" height="auto">
                             @endforeach
                         </td>
                         <td>{{ $product->product_qty }}</td>
@@ -127,4 +120,5 @@ Products List
         </footer> --}}
     </div>
 </div>
+
 @endsection

@@ -27,10 +27,11 @@ Update role
 <div class="form-w3layouts">
     <section class="panel">
         <header class="panel-heading">
-            Sửa vai trò
+            Cập nhật vai trò
         </header>
         <form role="form" action="{{ route('role.update',['id'=>$role->id]) }}" method="POST" enctype="multipart/form-data">
             @csrf
+            <input type="hidden" name="id" value="{{ $role->id }}">
             <div class="panel-body">
                 <div class="col-12">
                     <div class="form-group">
@@ -79,7 +80,7 @@ Update role
                 </div>
                 @endforeach
                                
-                <button type="submit" class="btn btn-info">Sửa</button>
+                <button type="submit" class="btn btn-info">Cập nhật</button>
 
             </div>
         </form>

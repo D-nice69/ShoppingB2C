@@ -114,9 +114,9 @@ class OrderController extends Controller
         if($product){
             foreach($unique_id as $ui){
                 $order = Order::create([
-                    'customer_id' => Session::get('customerId'),
+                    'customer_id' => Session::get('CustomerId'),
                     'shipping_id' => $shipping_id,
-                    'seller_id' => $ui,
+                    // 'seller_id' => $ui,
                     'status' => 1,
                     'code' => substr(md5(microtime()),rand(0,26),5),
                 ]);
@@ -198,7 +198,7 @@ class OrderController extends Controller
             $product_qty = $product->product_qty;
             if($product_qty <= $product_sale_qty){
                 $html = "Không thể cập nhật đơn hàng do số lượng sản phẩm trong kho không đủ.";
-                Session::put('message',$html);
+                toastr()->error('Không cập nhật được đơn hàng');
                 return response()->json([
                     'code' => 200,
                     'message' => $html,
@@ -218,7 +218,7 @@ class OrderController extends Controller
                 ]);
             }
         }
-        Session::put('message','Cập nhật đơn hàng thành công');
+        toastr()->success('Cập nhật đơn hàng thành công');
         return response()->json([
             'code' => 200,
             'message' => 'ok',

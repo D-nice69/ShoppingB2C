@@ -51,6 +51,7 @@ class DeliveryController extends Controller
             'fee_feeship' => $request->fee_feeship,
         ]
     );
+        toastr()->success('Thêm phí vận chuyển thành công');
         return redirect()->back();
     }
   
@@ -59,7 +60,8 @@ class DeliveryController extends Controller
 		$data = $request->all();
         $fee_ship = Feeship::find($data['feeship_id']);
 		$fee_value = str_replace(",","",$data['feeship_value']);
-		$fee_ship->fee_feeship = $fee_value;
+        $fee_ship->fee_feeship = $fee_value;
+        toastr()->success('Thay đổi phí vận chuyển thành công');
 		$fee_ship->save();
     }
 }

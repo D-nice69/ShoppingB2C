@@ -205,8 +205,8 @@ Eshop | Cart
                     }
                     ?>
                     <?php
-                    $customerId = Session::get('customerId');
-                    if($customerId!=Null){                                
+                    $CustomerId = Session::get('CustomerId');
+                    if($CustomerId!=Null){                                
                     ?>
                     <a class="btn btn-default check_out" href="{{ route('customer.checkout') }}">Check Out</a>
                     <?php 

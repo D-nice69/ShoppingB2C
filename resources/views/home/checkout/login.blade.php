@@ -32,28 +32,54 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <link href="css/font-awesome.css" rel="stylesheet">
     <!-- //font-awesome icons -->
     <script src="js/jquery2.0.3.min.js"></script>
-</head>
+    <style>
+        .fa {
+            padding: 5px;
+            /* font-size: 8px; */
+            width: 26px;
+            text-align: center;
+            text-decoration: none;
+            margin: 5px 2px;
+            border-radius: 50%;
+        }
 
+        .fa:hover {
+            opacity: 0.7;
+        }
+
+        .fa-facebook {
+            background: #3B5998;
+            color: white;
+        }
+
+        .fa-google {
+            background: #dd4b39;
+            color: white;
+        }
+    </style>
+</head>
 <body>
+    @include('admin.toast')
     <div class="log-w3">
         <div class="w3layouts-main">
-            <h2>Sign In Now</h2>
+            <h2>Đăng nhập</h2>
             <form action="{{ route('customer.loginCustomer') }}" method="post" enctype="multipart/form-data">
                 @csrf
-                <input type="email" class="ggg" name="email" placeholder="E-MAIL" >
-                <input type="password" class="ggg" name="password" placeholder="PASSWORD" >
-                <span><input type="checkbox" id="remember" name="remember" {{ old('remember') ? 'checked' : '' }} />Remember Me</span>
-                @if (Route::has('password.request'))
-                    <h6>
-                        <a class="btn btn-link" href="{{ route('password.request') }}">
-                            Forgot Your Password?
-                        </a>
-                    </h6>
-                @endif
+                <input type="email" class="ggg" name="email" placeholder="E-MAIL" value="{{ old('email') }}">
+                <input type="password" class="ggg" name="password" placeholder="MẬT KHẨU">
+                <span><input type="checkbox" id="remember" name="remember" {{ old('remember') ? 'checked' : '' }} />Lưu
+                    mật khẩu</span>
+                <h6>
+                    <a class="btn btn-link" href="{{ route('Customer.forgetPassword') }}">
+                        Quên mật khẩu ?
+                    </a>
+                </h6>
                 <div class="clearfix"></div>
                 <input type="submit" value="Sign In" name="login">
             </form>
-            <p>Don't Have an Account ?<a href="{{ route('customer.register') }}">Create an account</a></p>
+            <a href="{{ route('loginFacebook') }}" class="fa fa-facebook"></a>
+            <a href="{{ route('loginGoogle') }}" class="fa fa-google"></a>
+            <p>Bạn chưa có tài khoản ?<a href="{{ route('customer.register') }}">Đăng ký</a></p>
         </div>
     </div>
     <script src="js/bootstrap.js"></script>

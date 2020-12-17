@@ -6,12 +6,13 @@ Edit post categories
 <div class="form-w3layouts">
     <section class="panel">
         <header class="panel-heading">
-            Sửa danh mục bài viết
+            Cập nhật danh mục bài viết
         </header>
         <div class="panel-body">
             <div class="col-12">
                 <form role="form" action="{{ route('categoryPost.update',['id'=>$cPost->id]) }}" method="POST" enctype="multipart/form-data">
                     @csrf
+                    <input type="hidden" name="id" value="{{ $cPost->id }}">
                     <div class="form-group">
                         <label for="">Tên</label>
                         <input class="form-control @error('name') is-invalid @enderror" name="name"
@@ -23,7 +24,7 @@ Edit post categories
                     <div class="form-group">
                         <label for="">Chọn danh mục cha</label>
                         <select class="form-control m-bot15" name="parent_id">
-                            <option value="0">---Chọn danh mục cha---</option>
+                            <option value="0" hidden>---Chọn danh mục cha---</option>
                             {!! $htmlOption !!}
                         </select>
                     </div>                    
@@ -48,7 +49,7 @@ Edit post categories
                             @endif
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-info">Sửa</button>
+                    <button type="submit" class="btn btn-info">Cập nhật</button>
                 </form>
             </div>
 

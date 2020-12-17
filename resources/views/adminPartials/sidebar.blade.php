@@ -80,7 +80,7 @@
                         @can('add_slider')
                         <li><a href="{{ route('slider.create') }}">Thêm Slider</a></li>
                         @endcan
-                        <li><a href="{{ route('slider.index') }}">Liệt kê Slider</a></li>
+                        <li><a href="{{ route('slider.index') }}">Danh sách Slider</a></li>
                     </ul>
                 </li>
                 @endcan
@@ -108,7 +108,7 @@
                         @can('add_coupon')
                         <li><a href="{{ route('coupon.create') }}">Thêm mã giảm giá</a></li>
                         @endcan
-                        <li><a href="{{ route('coupon.index') }}">Quản lý mã giảm giá</a></li>
+                        <li><a href="{{ route('coupon.index') }}">Danh sách mã giảm giá</a></li>
                         
                     </ul>
                 </li>
@@ -118,10 +118,10 @@
                 <li class="sub-menu">
                     <a href="javascript:;">
                         <i class="fa fa-book"></i>
-                        <span>Vận chuyển</span>
+                        <span>Phí vận chuyển</span>
                     </a>
                     <ul class="sub">
-                        <li><a href="{{ route('delivery.index') }}">Quản lý vận chuyển</a></li>
+                        <li><a href="{{ route('delivery.index') }}">Quản lý phí vận chuyển</a></li>
                     </ul>
                 </li>
                 @endcan
@@ -134,7 +134,7 @@
                     </a>
                     <ul class="sub">
                         <li><a href="{{ route('categoryPost.create') }}">Thêm danh mục bài viết</a></li>
-                        <li><a href="{{ route('categoryPost.index') }}">Quản lý danh mục bài viết</a></li>
+                        <li><a href="{{ route('categoryPost.index') }}">Danh sách danh mục bài viết</a></li>
                     </ul>
                 </li>
                 {{-- @endcan --}}
@@ -147,7 +147,7 @@
                     </a>
                     <ul class="sub">
                         <li><a href="{{ route('post.create') }}">Thêm bài viết</a></li>
-                        <li><a href="{{ route('post.index') }}">Quản lý bài viết</a></li>
+                        <li><a href="{{ route('post.index') }}">Danh sách bài viết</a></li>
                     </ul>
                 </li>
                 {{-- @endcan --}}
@@ -168,13 +168,13 @@
                 <li class="sub-menu">
                     <a href="javascript:;">
                         <i class="fa fa-book"></i>
-                        <span>Vai trò</span>
+                        <span>Quản lý vai trò</span>
                     </a>
                     <ul class="sub">
                         @can('add_role')
                         <li><a href="{{ route('role.create') }}">Thêm vai trò</a></li>
                         @endcan
-                        <li><a href="{{ route('role.index') }}">Quản lý vai trò</a></li>
+                        <li><a href="{{ route('role.index') }}">Danh sách vai trò</a></li>
                     </ul>
                 </li>
                 @endcan

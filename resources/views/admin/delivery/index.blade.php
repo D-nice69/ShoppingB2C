@@ -1,6 +1,6 @@
 @extends('adminPartials.layout')
 @section('title')
-Shipping management
+Shipping fee management
 @endsection
 @section('js')
 <script type="text/javascript">
@@ -43,6 +43,7 @@ Shipping management
 <script src="js/dataTables/shipping.js"></script>
 @endsection
 @section('content')
+@include('admin.toast')
 <div class="form-w3layouts">
     <section class="panel">
         <header class="panel-heading">

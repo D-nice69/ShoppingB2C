@@ -12,6 +12,7 @@ Add brand
             <div class="col-12">
                 <form role="form" action="{{ route('brand.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
+                   
                     <div class="form-group">
                         <label for="">Tên</label>
                         <input class="form-control @error('brand_name') is-invalid @enderror" name="brand_name"

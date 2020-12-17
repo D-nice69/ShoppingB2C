@@ -11,7 +11,8 @@ Edit post
         <div class="panel-body">
             <div class="col-12">
                 <form role="form" action="{{ route('post.update',['id'=>$post->id]) }}" method="POST" enctype="multipart/form-data">
-                    @csrf                    
+                    @csrf
+                    <input type="hidden" name="id" value="{{ $post->id }}">                    
                     <div class="form-group">
                         <label for="">Tiêu đề</label>
                         <input class="form-control @error('title') is-invalid @enderror" name="title"

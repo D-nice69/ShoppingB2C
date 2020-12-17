@@ -31,7 +31,8 @@ class AdminCustomerController extends Controller
             'role_id' => $request->role_id,
         ];
         Customer::find($id)->update($updateCustomer);
-        return redirect()->back();
+        toastr()->success('Phân quyền người dùng thành công');
+        return redirect()->route('adminCustomer.index');
     }
     public function delete($id)
     {

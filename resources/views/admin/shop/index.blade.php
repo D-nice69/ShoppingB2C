@@ -133,6 +133,7 @@ Shop's setting
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.6/cropper.js"></script>
 @endsection
 @section('content')
+@include('admin.toast')
 <div class="form-w3layouts">
     <section class="panel">
         <header class="panel-heading">
@@ -208,7 +209,7 @@ Shop's setting
                     <div class="form-group">
                         <label for="">Mô tả</label>
                         <textarea rows="5" rows="5" class="form-control @error('shop_info') is-invalid @enderror"
-                            name="shop_info">{{ $shop->shop_info }}</textarea>
+                            name="shop_info">{{ $shop->shop_info }}{{ old('shop_info') }}</textarea>
                         @error('shop_info')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror

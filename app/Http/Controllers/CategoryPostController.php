@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use App\Components\Recusive;
+use App\Http\Requests\CategoryPostRequest;
 
 class CategoryPostController extends Controller
 {
@@ -20,7 +21,7 @@ class CategoryPostController extends Controller
         $htmlOption = $this->getCategory($parentId = '');
         return view('admin.categoryPost.create',compact('htmlOption'));
     }
-    public function store(Request $request)
+    public function store(CategoryPostRequest $request)
     {
         CategoryPost::create([
             'name' => $request->name,
@@ -29,17 +30,20 @@ class CategoryPostController extends Controller
             'parent_id' => $request->parent_id,
             'slug' => Str::slug( $request->name,'-'),
         ]);
+        toastr()->success('Thêm danh mục bài viết thành công');
         return redirect()->route('categoryPost.index');
     }
     public function unactive($id)
     {
         CategoryPost::find($id)->update(['status'=>1]);
-        return redirect()->route('categoryPost.index')->with('message','Đã ẩn');
+        toastr()->info('Ẩn danh mục bài viết');
+        return redirect()->route('categoryPost.index');
     }
     public function active($id)
     {
         CategoryPost::find($id)->update(['status'=>0]);
-        return redirect()->route('categoryPost.index')->with('message','Đã hiện');
+        toastr()->info('Hiện danh mục bài viết');
+        return redirect()->route('categoryPost.index');
     }
     public function delete($id)
     {
@@ -59,7 +63,7 @@ class CategoryPostController extends Controller
         $htmlOption = $this->getCategory($cPost->parent_id);
         return view('admin.categoryPost.edit',compact('cPost','htmlOption'));
     }
-    public function update($id,Request $request)
+    public function update($id,CategoryPostRequest $request)
     {
         CategoryPost::find($id)->update([
             'name' => $request->name,
@@ -68,7 +72,8 @@ class CategoryPostController extends Controller
             'parent_id' => $request->parent_id,
             'slug' => Str::slug( $request->name,'_'),
         ]);
-        return redirect()->route('categoryPost.index')->with('message','Sửa danh mục thành công');
+        toastr()->success('Cập nhật danh mục bài viết thành công');
+        return redirect()->route('categoryPost.index');
     }
     public function getCategory($parentId)
     {

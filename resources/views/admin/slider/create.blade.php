@@ -15,15 +15,14 @@ Add slider
                     <div class="form-group">
                         <label for="">Tên</label>
                         <input class="form-control @error('name') is-invalid @enderror" name="name"
-                            placeholder="Enter name">
+                            placeholder="Enter name" value="{{ old('name') }}">
                         @error('name')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
-                    </div>                    
+                    </div>
                     <div class="form-group">
                         <label for="">Hình ảnh</label>
-                        <input type="file" class="form-control @error('image') is-invalid @enderror"
-                            name="image">
+                        <input type="file" class="form-control @error('image') is-invalid @enderror" name="image">
                         @error('image')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
@@ -31,11 +30,11 @@ Add slider
                     <div class="form-group">
                         <label for="">Mô tả</label>
                         <textarea rows="5" class="form-control @error('desc') is-invalid @enderror"
-                            name="desc"></textarea>
+                            name="desc">{{ old('desc') }}</textarea>
                         @error('desc')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
-                    </div>                   
+                    </div>
                     <div class="form-group">
                         <label for="">Ẩn/Hiện</label>
                         <select class="form-control m-bot15" name="status">

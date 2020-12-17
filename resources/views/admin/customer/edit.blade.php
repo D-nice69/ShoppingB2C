@@ -23,7 +23,7 @@ Edit customer
                     @csrf
                     <div class="form-group">
                         <label for="">Tên</label>
-                        <input class="form-control @error('name') is-invalid @enderror" name="name"
+                        <input disabled class="form-control @error('name') is-invalid @enderror" name="name"
                             value="{{ $customer->name }}">
                         @error('name')
                         <div class="alert alert-danger">{{ $message }}</div>
@@ -31,7 +31,7 @@ Edit customer
                     </div>
                     <div class="form-group">
                         <label for="">Email</label>
-                        <input class="form-control @error('email') is-invalid @enderror" name="email"
+                        <input disabled class="form-control @error('email') is-invalid @enderror" name="email"
                             value="{{ $customer->email }}">
                         @error('email')
                         <div class="alert alert-danger">{{ $message }}</div>
@@ -39,7 +39,7 @@ Edit customer
                     </div>
                     <div class="form-group">
                         <label for="">SĐT</label>
-                        <input class="form-control @error('phone') is-invalid @enderror" name="phone"
+                        <input disabled class="form-control @error('phone') is-invalid @enderror" name="phone"
                             value="{{ $customer->phone }}">
                         @error('phone')
                         <div class="alert alert-danger">{{ $message }}</div>

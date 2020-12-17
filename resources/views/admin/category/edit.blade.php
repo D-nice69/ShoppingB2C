@@ -21,6 +21,7 @@ Update category
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                     </div>
+                    <input type="hidden" name="id" value="{{ $category->id }}">
                     <div class="form-group">
                         <label for="">Mô tả</label>
                         <textarea rows="3" class="form-control @error('category_description') is-invalid @enderror"
@@ -40,7 +41,7 @@ Update category
                     <div class="form-group">
                         <label for="">Chọn danh mục cha</label>
                         <select class="form-control m-bot15" name="parent_id">
-                            <option value="0">---Chọn danh mục cha---</option>
+                            <option value="0" hidden>---Chọn danh mục cha---</option>
                             {!! $htmlOption !!}
                         </select>
                     </div>

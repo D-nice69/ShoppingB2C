@@ -31,16 +31,32 @@ class CouponController extends Controller
             'message' => 'fail'
         ],500);
     }
-    public function store(StoreCoupon $request)
+    public function edit($id)
     {
-        Coupon::create([
+        $coupon = Coupon::find($id);
+        return view('admin.coupon.edit',compact('coupon'));
+    }
+    public function update($id, StoreCoupon $request)
+    {
+        $coupon = Coupon::find($id)->update([
             'name' => $request->name,
-            'code' => $request->code,
             'qty' => $request->qty,
             'feature' => $request->feature,
             'discount_number' => $request->discount_number
         ]);
-        Session::put('message','Thêm mã giảm giá thành công');
+        toastr()->success('Cập nhật mã giảm giá thành công');
+        return redirect()->route('coupon.index');
+    }
+    public function store(StoreCoupon $request)
+    {
+        Coupon::create([
+            'name' => $request->name,
+            'code' => substr(md5(microtime()),rand(0,26),5),
+            'qty' => $request->qty,
+            'feature' => $request->feature,
+            'discount_number' => $request->discount_number
+        ]);
+        toastr()->success('Thêm mã giảm giá thành công');
         return redirect()->route('coupon.index');
     }
     public function checkCoupon(Request $request)

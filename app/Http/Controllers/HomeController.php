@@ -30,6 +30,7 @@ class HomeController extends Controller
         $meta_title = "";
         $url_canonical = $request->url();
         $products = Product::where('product_status',0)->latest()->paginate(9);
+        toastr()->info('Info Message');
         return view('eshopHome',compact('products','meta_desc','meta_keywords','meta_title','url_canonical'));
     }
     public function categoryProduct($slug, Request $request)
@@ -188,4 +189,7 @@ class HomeController extends Controller
         $products = Product::where('user_id',$id)->get();
         return view('home.shop.index',compact('meta_desc','meta_keywords','meta_title','url_canonical','pic','seller','products','i'));
     }
+
+    
+   
 }

@@ -15,7 +15,7 @@ Add post
                     <div class="form-group">
                         <label for="">Tiêu đề</label>
                         <input class="form-control @error('title') is-invalid @enderror" name="title"
-                            placeholder="Enter price">
+                            placeholder="Enter price" value="{{ old('title') }}">
                         @error('title')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
@@ -31,7 +31,7 @@ Add post
                     <div class="form-group">
                         <label for="">Mô tả</label>
                         <textarea rows="5" class="form-control @error('description') is-invalid @enderror"
-                            name="description"></textarea>
+                            name="description">{{ old('description') }}</textarea>
                         @error('description')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
@@ -40,7 +40,7 @@ Add post
                         <label for="">Nội dung</label>
                         <textarea id="editor1" rows="10"
                             class="form-control @error('content') is-invalid @enderror"
-                            name="content"></textarea>
+                            name="content">{{ old('content') }}</textarea>
                         @error('content')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
@@ -49,9 +49,12 @@ Add post
                     <div class="form-group">
                         <label for="">Chọn danh mục</label>
                         <select class="form-control m-bot15" name="parent_id">
-                            <option value="0" hidden>---Chọn danh mục---</option>
+                            <option value="" hidden>---Chọn danh mục---</option>
                             {!! $htmlOption !!}
                         </select>
+                        @error('parent_id')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                     </div>   
                     <div class="form-group">
                         <label for="">Ẩn/Hiện</label>

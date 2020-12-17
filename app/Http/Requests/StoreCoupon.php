@@ -23,20 +23,29 @@ class StoreCoupon extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => 'required',
-            'code' => 'required',
-            'qty' => 'required',
-            'feature' => 'required',
-            'discount_number' => 'required',
-        ];
+        if($this->request->get('id')){
+            return [
+                'name' => 'required|unique:coupons,name,'.$this->request->get('id'),
+                'qty' => 'required|min:1',
+                'feature' => 'required',
+                'discount_number' => 'required',
+            ];
+        }else{
+            return [
+                'name' => 'required|unique:coupons,name',
+                'qty' => 'required',
+                'feature' => 'required',
+                'discount_number' => 'required',
+            ];
+        }
     }
     public function messages()
     {
         return [
             'name.required' => 'Vui lòng điền tên mã giảm giá',
-            'code.required' => 'Vui lòng điền mã giảm giá',
+            'name.unique' => 'Tên mã giảm giá đã tồn tại',
             'qty.required' => 'Vui lòng điền số lượng mã giảm giá',
+            'qty.min' => 'Số lượng mã giảm giá ít nhất là 1',
             'feature.required' => 'Vui lòng chọn tính năng',
             'discount_number.required' => 'Vui lòng điền số lượng giảm giá',
             

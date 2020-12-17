@@ -7,18 +7,12 @@ Posts List
 <script src="js/dataTables/post.js"></script>
 @endsection
 @section('content')
+@include('admin.toast')
 <div class="table-agile-info">
     <div class="panel panel-default">
         <div class="panel-heading">
             Danh sách bài viết
-        </div>
-        <?php
-            $message = Session::get('message');
-            if ($message) {
-            echo '<span style="color: red; padding: 10px">' . $message . '</span>';
-            Session::put('message', null);
-            }
-        ?>
+        </div>        
         {{-- <div class="row w3-res-tb">
             <div class="col-sm-5 m-b-xs">
                 <select class="inpu\t-sm form-control w-sm inline v-middle">

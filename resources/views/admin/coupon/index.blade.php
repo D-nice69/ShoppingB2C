@@ -7,19 +7,14 @@ Coupons List
 <script src="js/dataTables/coupon.js"></script>
 @endsection
 @section('content')
+@include('admin.toast')
 <div class="table-agile-info">
     <div class="panel panel-default">
         <div class="panel-heading">
             Danh sách mã giảm giá
         </div>
         <br/>
-        <?php
-            $message = Session::get('message');
-            if ($message) {
-            echo '<span style="color: red; padding: 10px">' . $message . '</span>';
-            Session::put('message', null);
-            }
-            ?>
+       
         {{-- <div class="row w3-res-tb">
             <div class="col-sm-5 m-b-xs">
                 <select class="inpu\t-sm form-control w-sm inline v-middle">
@@ -82,9 +77,9 @@ Coupons List
 
                         </td>
                         <td>
-                            {{-- <a href="{{ route('coupon.edit',['id'=>$coupon->id]) }}">
+                            <a href="{{ route('coupon.edit',['id'=>$coupon->id]) }}">
                             <i class="fa fa-pencil-square-o text-success text-active"></i>
-                            </a> --}}
+                            </a>
                             @can('delete_coupon')
                             <a href="" class="action_delete"
                                 data-url="{{ route('coupon.delete',['id'=>$coupon->id]) }}">
