@@ -336,6 +336,7 @@ Route::get('/login','CustomerController@login')->name('customer.login');
 Route::post('/login-customer','CustomerController@loginCustomer')->name('customer.loginCustomer');
 Route::get('/register', 'CustomerController@register')->name('customer.register');
 Route::get('/checkout', 'CustomerController@checkout')->name('customer.checkout');
+
 Route::post('/add-customer', 'CustomerController@add')->name('customer.add');
 Route::post('/save-checkout', 'CustomerController@saveCheckout')->name('customer.saveCheckout');
 Route::get('/payment', 'CustomerController@payment')->name('customer.payment');
