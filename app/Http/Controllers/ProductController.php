@@ -58,6 +58,7 @@ class ProductController extends Controller
             $storeProduct['product_image'] = $newImage;            
         }
         $sP = Product::create($storeProduct);
+        
         //add tags
         foreach ($request->tags as $tagItem) {
             $tagInstance = Tag::firstOrCreate([
@@ -85,10 +86,10 @@ class ProductController extends Controller
     }
     public function edit($id)
     {
-        $categories = Category::get();
         $brands = Brand::get();
         $product = Product::find($id);
-        return view('admin.product.edit',compact('product','categories','brands'));
+        $htmlOption = $this->getCategory($product->category_id);
+        return view('admin.product.edit',compact('product','brands','htmlOption'));
     }
     public function update($id,StoreProduct $request)
     {

@@ -40,7 +40,7 @@ class CategoryController extends Controller
     public function edit($id)
     {
         $category = Category::where('id',$id)->first();
-        $htmlOption = $this->getCategory($category->parent_id);
+        $htmlOption = $this->getCategory($category->id);
         return view('admin.category.edit',compact('category','htmlOption'));
     }
     public function update($id, StoreCategory $request)

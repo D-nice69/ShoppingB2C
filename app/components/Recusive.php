@@ -20,7 +20,7 @@ class Recusive
                 }else{
                     $this->htmlSelect .= "<option value='".$value['id']."' >" . $text . $value['category_name'] . "</option>";
                 }
-                $this->categoryRecusive($parentId, $value['id'], $text. '---');
+                $this->categoryRecusive($parentId, $value['id'], $text. '&nbsp-&nbsp-&nbsp-');
             }
         }
         return $this->htmlSelect;
@@ -34,7 +34,7 @@ class Recusive
                 }else{
                     $this->htmlSelect .= "<option value='".$value['id']."' >" . $text . $value['name'] . "</option>";
                 }
-                $this->categoryPostRecusive($parentId, $value['id'], $text. '---');
+                $this->categoryPostRecusive($parentId, $value['id'], $text. '&nbsp-&nbsp-&nbsp-');
             }
         }
         return $this->htmlSelect;

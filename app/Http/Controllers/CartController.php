@@ -20,7 +20,7 @@ class CartController extends Controller
         $meta_keywords = "Giỏ hàng của bạn";
         $meta_title = "Giỏ hàng của bạn";
         $url_canonical = $request->url();
-        //SEO
+        //----SEO
         $cities = City::all();
         $districts = District::all();
         $towns = Town::all();

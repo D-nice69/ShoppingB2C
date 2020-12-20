@@ -69,17 +69,17 @@ Post categories List
                             </span>
                         </td>
                         <td>
-                            {{-- @can('edit_product') --}}
+                            @can('edit_categoryPost')
                             <a href="{{ route('categoryPost.edit',['id'=>$cpost->id]) }}">
                                 <i class="fa fa-pencil-square-o text-success text-active"></i>
                             </a>
-                            {{-- @endcan --}}
-                            {{-- @can('delete_product') --}}
+                            @endcan
+                            @can('delete_categoryPost')
                             <a href="" class="action_delete"
                                 data-url="{{ route('categoryPost.delete',['id'=>$cpost->id]) }}">
                                 <i class="fa fa-times text-danger text"></i>
                             </a>
-                            {{-- @endcan --}}
+                            @endcan
                         </td>
                     </tr>
                     @endforeach

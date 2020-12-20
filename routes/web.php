@@ -171,10 +171,10 @@ Route::prefix('admin')->group(function () {
     Route::prefix('category-posts')
         ->group(function () {
             Route::get('/', 'CategoryPostController@index')
-                // ->middleware('can:list_user')
+                ->middleware('can:list_categoryPost')
                 ->name('categoryPost.index');
             Route::get('/create', 'CategoryPostController@create')
-                // ->middleware('can:add_slider')
+                ->middleware('can:add_categoryPost')
                 ->name('categoryPost.create');
             Route::post('/store', 'CategoryPostController@store')
                 ->name('categoryPost.store');
@@ -183,12 +183,12 @@ Route::prefix('admin')->group(function () {
             Route::get('/active/{id}', 'CategoryPostController@active')
                 ->name('categoryPost.active');
             Route::get('/edit/{id}', 'CategoryPostController@edit')
-                // ->middleware('can:edit_user')
+                ->middleware('can:edit_categoryPost')
                 ->name('categoryPost.edit');
             Route::post('/update/{id}', 'CategoryPostController@update')
                 ->name('categoryPost.update');
             Route::get('/delete/{id}', 'CategoryPostController@delete')
-                // ->middleware('can:delete_user')
+                ->middleware('can:delete_categoryPost')
                 ->name('categoryPost.delete');
         }
     );
@@ -196,10 +196,10 @@ Route::prefix('admin')->group(function () {
     Route::prefix('posts')
         ->group(function () {
             Route::get('/', 'PostController@index')
-                // ->middleware('can:list_user')
+                ->middleware('can:list_post')
                 ->name('post.index');
             Route::get('/create', 'PostController@create')
-                // ->middleware('can:add_slider')
+                ->middleware('can:add_post')
                 ->name('post.create');
             Route::post('/store', 'PostController@store')
                 ->name('post.store');
@@ -208,12 +208,12 @@ Route::prefix('admin')->group(function () {
             Route::get('/active/{id}', 'PostController@active')
                 ->name('post.active');
             Route::get('/edit/{id}', 'PostController@edit')
-                // ->middleware('can:edit_user')
+                ->middleware('can:edit_post')
                 ->name('post.edit');
-            Route::post('/update/{id}', 'PostController@update')
+            Route::post('/update/{id}','PostController@update')
                 ->name('post.update');
             Route::get('/delete/{id}', 'PostController@delete')
-                // ->middleware('can:delete_user')
+                ->middleware('can:delete_post')
                 ->name('post.delete');
         }
     );
@@ -379,4 +379,7 @@ Route::get('/password-forget', 'CustomerController@forgetPassword')->name('Custo
 Route::post('/password-reset', 'CustomerController@resetPassword')->name('Customer.resetPassword');
 //verify account
 Route::get('/account-verify', 'CustomerController@accountVerify')->name('Customer.accountVerify');
+//payment
+Route::get('/payment1', 'PaymentController@index')->name('Payment.index');
+Route::post('/payment1', 'PaymentController@store')->name('Payment.store');
 

@@ -123,13 +123,13 @@ Add product
                     </div>
                     <div class="form-group">
                         <label for="">Danh mục</label>
-                        <select class="form-control m-bot15" name="category_id">
+                        <select class="form-control m-bot15 select2_multiple" name="category_id">
                             {!! $htmlOption !!}
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="">Thương hiệu</label>
-                        <select class="form-control m-bot15" name="brand_id">
+                        <select class="form-control m-bot15 select2_multiple" name="brand_id">
                             @foreach($brands as $key=>$brand)
                             <option value="{{ $brand->id }}">{{ $brand->brand_name }}</option>
                             @endforeach

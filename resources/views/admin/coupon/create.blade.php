@@ -35,8 +35,7 @@ Add coupon
                     </div>
                     <div class="form-group">
                         <label for="">Tính năng</label>
-                        <select class="form-control  @error('feature') is-invalid @enderror" name="feature">
-                            <option hidden value="">----Chọn----</option>
+                        <select class="form-control select2_multiple @error('feature') is-invalid @enderror" name="feature">
                             <option {{ old('feature') == 0 ? 'selected' : '' }} value="0">Giảm theo phần trăm</option>
                             <option {{ old('feature') == 1 ? 'selected' : '' }} value="1">Giảm theo tiền</option>
                         </select>

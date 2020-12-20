@@ -214,6 +214,8 @@
                             var seller_id = $('.seller_id').val();
                             var order_fee = $('.order_fee').val();
                             var order_coupon = $('.order_coupon').val();
+                            var bank_code = $('.bank_code').val();
+                            var total = $('.total').val();
                             var payment_select1 = [];
                             var payment_select = '';
                             $(':checkbox:checked').each(function(i){
@@ -227,12 +229,17 @@
                                 data:{shipping_email:shipping_email,shipping_name:shipping_name
                                 ,shipping_address:shipping_address,shipping_phone:shipping_phone,shipping_note:shipping_note
                                 ,order_fee:order_fee,order_coupon:order_coupon,payment_select:payment_select,
-                                seller_id:seller_id,_token:_token},
+                                seller_id:seller_id,bank_code:bank_code,total:total,_token:_token},
                                 success:function(data){
-                                    swal("Bạn đã đặt đơn hàng thành công!", "Cảm ơn bạn đã mua hàng");
-                                    window.setTimeout(function(){
-                                        location.replace("{{ route('customer.thanks') }}");
-                                    },1000);
+                                    if(data == 'cash'){
+                                        swal("Bạn đã đặt đơn hàng thành công!", "Cảm ơn bạn đã mua hàng");
+                                        window.setTimeout(function(){
+                                            location.replace("{{ route('customer.thanks') }}");
+                                        },1000);
+                                    }else {
+                                        // alert(data);
+                                        location.replace(data);
+                                    }
                                 }
                             });
                         }

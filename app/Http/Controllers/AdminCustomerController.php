@@ -25,9 +25,9 @@ class AdminCustomerController extends Controller
     public function update($id, Request $request)
     {
         $updateCustomer = [
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
+            // 'name' => $request->name,
+            // 'email' => $request->email,
+            // 'phone' => $request->phone,
             'role_id' => $request->role_id,
         ];
         Customer::find($id)->update($updateCustomer);

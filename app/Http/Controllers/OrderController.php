@@ -67,7 +67,7 @@ class OrderController extends Controller
         $orderDetails = Order_detail::where('seller_id',Auth::user()->id)->get();
         // dd($orderDetails);
         // dd(count($orderDetails));
-        $orders = Order::where('seller_id',Auth::user()->id)->get();
+        // $orders = Order::where('seller_id',Auth::user()->id)->get();
         // $product = Session::get('cart');
 
         // foreach($product as $pro){
@@ -76,7 +76,7 @@ class OrderController extends Controller
         // $unique_id = array_unique($unique);
         // dd($unique_id);
         
-        return view('admin.order.index',compact('orders','orderDetails'));
+        return view('admin.order.index',compact('orderDetails'));
     }
     public function view($id, Request $request)
     {
@@ -97,64 +97,111 @@ class OrderController extends Controller
     {
         $data = $request->all();
         $product = Session::get('cart');
-        $shipping = Shipping::create([
-            'name' => $data['shipping_name'],
-            'email' => $data['shipping_email'],
-            'address' => $data['shipping_address'],
-            'phone' => $data['shipping_phone'],
-            'note' => $data['shipping_note'],
-            'method' => $data['payment_select'],
-        ]);
-        $shipping_id = $shipping->id;
-        
-        foreach($product as $pro){
-            $unique[] = $pro['seller_id'];
-        }
-        $unique_id = array_unique($unique);
-        if($product){
-            foreach($unique_id as $ui){
-                $order = Order::create([
-                    'customer_id' => Session::get('CustomerId'),
-                    'shipping_id' => $shipping_id,
-                    // 'seller_id' => $ui,
-                    'status' => 1,
-                    'code' => substr(md5(microtime()),rand(0,26),5),
-                ]);
-            foreach($product as $val){
-                if($val['seller_id']==$ui){
-                    Order_detail::create([
-                        'order_id' => $order->id,
-                        'product_id' => $val['product_id'],
-                        'seller_id' => $val['seller_id'],
-                        'product_name' => $val['product_name'],
-                        'product_sales_quantity' => $val['product_qty'],
-                        'product_price' => $val['product_price'],
-                        'coupon' => $data['order_coupon'],
-                        'fee_ship' => $data['order_fee'],
-                        ]);
+        if($data['payment_select']==1){
+
+            $shipping = Shipping::create([
+                'name' => $data['shipping_name'],
+                'email' => $data['shipping_email'],
+                'address' => $data['shipping_address'],
+                'phone' => $data['shipping_phone'],
+                'note' => $data['shipping_note'],
+                'method' => $data['payment_select'],
+            ]);
+            $shipping_id = $shipping->id;
+            
+            foreach($product as $pro){
+                $unique[] = $pro['seller_id'];
+            }
+            $unique_id = array_unique($unique);
+            if($product){
+                foreach($unique_id as $ui){
+                    $order = Order::create([
+                        'customer_id' => Session::get('CustomerId'),
+                        'shipping_id' => $shipping_id,
+                        // 'seller_id' => $ui,
+                        'status' => 1,
+                        'code' => substr(md5(microtime()),rand(0,26),5),
+                    ]);
+                foreach($product as $val){
+                    if($val['seller_id']==$ui){
+                        Order_detail::create([
+                            'order_id' => $order->id,
+                            'product_id' => $val['product_id'],
+                            'seller_id' => $val['seller_id'],
+                            'product_name' => $val['product_name'],
+                            'product_sales_quantity' => $val['product_qty'],
+                            'product_price' => $val['product_price'],
+                            'coupon' => $data['order_coupon'],
+                            'fee_ship' => $data['order_fee'],
+                            ]);
+                        }
                     }
                 }
+
+            }
+            Session::forget('fee');
+            Session::forget('coupon');
+            Session::forget('cart');
+            echo 'cash';
+        }else if($data['payment_select']==0){
+
+            $vnp_TmnCode = "Y4U88XFK"; //Mã website tại VNPAY 
+            $vnp_HashSecret = "DTHXNFNBUMNKFKQOZVHTXUXNUQUUXMTV"; //Chuỗi bí mật
+            $vnp_Url = "http://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+            $vnp_Returnurl = "http://localhost:8000/vnpay_php/vnpay_return.php";
+
+            $vnp_TxnRef = date("YmdHis");
+            $vnp_OrderInfo = $data['shipping_note'];
+            $vnp_OrderType = 'other';
+            $vnp_Amount = str_replace(',', '', $data['total']) * 100;
+            $vnp_Locale = 'vn';
+            $vnp_BankCode = $data['bank_code'];
+            $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
+            $inputData = array(
+                "vnp_Version" => "2.0.0",
+                "vnp_TmnCode" => $vnp_TmnCode,
+                "vnp_Amount" => $vnp_Amount,
+                "vnp_Command" => "pay",
+                "vnp_CreateDate" => date('YmdHis'),
+                "vnp_CurrCode" => "VND",
+                "vnp_IpAddr" => $vnp_IpAddr,
+                "vnp_Locale" => $vnp_Locale,
+                "vnp_OrderInfo" => $vnp_OrderInfo,
+                "vnp_OrderType" => $vnp_OrderType,
+                "vnp_ReturnUrl" => $vnp_Returnurl,
+                "vnp_TxnRef" => $vnp_TxnRef,
+            );
+
+
+            if (isset($vnp_BankCode) && $vnp_BankCode != "") {
+                $inputData['vnp_BankCode'] = $vnp_BankCode;
+            }
+            ksort($inputData);
+            $query = "";
+            $i = 0;
+            $hashdata = "";
+            foreach ($inputData as $key => $value) {
+                if ($i == 1) {
+                    $hashdata .= '&' . $key . "=" . $value;
+                } else {
+                    $hashdata .= $key . "=" . $value;
+                    $i = 1;
+                }
+                $query .= urlencode($key) . "=" . urlencode($value) . '&';
             }
 
+            $vnp_Url = $vnp_Url . "?" . $query;
+            if (isset($vnp_HashSecret)) {
+            // $vnpSecureHash = md5($vnp_HashSecret . $hashdata);
+                $vnpSecureHash = hash('sha256', $vnp_HashSecret . $hashdata);
+                $vnp_Url .= 'vnp_SecureHashType=SHA256&vnp_SecureHash=' . $vnpSecureHash;
+            }
+            $returnData = array('code' => '00'
+                , 'message' => 'success'
+                , 'data' => $vnp_Url);
+            echo $vnp_Url;
         }
 
-        // if($product){
-        //     foreach($product as $val){
-        //         Order_detail::create([
-        //             'order_id' => $order->id,
-        //             'product_id' => $val['product_id'],
-        //             'seller_id' => $val['seller_id'],
-        //             'product_name' => $val['product_name'],
-        //             'product_sales_quantity' => $val['product_qty'],
-        //             'product_price' => $val['product_price'],
-        //             'coupon' => $data['order_coupon'],
-        //             'fee_ship' => $data['order_fee'],
-        //         ]);
-        //     }
-        // }
-        Session::forget('fee');
-        Session::forget('coupon');
-        Session::forget('cart');
     }
     public function print($checkout_code)
     {

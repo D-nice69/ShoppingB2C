@@ -13,7 +13,7 @@ class CategoryPostController extends Controller
 {
     public function index()
     {
-        $cPosts = CategoryPost::latest()->paginate(5);
+        $cPosts = CategoryPost::latest()->get();
         return view('admin.categoryPost.index',compact('cPosts'));
     }
     public function create()
@@ -60,7 +60,7 @@ class CategoryPostController extends Controller
     public function edit($id)
     {
         $cPost = CategoryPost::find($id);
-        $htmlOption = $this->getCategory($cPost->parent_id);
+        $htmlOption = $this->getCategory($cPost->id);
         return view('admin.categoryPost.edit',compact('cPost','htmlOption'));
     }
     public function update($id,CategoryPostRequest $request)

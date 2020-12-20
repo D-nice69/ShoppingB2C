@@ -54,7 +54,6 @@
                     </ul>
                 </li>
                 @endcan
-
                 @can('list_product')
                 <li class="sub-menu">
                     <a href="javascript:;">
@@ -126,20 +125,22 @@
                 </li>
                 @endcan
 
-                {{-- @can('list_shipping') --}}
+                @can('list_categoryPost')
                 <li class="sub-menu">
                     <a href="javascript:;">
                         <i class="fa fa-book"></i>
                         <span>Danh mục bài viết</span>
                     </a>
                     <ul class="sub">
+                        @can('add_categoryPost')
                         <li><a href="{{ route('categoryPost.create') }}">Thêm danh mục bài viết</a></li>
+                        @endcan
                         <li><a href="{{ route('categoryPost.index') }}">Danh sách danh mục bài viết</a></li>
                     </ul>
                 </li>
-                {{-- @endcan --}}
+                @endcan
 
-                {{-- @can('list_shipping') --}}
+                @can('list_post')
                 <li class="sub-menu">
                     <a href="javascript:;">
                         <i class="fa fa-book"></i>
@@ -150,7 +151,7 @@
                         <li><a href="{{ route('post.index') }}">Danh sách bài viết</a></li>
                     </ul>
                 </li>
-                {{-- @endcan --}}
+                @endcan
 
                 @can('list_user')
                 <li class="sub-menu">

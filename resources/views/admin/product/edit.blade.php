@@ -157,20 +157,21 @@ Edit product
                     </div>
                     <div class="form-group">
                         <label for="">Danh mục</label>
-                        <select class="form-control m-bot15" name="category_id">
-                            @foreach($categories as $key=>$category)
+                        <select class="form-control m-bot15 select2_multiple" name="category_id">
+                            {!! $htmlOption !!}
+                            {{-- @foreach($categories as $key=>$category)
                             <option value="{{ $category->id }}"
                                 {{ ($category->id==$product->category->id) ? 'selected' : '' }}>
                                 {{ $category->category_name }}
                             </option>
-                            @endforeach
+                            @endforeach --}}
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="">Thương hiệu</label>
-                        <select class="form-control m-bot15" name="brand_id">
+                        <select class="form-control m-bot15 select2_multiple" name="brand_id">
                             @foreach($brands as $key=>$brand)
-                            <option value="{{ $brand->id }}" {{ ($brand->id==$product->brand->id) ? 'selected' : '' }}>
+                            <option value="{{ $brand->id }}" {{ ($brand->id==$product->brand_id) ? 'selected' : '' }}>
                                 {{ $brand->brand_name }}
                             </option>
                             @endforeach

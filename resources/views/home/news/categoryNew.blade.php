@@ -43,7 +43,7 @@ Eshop | News
 @endforeach
 
 <div class="col-sm-12 text-center text-center-xs">
-    {{-- {{$categoryPosts->links()}} --}}
+    {{$categoryPosts->links()}}
 </div>
 </div>
 @endsection

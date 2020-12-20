@@ -48,14 +48,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <script src="js/raphael-min.js"></script>
     <script src="js/morris.js"></script>
     <link href="css/fileinput.css" rel='stylesheet' type='text/css' />
-
+    <link href="css/select2.min.css" rel="stylesheet" />
     <style>
         .alert {
             padding: 6px !important;
             margin-top: 6px;
         }
     </style>
-    
+
     @yield('css')
 </head>
 
@@ -91,14 +91,19 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <script src="js/fileinput.js"></script>
     <script src="js/vi.js"></script>
     <script src="js/jquery.dataTables.min.js"></script>
+    <script src="js/select2.min.js"></script>
     <script>
         // Replace the <textarea id="editor1"> with a CKEditor 4
             // instance, using default configuration.
             CKEDITOR.replace( 'editor1' );
             CKEDITOR.replace( 'editor' );
     </script>
-   
     @yield('js')
+    <script>
+        $(document).ready(function() {
+            $('.select2_multiple').select2();
+        });
+    </script>
     <!-- morris JavaScript -->
 
     <script>

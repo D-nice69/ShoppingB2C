@@ -20,6 +20,26 @@ Eshop | Thanh toán
   }
 });
 </script>
+<script>
+    $(document).ready(function(){
+      $("#ATM").click(function(){
+        if ($("#ATM").is(":checked")){
+            $("#ATM_form").show();
+        }else{
+            $("#ATM_form").hide();
+        }
+      });
+    });
+</script>
+<script>
+    $(document).ready(function(){
+      $("#cash").click(function(){
+        if ($("#cash").is(":checked")){
+            $("#ATM_form").hide();
+        }
+      });
+    });
+</script>
 @endsection
 @section('content_2')
 
@@ -63,6 +83,7 @@ Eshop | Thanh toán
                                 <input type="text" class="shipping_address" name="address"
                                     placeholder="Địa chỉ gửi hàng">
                                 <input type="text" class="shipping_phone" name="phone" placeholder="Số điện thoại">
+                                <input type="hidden" class="total" name="total" value="{{ $total }}">
                                 @if(Session::get('fee'))
                                 <input type="hidden" class="order_fee" name="order_fee"
                                     value="{{ Session::get('fee') }}">
@@ -239,19 +260,59 @@ Eshop | Thanh toán
             {{-- <select class="payment_select" id="city" name="matp">
                 <option selected value="3" >---Chọn tỉnh, thành phố---</option>               
             </select> --}}
-            <span>
-                <label><input name="payment_method" class="radio payment_select" value="0" type="checkbox"> Trả bằng thẻ
-                    ATM</label>
-            </span>
-            <span>
-                <label><input name="payment_method" class="radio payment_select" value="1" type="checkbox"> Nhận tiền
-                    mặt</label>
-            </span>
+            <div class="col-md-12">
+                <span>
+                    <label><input style="position: absolute; margin-left:-16px;margin-top:0px" id="ATM"
+                            name="payment_method" class="radio payment_select" value="0" type="checkbox"> Trả qua
+                        VNPay</label>
+                </span>
+                <span>
+                    <label><input style="position: absolute; margin-left:-16px;margin-top:0px" id="cash"
+                            name="payment_method" class="radio payment_select" value="1" type="checkbox"> Nhận
+                        tiền
+                        mặt</label>
+                </span>
+            </div>
+            <div id="ATM_form" class="col-md-6" style="display:none">
+                <label for="bank_code">Chọn ngân hàng</label>
+                <select name="bank_code" id="bank_code" class="form-control bank_code">
+                    <option value="">Không chọn</option>
+                    <option value="NCB"> Ngan hang NCB</option>
+                    <option value="AGRIBANK"> Ngan hang Agribank</option>
+                    <option value="SCB"> Ngan hang SCB</option>
+                    <option value="SACOMBANK">Ngan hang SacomBank</option>
+                    <option value="EXIMBANK"> Ngan hang EximBank</option>
+                    <option value="MSBANK"> Ngan hang MSBANK</option>
+                    <option value="NAMABANK"> Ngan hang NamABank</option>
+                    <option value="VNMART"> Vi dien tu VnMart</option>
+                    <option value="VIETINBANK">Ngan hang Vietinbank</option>
+                    <option value="VIETCOMBANK"> Ngan hang VCB</option>
+                    <option value="HDBANK">Ngan hang HDBank</option>
+                    <option value="DONGABANK"> Ngan hang Dong A</option>
+                    <option value="TPBANK"> Ngân hàng TPBank</option>
+                    <option value="OJB"> Ngân hàng OceanBank</option>
+                    <option value="BIDV"> Ngân hàng BIDV</option>
+                    <option value="TECHCOMBANK"> Ngân hàng Techcombank</option>
+                    <option value="VPBANK"> Ngan hang VPBank</option>
+                    <option value="MBBANK"> Ngan hang MBBank</option>
+                    <option value="ACB"> Ngan hang ACB</option>
+                    <option value="OCB"> Ngan hang OCB</option>
+                    <option value="IVB"> Ngan hang IVB</option>
+                    <option value="VISA"> Thanh toan qua VISA/MASTER</option>
+                </select>
+            </div>
+
             {{-- <span>
                 <label><input type="checkbox"> Paypal</label>
             </span> --}}
             <br />
-            <a type="button" class="btn btn-default check_out send_order" name="send_order_place">Đặt hàng</a>
+            <div class="col-md-12">
+                <a type="button" class="btn btn-default check_out send_order" name="send_order_place">Đặt hàng</a>
+            </div>
+            {{-- <div class="col-md-12">
+                <a type="button" id="ATM_button" style="display:none" class="btn btn-default check_out"
+                    name="send_order_place">Đặt hàng</a>
+            </div> --}}
         </div>
     </form>
 </section>

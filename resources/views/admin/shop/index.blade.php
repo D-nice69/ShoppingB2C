@@ -137,7 +137,7 @@ Shop's setting
 <div class="form-w3layouts">
     <section class="panel">
         <header class="panel-heading">
-            Thêm danh mục
+            Cài đặt cửa hàng
         </header>
         <div class="panel-body">
             <div class="col-12">

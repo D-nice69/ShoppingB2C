@@ -22,7 +22,7 @@ Add post categories
                     </div>
                     <div class="form-group">
                         <label for="">Chọn danh mục cha</label>
-                        <select class="form-control m-bot15" name="parent_id">
+                        <select class="form-control m-bot15 select2_multiple" name="parent_id">
                             <option value="0" hidden>---Chọn danh mục cha---</option>
                             {!! $htmlOption !!}
                         </select>

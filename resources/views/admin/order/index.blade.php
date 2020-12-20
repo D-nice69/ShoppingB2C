@@ -51,23 +51,23 @@ Orders List
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($orders as $order)
+                    @foreach($orderDetails as $order)
                     <tr>
                         <td><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label>
-                        <td>{{ $order->code }}</td>
+                        <td>{{ $order->order->code }}</td>
                         <td>
-                            @if( $order->status == 1)
+                            @if( $order->order->status == 1)
                             Đơn hàng mới
                             @else
                             Đơn hàng đã được thanh toán
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route('order.view',['id'=>$order->id]) }}">
+                            <a href="{{ route('order.view',['id'=>$order->order->id]) }}">
                                 <i class="fa fa-eye"></i>
                             </a>
                             @can('delete_order')
-                            <a href="" class="action_delete" data-url="{{ route('order.delete',['id'=>$order->id]) }}">
+                            <a href="" class="action_delete" data-url="{{ route('order.delete',['id'=>$order->order->id]) }}">
                                 <i class="fa fa-times text-danger text"></i>
                             </a>
                             @endcan

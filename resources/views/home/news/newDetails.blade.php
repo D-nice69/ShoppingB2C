@@ -14,7 +14,7 @@ Eshop | News
 <div class="features_items">
 
     <div class="col-sm-2">
-        ADS
+        @include('homePartials.left_sidebar_ads')
     </div>
     <div class="col-sm-8 nContent">
         {!! $new->content !!}
@@ -23,7 +23,7 @@ Eshop | News
 
     </div>
     <div class="col-sm-2">
-        ADS
+        @include('homePartials.left_sidebar_ads')
     </div>
     <div class="col-sm-12" style="width: 66%;    margin-left: 16%;">
         <div class="recommended_items">

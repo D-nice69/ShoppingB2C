@@ -75,17 +75,17 @@ Posts List
                             </span>
                         </td>
                         <td>
-                            {{-- @can('edit_post') --}}
+                            @can('edit_post')
                             <a href="{{ route('post.edit',['id'=>$post->id]) }}">
                                 <i class="fa fa-pencil-square-o text-success text-active"></i>
                             </a>
-                            {{-- @endcan --}}
-                            {{-- @can('delete_post') --}}
+                            @endcan
+                            @can('delete_post')
                             <a href="" class="action_delete"
                                 data-url="{{ route('post.delete',['id'=>$post->id]) }}">
                                 <i class="fa fa-times text-danger text"></i>
                             </a>
-                            {{-- @endcan --}}
+                            @endcan
                         </td>
                     </tr>
                     @endforeach

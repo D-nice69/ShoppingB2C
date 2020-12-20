@@ -28,6 +28,8 @@ class SignupEmail extends Mailable
      */
     public function build()
     {
-        return $this->from(env('MAIL_USERNAME'),'ungthomung123@gmail.com')->subject("Chào mừng bạn đến với Eshoper")->view('mail.signupEmail',['email_data'=>$this->email_data]);
+        return $this->from(env('MAIL_USERNAME'),'ungthomung123@gmail.com')
+        ->subject("Chào mừng bạn đến với Eshoper")
+        ->view('mail.signupEmail',['email_data'=>$this->email_data]);
     }
 }

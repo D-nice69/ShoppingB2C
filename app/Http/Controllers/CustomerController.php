@@ -75,7 +75,7 @@ class CustomerController extends Controller
             //redirect
             return redirect()->back()->with(session()->flash('alert-success','Bạn đã tạo tài khoản thành công, vui lòng kiểm tra email để kích hoạt'));
         }
-        return redirect()->back()->with(session()->flash('alert-danger','Có gì đó sai sai'));
+        return redirect()->back()->with(session()->flash('alert-danger','Tạo tài khoản thất bại'));
     }
     public function Checkout(Request $request)
     {

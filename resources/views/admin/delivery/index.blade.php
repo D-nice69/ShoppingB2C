@@ -55,7 +55,7 @@ Shipping fee management
                     @csrf
                     <div class="form-group">
                         <label for="">Chọn tỉnh, thành phố</label>
-                        <select class="form-control m-bot15 choose city" id="city" name="matp">
+                        <select class="form-control m-bot15 choose city select2_multiple" id="city" name="matp">
                             <option value="" hidden>---Chọn tỉnh, thành phố---</option>
                             @foreach($cities as $city)
                             <option value="{{ $city->matp }}">{{ $city->name }}</option>
@@ -64,7 +64,7 @@ Shipping fee management
                     </div>
                     <div class="form-group">
                         <label for="">Chọn quận huyện </label>
-                        <select class="form-control m-bot15 choose district" id="district" name="maqh">
+                        <select class="form-control m-bot15 choose district select2_multiple" id="district" name="maqh">
                             <option value="" hidden>---Chọn quận huyện---</option>
                             @foreach($districts as $district)
                             <option value="{{ $district->maqh }}">{{ $district->name }}</option>
@@ -73,7 +73,7 @@ Shipping fee management
                     </div>
                     <div class="form-group">
                         <label for="">Chọn xã phường</label>
-                        <select class="form-control m-bot15 town" id="town" name="xaid">
+                        <select class="form-control m-bot15 town select2_multiple" id="town" name="xaid">
                             <option value="" hidden>---Chọn xã phường---</option>
                             @foreach($towns as $town)
                             <option value="{{ $town->xaid }}">{{ $town->name }}</option>

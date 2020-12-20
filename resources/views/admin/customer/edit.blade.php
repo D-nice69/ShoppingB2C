@@ -3,13 +3,12 @@
 Edit customer
 @endsection
 @section('js')
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-<script>
+
+{{-- <script>
     $(document).ready(function() {
     $('.js-example-basic-multiple').select2();
 });
-</script>
+</script> --}}
 @endsection
 @section('content')
 <div class="form-w3layouts">
@@ -48,7 +47,7 @@ Edit customer
                     
                     <div class="form-group">
                         <label for="">Vai trò</label>
-                        <select class="form-control js-example-basic-multiple  @error('role_id') is-invalid @enderror" name="role_id">
+                        <select class="form-control select2_multiple  @error('role_id') is-invalid @enderror" name="role_id">
                             @foreach($roles as $key=>$role)
                             <option {{ ($role->id == $roleCustomer->id) ? 'selected' : '' }} value="{{ $role->id }}">{{ $role->name }}</option>
                             @endforeach
